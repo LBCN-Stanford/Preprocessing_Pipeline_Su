@@ -103,5 +103,5 @@ catch
     end  
 end
 catch
-    disp('Can not load data. Continue ...');
+    disp('Can not load image. Continue ...');
 end
