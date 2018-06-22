@@ -1,5 +1,5 @@
 06/22 Update: 	Added external functions for plotting (/subfunctions)
-		Fixed a bug in crc_eeg_readHeaderEDF.m (/Preprocessing-			pipeline/FAAST_tools). Thanks Aaron!
-		Modified plot_mesh and plot_3dslice to show slice plane if no 		free surfer model is identified (/subfunctions/plotting)
-		Modified plot_window function, now can select which 			conditions to plot (/subfunctions/plotting)
+		Fixed a bug in crc_eeg_readHeaderEDF.m (/Preprocessing-pipeline/FAAST_tools). Thanks Aaron!
+		Modified plot_mesh and plot_3dslice to show slice plane if no free surfer model is identified (/subfunctions/plotting)
+		Modified plot_window function, now can select which conditions to plot (/subfunctions/plotting)
 		
