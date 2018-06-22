@@ -174,6 +174,34 @@ labs = cellstr(header.channelname) ;
 catch
     disp('Skipping the channel rename step.')
 end
+
+try
+labs = cellstr(chanlist) ;   
+[slab,ilab,~] = unique(labs);
+    if numel(slab) ~= numel(labs)
+        iall=1:length(labs);
+        sameid = iall;
+        sameid(ilab)=[];
+        [aa,~,~]=unique(labs(sameid));
+        ls = labs(sameid);
+        for u = 1:length(aa)
+            idrep=find(strcmp(aa(u),ls));
+            for k = 1:length(idrep)
+                nel = char(ls(idrep(k)));
+                ref = strfind(nel,'-Ref');
+                itr = setdiff(1:length(nel),ref:ref+3);
+                ls{idrep(k)} = strcat(ls{idrep(k)}(itr),'_',num2str(k),ls{idrep(k)}(ref:ref+3));
+            end
+        end
+        for j = 1:length(sameid)
+            cc = char(chanlist(sameid(j)));
+            cc(1:length(ls{j}))=ls{j};
+           chanlist{sameid(j)} = cc;
+        end
+    end
+catch
+    disp('Skipping the channel rename step.')
+end
 %labs(sameid) = ls;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
