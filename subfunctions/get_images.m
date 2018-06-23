@@ -6,12 +6,21 @@ surfpath = [];
 try
 sbjpath = path(meeg);
 sublist = strsplit(genpath(sbjpath),':')';
+n = 1;
 elecpath = find(contains(sublist,'elec_recon'));
-% if isempty(elecpath)
-%     [upper,~] = fileparts(sbjpath);
-%     sublist = strsplit(genpath(upper),':')';
-%     elecpath = find(contains(sublist,'elec_recon'));
-% end
+while isempty(elecpath)
+    %if isempty(elecpath)
+        [upper,~] = fileparts(sbjpath);
+        sublist = strsplit(genpath(upper),':')';
+        elecpath = find(contains(sublist,'elec_recon'));
+        if length(elecpath) >1 || n > 4
+            elecpath = [];
+            break;
+        end
+        n = n+1;
+    %end
+end
+
 if isempty(elecpath) 
         fprintf('------Please select the subject Freesurfer folder -------\n')
         selpath = uigetdir;

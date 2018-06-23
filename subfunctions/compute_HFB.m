@@ -1,4 +1,4 @@
-function [signalbc, signal] = compute_HFB(data, fs, type, fbands, atf_check, bc_type, bc_win , pre_defined_bad, window)
+function [signalbc, signalbc2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type, bc_win , pre_defined_bad, window)
 
 if nargin<1 || isempty(data)
     [filename,pathname] = uigetfile({'*.mat','Data format (*.mat)'});
@@ -113,6 +113,6 @@ switch type
             end
         end
 end
-signal = narrown;
-signalbc = baseline_norm(narrown, window, bc_win, bc_type);
+%signal = narrown;
+[signalbc, signalbc2] = baseline_norm(narrown, window, bc_win, bc_type);
 progress(1,1,1,1);
