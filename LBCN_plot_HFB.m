@@ -69,7 +69,8 @@ if ~exist('signal_all','var')
     if nargin<2 || isempty(D)
         for i = 1:length(evtfile)
             [filepath,name,~] = fileparts(evtfile{i});
-            [name2] = find_file(filepath,'/eM*.mat',name(21:end));
+            fixind = regexp(name,'DCchans')+8;
+            [name2] = find_file(filepath,'/eM*.mat',name(fixind:end));
 %             en = strcat(filepath,'/eM*.mat');
 %             match = [];
 %             S = dir(en);
@@ -181,7 +182,7 @@ end
 
 if ~exist('signal_all','var')
     fprintf('%s\n','------ Calculating HFB ------')
-    %%%%%%%%%re-arrange the data, take out excluded trials%%%%%%%%%%
+    %% re-arrange the data, take out excluded trials%%%%%%%%%%
     sdata = cell(1,length(evtfile));
     sdata2 = cell(1,length(evtfile));
     for N=1:length(evtfile)
@@ -190,12 +191,12 @@ if ~exist('signal_all','var')
         load(evtfile{N});
         data = D{N}(:,:,:);
         pre_defined = pre_defined_bad{N};
-        %
+        %% Just to test something. Comment this 
         bc_type = 'z';
         type = 1;
         atf_check = 3;
-        %
-        [signal, signal_org] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window);
+        %% Signal 2 is the other un-chosen baseline correction method. (Just get ready for the plotting)
+        [signal, signal2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window);
         cn = size(data,1);
         ts=[];
         for i=1:length(events.categories)
@@ -203,10 +204,16 @@ if ~exist('signal_all','var')
         end
         [~,A]=sort(ts);
         sdata{N} = signal(:,:,A);
-        sdata2{N} = signal_org(:,:,:,A);
+        sdata2{N} = signal2(:,:,A);
+        
+        %% In case it crashes 0_0
+        assignin ('base','Signal',sdata{N});
+        assignin ('base','Signal2',sdata2{N});
+        %% Some arrangements
         for i = 1:cn
             m = 1;
             dt=squeeze(sdata{N}(i,:,:));
+            dt2=squeeze(sdata2{N}(i,:,:));
                 try
                     ex=exclude{N}{i}(1,all(exclude{N}{i}));
                 catch
@@ -214,8 +221,8 @@ if ~exist('signal_all','var')
                 end
                 con=conditionList{N};
                 con(ex)=[];
-                
                 dt(:,ex)=[];
+                dt2(:,ex)=[];
             curr_id=false(Nt,size(dt,2));
             for k = plot_cond
                 %ex=[];
@@ -237,31 +244,37 @@ if ~exist('signal_all','var')
                      curr_id(k,:)=strcmpi(con,curr_cond);
                 end
                 total_raw{N}{m}{i}=dt(:,curr_id(k,:));
+                total_raw2{N}{m}{i}=dt2(:,curr_id(k,:));
                 m=m+1;
             end
         end
     end
     
-    %%%%%%%%%merge multiple files (experiment sessions)%%%%%%%%%%
+    %% Merge multiple blocks %%%%%%%%%%
     
     if numel(total_raw)>1
         for nn=1:Nt
             for cc=1:cn
                 currcond = [];
+                currcond2 = [];
                 for jj=1:numel(total_raw)
                     currcond=[currcond total_raw{jj}{nn}{cc}];
+                    currcond2=[currcond2 total_raw2{jj}{nn}{cc}];
                 end
                 total_plot{nn}{cc}=currcond;
+                total_plot2{nn}{cc}=currcond2;
             end
         end
     else
         total_plot=total_raw{1};
+        total_plot2=total_raw2{1};
     end
     beh_fp=total_plot;
     save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','save_print','type','bc_type');
+        'beh_fp','labels','plot_cond','save_print','type','bc_type','total_plot2');
     signal_all=beh_fp;
 end
+
 win = window(51:950);
 window = win;
 t = t(window);
@@ -275,11 +288,11 @@ end
 sparam = 15;
 page = 1;
 yl= [-0.3 1.5];
-if ~exist('sdata2','var')
-    sdata2 = cell(1,length(evtfile));
+if ~exist('total_plot2','var')
+    total_plot2 = cell(1,length(evtfile));
 end
 
 if ~exist('bc_type','var')
     bc_type = 'z';
 end
-    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, sdata2, bc_type);
+    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, total_plot2, bc_type);
