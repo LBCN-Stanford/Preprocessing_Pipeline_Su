@@ -257,7 +257,8 @@ if inspect
         % Handle response
         switch checkdata
             case 'Yes'
-                disp([checkdata ' Plotting bad epochs'])
+                disp(' Plotting bad epochs')
+                disp('.')
                 fb = find(badind);
                 figure;
                         P=tight_subplot(8,5,[.05 .05],[.05 .05],[.05 .05]);
