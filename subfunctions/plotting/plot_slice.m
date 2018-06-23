@@ -1,4 +1,4 @@
-function plot_slice(elecMatrix, elecRgb, V,elecId)
+function [slice2d_axes, hm] = plot_slice(elecMatrix, elecRgb, V,elecId)
 
 if isempty(elecMatrix) || isempty(V)
     return;
@@ -20,7 +20,7 @@ wDelt=.3;
 xStart=.09;
 yStart=.01;
 ht=.4;
-axes('position',[xStart yStart wdth ht]);
+slice2d_axes(1) = axes('position',[xStart yStart wdth ht]);
 
 imagesc(squeeze(mri.vol(:,xyz(elecId,1),:)),[mn mx]);
 axis square;
@@ -48,7 +48,7 @@ end
 set(gca,'xtick',[],'ytick',[],'xdir','reverse');
 
 %subplot(132);
-axes('position',[xStart+wDelt yStart wdth ht]);
+slice2d_axes(2) = axes('position',[xStart+wDelt yStart wdth ht]);
 imagesc(squeeze(mri.vol(xyz(elecId,2),:,:)),[mn mx]);
 axis square;
 hold on;
@@ -72,7 +72,7 @@ end
 set(gca,'xtick',[],'ytick',[]);
 
 %subplot(133);
-axes('position',[xStart+wDelt*2 yStart wdth ht]);
+slice2d_axes(3) = axes('position',[xStart+wDelt*2 yStart wdth ht]);
 imagesc(squeeze(mri.vol(:,:,xyz(elecId,3)))',[mn mx]);
 axis square;
 hold on;
