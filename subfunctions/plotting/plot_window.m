@@ -194,7 +194,7 @@ if ~isempty(handles.elecoor) || ~isempty(handles.elecMatrix)
     end
     %% add label
     handles.labeltext = text(handles.eleinuse(1,1),handles.eleinuse(1,2),handles.eleinuse(1,3),...
-        string(strcat(handles.m(1,2),handles.m(1,3))),'FontSize',18);
+        string(strcat(handles.m(1,2),' ',handles.m(1,3))),'FontSize',18);
     if handles.showslice
         set(handles.labeltext,'color',[1 1 1]);
     end
@@ -210,7 +210,7 @@ else
 end
 set(gca,'color',[1 1 1]);
 
-%% plot slice
+%% plot 2D slice
 plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
 
 %% plot signal
@@ -230,10 +230,9 @@ end
 %% Add checkboxes to for condition selection
 fsize = get(gcf,'position');
 fl = fsize(3); fw = fsize(4);
-cc = linspecer(length(handles.plot_cond));
 for k=length(handles.plot_cond):-1:1
-    handles.cbh(k) = uicontrol('Style','checkbox','String',handles.labels{k}, ...
-                        'fontsize',16,...
+    handles.cbh(k) = uicontrol('Style','checkbox','String',handles.labels{handles.plot_cond(k)}, ...
+                        'fontsize',14,...
                        'Value',1,'Position',...
                        round([fl*(handles.legendp(1)+handles.legendp(3)+0.01) ...
                        fw*(handles.legendp(2)+(handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
@@ -392,7 +391,7 @@ if handles.showslice
 end
 if ~isempty(handles.eleinuse)
     set(handles.labeltext,'position',...
-        [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)+2],...
+        [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)],...
         'string',string(strcat(handles.m(handles.page,2),handles.m(handles.page,3))));
     set(handles.currele,'xdata',...
         handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
@@ -414,7 +413,7 @@ handles.sparam = sv*50;
 axes(handles.axes1);
 cla;
 plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond, handles.order(handles.page), handles.yl,handles.bch,handles.t)
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
 guidata(hObject, handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
