@@ -11,10 +11,12 @@ elecpath = find(contains(sublist,'elec_recon'));
 while isempty(elecpath)
     %if isempty(elecpath)
         [upper,~] = fileparts(sbjpath);
+        sbjpath = upper;
         sublist = strsplit(genpath(upper),':')';
         elecpath = find(contains(sublist,'elec_recon'));
-        if length(elecpath) >1 || n > 4
+        if length(elecpath) >3 || n > 3
             elecpath = [];
+            sbjpath = path(meeg);
             break;
         end
         n = n+1;
@@ -58,10 +60,13 @@ catch
         gunzip(fullfile(elecpath,'brainmask.nii.gz'));
         V = spm_read_vols(spm_vol(mriFname));
 end
-
-surfpath = find(contains(sublist,'surf'));
+[upper,~] = fileparts(elecpath);
+sublist = strsplit(genpath(upper),':')';
+surfpath = find(contains(sublist,{'/surf','\surf'}));
 if isempty(surfpath)
     surfpath = elecpath;
+else
+    surfpath = sublist{surfpath(1)};
 end
 sbjnames = dir(fullfile(elecpath, '*.INF'));
 try
