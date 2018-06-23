@@ -1,22 +1,67 @@
-function  plot_3dslice(handles)
+function  hslices = plot_3dslice(handles)
 if isempty(handles.V)
     return;
 end
 V = handles.V;
-xyz = handles.elecMatrix;
-[d1, ~, ~] = size(V);
-vol = zeros(size(V));
-for i = 1:d1
-    vol(i,:,:)=V(:,i,:);
-end
-V=vol./max(vol(:));
+[d1, d2, d3] = size(V);
+xyz=zeros(size(handles.elecMatrix));
+xyz(:,1)=handles.elecMatrix(:,2);
+xyz(:,2)=handles.elecMatrix(:,1);
+xyz(:,3)=d3-handles.elecMatrix(:,3);
+%xyz = handles.elecMatrix;
+
+%vol = V;
+% for i = 1:d1
+%     vol(i,:,:)=(V(:,i,:));
+%     
+% end
+%vol = imrotate3(vol,90,[1 0 0],'nearest','loose','FillValues',0);
+% vol=flip(vol,3);
+% V=vol./max(vol(:));
+% V=smooth3(V,'gaussian',3);
+mxY=max(squeeze(V(:,round(d1/2),:)),[],1);
+mxX=max(squeeze(V(round(d1/2),:,:)),[],1);
+mxZ=max(squeeze(V(:,:,round(d1/2))),[],1);
+
+la=max(intersect(1:(round(d1/2)),find(mxY==0)))*0.9;
+lb=max(intersect(1:(round(d1/2)),find(mxX==0)))*0.9;
+lc=max(intersect(1:(round(d1/2)),find(mxZ==0)))*0.9;
+ld=max(intersect((round(d1/2):d1),find(mxY~=0)))*1.05;
+le=max(intersect((round(d1/2):d1),find(mxX~=0)))*1.05;
+lf=max(intersect((round(d1/2):d1),find(mxZ~=0)))*1.05;
+lim = min([la lb lc]);
+lim2 = max([ld le lf]);
+lim3 = min([ld le lf]);
 axes(handles.axes3);
-vol3d('cdata',V,'texture','3D');
-colormap(gray);
-view(3); 
-axis vis3d
-axis equal off
-set(gca,'color',[0 0 0]);
+
+[x,y,z] = meshgrid(1:size(V,2),1:size(V,1),1:size(V,3));
+     
+	hslices=slice(x,y,z,V,xyz(handles.page,1),xyz(handles.page,2),xyz(handles.page,3));
+    colormap(gray);
+    xlabel('x');ylabel('y');zlabel('z');
+%     xlim([1 size(V,1)*4]); 
+%     ylim([1 size(V,2)*4]);
+%     zlim([1 size(V,3)*4]); 
+    
+    hXslice=hslices(1);
+    hYslice=hslices(2);
+    hZslice=hslices(3);
+    
+    set(hXslice,'EdgeColor','None','Tag','SliceX');
+    set(hYslice,'EdgeColor','None','Tag','SliceY');
+    set(hZslice,'EdgeColor','None','Tag','SliceZ');
+   
+   	axis tight;	
+	axis vis3d;	
+    set(gca,'ZDir','reverse');
+    set(gca,'YDir','reverse');
+
+%vol3d('cdata',V,'texture','3D');
+% colormap(gray);
+% view(3); 
+% axis vis3d
+% axis equal off
+% set(gca,'color',[0 0 0]);
 %s = slice(V,xyz(handles.page,1),xyz(handles.page,2),xyz(handles.page,3),'edgecolor','none');colormap(gray);
 hold on
 for j=1:size(handles.group,1)
@@ -26,7 +71,7 @@ for j=1:size(handles.group,1)
         [side,top,~]=scatter3d(xyz(handles.group(j,1):handles.group(j,2),1),...
             xyz(handles.group(j,1):handles.group(j,2),2),...
             xyz(handles.group(j,1):handles.group(j,2),3),...
-            handles.elecRgb(handles.group(j,1),:),2,1,5,0,handles.head_center);
+            handles.elecRgb(handles.group(j,1),:),1.5,1,5,0,handles.head_center);
         
         handles.curr_elec.side=patch('faces',side.faces,'vertices',...
             side.vertices,'edgecolor','none','facecolor',(handles.elecRgb(handles.group(j,1),:)),'facelighting',...
@@ -42,11 +87,13 @@ for j=1:size(handles.group,1)
 
         plot3(xyz(handles.group(j,1):handles.group(j,2),1),xyz(handles.group(j,1):handles.group(j,2),2),...
              xyz(handles.group(j,1):handles.group(j,2),3),...
-            '.','markersize',15,'color',handles.elecRgb(handles.group(j,1),:));
+            '.','markersize',12,'color',handles.elecRgb(handles.group(j,1),:));
     end
     hold on
 end
-
+xlim([lim lim2]);
+ylim([lim lim2]);
+zlim([lim lim2]);
 % if ~handles.showslice
 %     set(s,'visible','off');
 % end

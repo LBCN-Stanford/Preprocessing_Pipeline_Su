@@ -1,6 +1,6 @@
-function plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t)
+function [po] = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t)
 
-Nt = length(signal_all);
+Nt = length(plot_cond);
 cn = nchannels(D{1});
 chanp=1:cn;
 cc = linspecer(Nt);
@@ -11,7 +11,6 @@ for i = page
     if contains(lower(name), 'ekg') || contains(lower(name), 'edf') || contains(lower(name), 'ref')
         continue;
     end
-    cla;
     allcond=true(Nt,1);
     temp_mean = nan(length(window),Nt);
     temp_std = nan(length(window),Nt);
@@ -64,7 +63,9 @@ for i = page
     line([0 0],[yl(1) yl(2)],'color','k','linewidth',2);
     xlim([t(1) t(end)])
     xlabel('Time (s)');
-    legend(labels(plot_cond(allcond)),'Location','NorthEastOutside');
+    le = legend(labels(plot_cond(allcond)),'Location','NorthEastOutside');
+    [po] = get(le,'position');
+ end
     hold off
     box off
 end

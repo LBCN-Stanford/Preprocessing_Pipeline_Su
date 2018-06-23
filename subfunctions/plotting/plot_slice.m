@@ -22,40 +22,17 @@ yStart=.01;
 ht=.4;
 axes('position',[xStart yStart wdth ht]);
 
-imagesc(squeeze(mri.vol(xyz(elecId,1),:,:)),[mn mx]);
+imagesc(squeeze(mri.vol(:,xyz(elecId,1),:)),[mn mx]);
 axis square;
 set(gca,'xdir','reverse');
 hold on;
 
 
 % Plot electrode
-hm(1)=plot(xyz(elecId,3),xyz(elecId,1),'r.');
+hm(1)=plot(xyz(elecId,3),xyz(elecId,2),'r.');
 set(hm(1),'color',elecRgb(elecId,:),'markersize',30);
 %find image limits
-mxX=max(squeeze(mri.vol(:,xyz(elecId,2),:)),[],2);
-mxY=max(squeeze(mri.vol(:,xyz(elecId,2),:)),[],1);
-limXa=max(intersect(1:(sVol(3)/2),find(mxX==0)));
-limXb=min(intersect((sVol(3)/2:sVol(3)),find(mxX==0)));
-limYa=max(intersect(1:(sVol(1)/2),find(mxY==0)));
-limYb=min(intersect((sVol(1)/2:sVol(1)),find(mxY==0)));
-%keep image square
-tempMin=min([limXa limYa]);
-tempMax=max([limXb limYb]);
-if tempMin<tempMax
-    axis([tempMin tempMax tempMin tempMax]);
-end
-set(gca,'xtick',[],'ytick',[]);
 
-%subplot(132);
-axes('position',[xStart+wDelt yStart wdth ht]);
-imagesc(squeeze(mri.vol(:,xyz(elecId,2),:)),[mn mx]);
-axis square;
-hold on;
-
-
-hm(2)=plot(xyz(elecId,3),xyz(elecId,2),'r.');
-set(hm(2),'color',elecRgb(elecId,:),'markersize',30);
-%find image limits
 mxX=max(squeeze(mri.vol(xyz(elecId,1),:,:)),[],2);
 mxY=max(squeeze(mri.vol(xyz(elecId,1),:,:)),[],1);
 limXa=max(intersect(1:(sVol(3)/2),find(mxX==0)));
@@ -70,6 +47,29 @@ if tempMin<tempMax
 end
 set(gca,'xtick',[],'ytick',[],'xdir','reverse');
 
+%subplot(132);
+axes('position',[xStart+wDelt yStart wdth ht]);
+imagesc(squeeze(mri.vol(xyz(elecId,2),:,:)),[mn mx]);
+axis square;
+hold on;
+
+
+hm(2)=plot(xyz(elecId,3),xyz(elecId,1),'r.');
+set(hm(2),'color',elecRgb(elecId,:),'markersize',30);
+%find image limits
+mxX=max(squeeze(mri.vol(:,xyz(elecId,2),:)),[],2);
+mxY=max(squeeze(mri.vol(:,xyz(elecId,2),:)),[],1);
+limXa=max(intersect(1:(sVol(3)/2),find(mxX==0)));
+limXb=min(intersect((sVol(3)/2:sVol(3)),find(mxX==0)));
+limYa=max(intersect(1:(sVol(1)/2),find(mxY==0)));
+limYb=min(intersect((sVol(1)/2:sVol(1)),find(mxY==0)));
+%keep image square
+tempMin=min([limXa limYa]);
+tempMax=max([limXb limYb]);
+if tempMin<tempMax
+    axis([tempMin tempMax tempMin tempMax]);
+end
+set(gca,'xtick',[],'ytick',[]);
 
 %subplot(133);
 axes('position',[xStart+wDelt*2 yStart wdth ht]);
