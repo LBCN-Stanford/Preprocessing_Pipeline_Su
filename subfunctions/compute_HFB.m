@@ -57,7 +57,7 @@ if atf_check
         catch
             inspectatf = 1;
         end
-        [badind,fbeh,~,spkts] = LBCN_filt_bad_trial(dat,fs,[],1,15, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);%(data_raw,fs,spk_thr,tapers,exwin,amp,pre_defined_bad)
+        [badind,fbeh,~,spkts] = LBCN_filt_bad_trial(dat,fs,[],1,5, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);%(data_raw,fs,spk_thr,tapers,exwin,amp,pre_defined_bad)
         switch atf_check
             case 1
                 nanid(:,:,i) = spkts';
