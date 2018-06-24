@@ -3,3 +3,8 @@
 		Modified plot_mesh and plot_3dslice to show slice plane if no free surfer model is identified (/subfunctions/plotting)
 		Modified plot_window function, now can select which conditions to plot (/subfunctions/plotting)
 		Added missing subfunctions
+06/23 Update: 	Some changes to improve speed.
+		Artifact removel control in GUI (by changeing the NAN window size. Previously disabled).
+		Additional baseline method added. 
+		Add different colors to electrode groups and showing electrode labels.
+		Optimized the funcitons to automatically identify tasks/load files/locate imaging data.
