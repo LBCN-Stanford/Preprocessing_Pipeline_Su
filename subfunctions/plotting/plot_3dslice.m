@@ -3,22 +3,11 @@ if isempty(handles.V)
     return;
 end
 V = handles.V;
-[d1, d2, d3] = size(V);
+[d1, ~, d3] = size(V);
 xyz=zeros(size(handles.elecMatrix));
 xyz(:,1)=handles.elecMatrix(:,2);
 xyz(:,2)=handles.elecMatrix(:,1);
 xyz(:,3)=d3-handles.elecMatrix(:,3);
-%xyz = handles.elecMatrix;
-
-%vol = V;
-% for i = 1:d1
-%     vol(i,:,:)=(V(:,i,:));
-%     
-% end
-%vol = imrotate3(vol,90,[1 0 0],'nearest','loose','FillValues',0);
-% vol=flip(vol,3);
-% V=vol./max(vol(:));
-% V=smooth3(V,'gaussian',3);
 mxY=max(squeeze(V(:,round(d1/2),:)),[],1);
 mxX=max(squeeze(V(round(d1/2),:,:)),[],1);
 mxZ=max(squeeze(V(:,:,round(d1/2))),[],1);
@@ -31,7 +20,6 @@ le=max(intersect((round(d1/2):d1),find(mxX~=0)))*1.05;
 lf=max(intersect((round(d1/2):d1),find(mxZ~=0)))*1.05;
 lim = min([la lb lc]);
 lim2 = max([ld le lf]);
-lim3 = min([ld le lf]);
 axes(handles.axes3);
 
 [x,y,z] = meshgrid(1:size(V,2),1:size(V,1),1:size(V,3));
@@ -85,7 +73,7 @@ for j=1:size(handles.group,1)
             'SpecularColorReflectance', 0.2);
     elseif strcmpi(type(2),'d')
 
-        plot3(xyz(handles.group(j,1):handles.group(j,2),1),xyz(handles.group(j,1):handles.group(j,2),2),...
+        e(j) = plot3(xyz(handles.group(j,1):handles.group(j,2),1),xyz(handles.group(j,1):handles.group(j,2),2),...
              xyz(handles.group(j,1):handles.group(j,2),3),...
             '.','markersize',12,'color',handles.elecRgb(handles.group(j,1),:));
     end
@@ -94,6 +82,9 @@ end
 xlim([lim lim2]);
 ylim([lim lim2]);
 zlim([lim lim2]);
+legend(e, handles.groupNames,'location','northeast','AutoUpdate','off', ...
+    'box','off','fontsize',12,'NumColumns',ceil(size(handles.group,1)/length(handles.plot_cond)));
+
 % if ~handles.showslice
 %     set(s,'visible','off');
 % end

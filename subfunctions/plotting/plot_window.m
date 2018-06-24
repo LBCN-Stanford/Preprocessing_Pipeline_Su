@@ -63,10 +63,18 @@ handles.page = varargin{7};
 handles.yl = varargin{8};
 handles.bch = varargin{9};
 handles.t = varargin{10};
-handles.signal_org = [];
+%handles.atf = [];
 setappdata(hObject,'signal_other',varargin{11});
 handles.bc_type = varargin{12};
 handles.bc_win = 100:300;
+handles.signal_backup=handles.signal_all;
+nanid = cell(size(handles.signal_all));
+for k=1:length(handles.plot_cond)
+    for j = 1:length(handles.signal_all{k})
+        nanid{k}{j} = (isnan(handles.signal_all{k}{j}));
+    end
+end
+handles.nanid = nanid;
 handles.showslice = 0;
     handles.elecMatrix=[];
     handles.elecLabels=[];
@@ -80,10 +88,10 @@ set(handles.slider1,'value',0.3);
 set(handles.slider3,'enable','off');
 set(handles.axes4,'visible','off');
 set(handles.checkbox2,'visible','off');
-if isempty(handles.signal_org)
-    set(handles.slider2,'enable','off');
-end
-handles.sparam = (get(handles.slider1,'value'))*50;
+% if isempty(handles.atf)
+%     set(handles.slider2,'enable','off');
+% end
+handles.sparam = (get(handles.slider1,'value'))*60;
 % Update handles structure
 guidata(hObject, handles);
 
@@ -107,12 +115,6 @@ handles.V = V;
 try
     [handles.elecMatrix, handles.elecLabels, handles.elecRgb]=mgrid2matlab(mgridfilenames);
     handles.elecMatrix=round(handles.elecMatrix);
-    dd=diff(handles.elecRgb(:,1));
-    dd=[0;dd];
-    id=find(dd~=0);
-    id2=[id-1;size( handles.elecRgb,1)];
-    id1=[1;id];
-    handles.group=[id1 id2];
 catch
 end
 handles.elecoor = leptoCoor;
@@ -171,6 +173,20 @@ try
 catch
     disp('Can not match the channel names with imaging data.')
 end
+
+%% Get group names, add some color if needed
+if length(unique(sum(handles.elecRgb,2))) == 1
+    handles.elecRgb = map_color(handles.m(:,2));
+end
+if ~isempty(handles.elecRgb)
+    dd=diff(handles.elecRgb(:,1));
+    dd=[0;dd];
+    id=find(dd~=0);
+    id2=[id-1;size( handles.elecRgb,1)];
+    id1=[1;id];
+    handles.group=[id1 id2];
+    handles.groupNames = handles.m(id1,2);
+end
 %% Plot cortex model
 if ~isempty(handles.elecoor) || ~isempty(handles.elecMatrix)
     axes(handles.axes3);
@@ -210,8 +226,6 @@ else
 end
 set(gca,'color',[1 1 1]);
 
-%% plot 2D slice
-plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
 
 %% plot signal
 axes(handles.axes1);
@@ -232,15 +246,18 @@ fsize = get(gcf,'position');
 fl = fsize(3); fw = fsize(4);
 for k=length(handles.plot_cond):-1:1
     handles.cbh(k) = uicontrol('Style','checkbox','String',handles.labels{handles.plot_cond(k)}, ...
-                        'fontsize',14,...
+                        'fontsize',12,...
                        'Value',1,'Position',...
                        round([fl*(handles.legendp(1)+handles.legendp(3)+0.01) ...
                        fw*(handles.legendp(2)+(handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
                        fw*((handles.legendp(4)))  ...
                        fw*((handles.legendp(4)*0.8/length(handles.plot_cond)))]),'Unit','normalized',...
-                       'backgroundcolor',[1 1 1],'string',handles.labels{k},...
+                       'backgroundcolor',[1 1 1],...
                        'Callback',{@checkBoxCallback,k, handles});
 end
+
+%% plot 2D slice. Store the axes and electrode handles
+handles.slice2d_axes = plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page);
 
 guidata(hObject, handles);
 
@@ -262,21 +279,23 @@ function pushbutton1_Callback(hObject, ~, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if handles.page < length(handles.order)
     handles.page=handles.page+1;
-
-plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
-if handles.showslice
-     move_slice(handles);
-end
-if ~isempty(handles.eleinuse)
-    set(handles.labeltext,'position',...
-        [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)+2],...
-        'string',string(strcat(handles.m(handles.page,2),handles.m(handles.page,3))));
-    set(handles.currele,'xdata',...
-        handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
-end
-axes(handles.axes1);
-plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    
+    %plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
+    if handles.showslice
+        move_slice(handles);
+    end
+    if ~isempty(handles.eleinuse)
+        set(handles.labeltext,'position',...
+            [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)+2],...
+            'string',string(strcat(handles.m(handles.page,2),handles.m(handles.page,3))));
+        set(handles.currele,'xdata',...
+            handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
+    end
+    axes(handles.axes1);
+    plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
+        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    
+    move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
 end
 set(handles.listbox1,'value',handles.page);
 guidata(hObject, handles);
@@ -339,17 +358,23 @@ if strcmp(bc_type,bc_old)
 end
 signal_other = getappdata(gcf, 'signal_other');
 if isempty(signal_other{1})
-    switch bc_old
-        case 'z'
-            bcv = 1;
-        case 'log'
-            bcv = 2;
+    try
+        signal_other = evalin('base', 'Signal2');
+        signal_other = arrange(signal_other, handles);
+    catch
+        switch bc_old
+            case 'z'
+                bcv = 1;
+            case 'log'
+                bcv = 2;
+        end
+        set(hObject, 'value',bcv);
+    	return;
     end
-    set(hObject, 'value',bcv);
-    return;
 end
+setappdata(gcf,'signal_other',handles.signal_backup);
 handles.signal_all = signal_other;
-setappdata(gcf,'signal_other',handles.signal_all);
+handles.signal_backup = signal_other;
 % for i = 1:length(handles.signal_org)
 %     signalbc{i} = baseline_norm(handles.signal_org{i}, handles.window, handles.bc_win, handles.bc_type);
 % end
@@ -384,22 +409,26 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 if handles.page > 1
     handles.page=handles.page-1;
+    
+    %plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
+    if handles.showslice
+        move_slice(handles);
+    end
+    if ~isempty(handles.eleinuse)
+        set(handles.labeltext,'position',...
+            [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)],...
+            'string',string(strcat(handles.m(handles.page,2),handles.m(handles.page,3))));
+        set(handles.currele,'xdata',...
+            handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
+    end
+    move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
+    
+    axes(handles.axes1);
+    plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
+        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    
+end
 
-plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
-if handles.showslice
-     move_slice(handles);
-end
-if ~isempty(handles.eleinuse)
-    set(handles.labeltext,'position',...
-        [handles.eleinuse(handles.page,1) handles.eleinuse(handles.page,2) handles.eleinuse(handles.page,3)],...
-        'string',string(strcat(handles.m(handles.page,2),handles.m(handles.page,3))));
-    set(handles.currele,'xdata',...
-        handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
-end
-axes(handles.axes1);
-plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
-end
 set(handles.listbox1,'value',handles.page);
 guidata(hObject, handles);
 
@@ -409,7 +438,7 @@ function slider1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 sv = get(hObject,'Value')+0.02;
-handles.sparam = sv*50;
+handles.sparam = sv*60;
 axes(handles.axes1);
 cla;
 plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
@@ -436,13 +465,24 @@ function slider2_Callback(hObject, eventdata, handles)
 % hObject    handle to slider2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-for k=1:length(handles.signal_all)
-    nanid = find(isnan(handles.signal_all{k}));
-    nanid = [nanid nanid+5];
-    nanid = [nanid nanid-5];
-    handles.nanid = unique(sort(nanid));
-    handles.signal_all{k}(handles.nanid)=nan;
+param = get(hObject,'Value')*100;
+handles.signal_all=handles.signal_backup;
+se = strel('line',param*100,90);
+for k=1:length(handles.plot_cond)
+    for j = 1:length(handles.signal_all{k})
+        progress(j,length(handles.signal_all{k})*length(handles.plot_cond),80,0)
+        nanid = handles.nanid{k}{j};
+        results=imdilate(nanid,se);
+        handles.signal_all{k}{j}(results)=nan;
+        handles.signal_all{k}{j} = fillmissing(handles.signal_all{k}{j},'movmean',param*5);
+    end
 end
+disp('.');
+disp('-----------Done------------');
+axes(handles.axes1);
+plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+guidata(hObject, handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -493,7 +533,7 @@ function listbox1_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 selchan = get(hObject,'Value');
 handles.page = selchan;
-plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
+
 if handles.showslice
      move_slice(handles);
 end
@@ -510,6 +550,7 @@ plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox1
+move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -565,7 +606,7 @@ for i = 1:length(handles.order)
     name=char(chanlabels(handles.D{1},i));
     progress(i,length(handles.order),80,0)
     plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond, handles.order(i), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond, handles.order(i), handles.yl,handles.bch,handles.t,1);
 print(f, fullfile(resultdname,name),'-opengl','-r300','-dpng');
 
 end

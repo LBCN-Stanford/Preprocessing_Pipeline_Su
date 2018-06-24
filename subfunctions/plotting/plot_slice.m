@@ -1,6 +1,7 @@
-function [slice2d_axes, hm] = plot_slice(elecMatrix, elecRgb, V,elecId)
+function [slice2d_axes] = plot_slice(elecMatrix, elecRgb, V,elecId)
 
 if isempty(elecMatrix) || isempty(V)
+    slice2d_axes = [];
     return;
 end
 mri.vol = V;

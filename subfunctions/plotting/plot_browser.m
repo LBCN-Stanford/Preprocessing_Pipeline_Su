@@ -1,12 +1,14 @@
-function [po] = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t)
-
+function po = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t,showlegend)
+if nargin < 12
+    showlegend = 1;
+end
 Nt = length(plot_cond);
 cn = nchannels(D{1});
 chanp=1:cn;
 cc = linspecer(Nt);
 
 for i = page
-
+    
     name=char(chanlabels(D{1},chanp(i)));
     if contains(lower(name), 'ekg') || contains(lower(name), 'edf') || contains(lower(name), 'ref')
         continue;
@@ -26,9 +28,9 @@ for i = page
         vs=nanvar(signal);
         elim=vs>5*nanmedian(vs);
         temp_mean(:,j ) = nanmean(signal(:,~elim),2);
-        temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),5,3,1);
+        temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),10,3,1);
         temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(nt);
-        temp_std(:,j ) = smooth_sig(temp_std(:,j ),5,3,1);
+        temp_std(:,j ) = smooth_sig(temp_std(:,j ),10,3,1);
         try
             plot(t,temp_mean(:,j),'color',cc(j,:),'linewidth',2);
             hold on
@@ -63,9 +65,31 @@ for i = page
     line([0 0],[yl(1) yl(2)],'color','k','linewidth',2);
     xlim([t(1) t(end)])
     xlabel('Time (s)');
-    le = legend(labels(plot_cond(allcond)),'Location','NorthEastOutside');
+    if showlegend
+        le = legend(labels(plot_cond(allcond)),'Location','NorthEast','box','off');
+%     else
+%         lb_emp = repmat({''},size(labels));
+%         [le, ~] = legend(lb_emp(plot_cond(allcond)),'Location','NorthEast','box','off');
+%         for ii = 1:length(hObjs)
+%             hdl = hObjs(ii);
+%             if strcmp(get(hdl, 'Type'), 'text')
+%                 pos = get(hdl, 'Position');
+%                 extent = get(hdl, 'Extent');    
+%                 pos(1) = 1-extent(1)-extent(3); 
+%                 set(hdl, 'Position', pos);
+%             else    
+%                 xData = get(hdl, 'XData');
+%                 if length(xData) == 2 
+%                     xDataNew = [1-xData(2), 1-xData(1)];
+%                 else 
+%                     xDataNew = 1-xData;
+%                 end
+%                 set(hdl, 'XData', xDataNew);
+%             end
+%         end
+    end
     [po] = get(le,'position');
- end
-    hold off
-    box off
+end
+hold off
+box off
 end
