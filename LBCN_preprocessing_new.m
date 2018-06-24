@@ -76,7 +76,8 @@ nd = zeros(size(filename,1),1);
 
 for i = 1:size(filename,1)
     % Convert data
-    [D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],0,[20 40 41 64:67 102:190]);
+    %[D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],0,[20 40 41 64:67 102:190]);
+    [D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],1);
     if Ddiod.fsample > 1000
         S.D = Ddiod;
         S.fsample_new = 1000;

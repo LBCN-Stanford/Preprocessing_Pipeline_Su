@@ -196,19 +196,26 @@ if ~exist('signal_all','var')
         type = 1;
         atf_check = 3;
         %% Signal 2 is the other un-chosen baseline correction method. (Just get ready for the plotting)
-        [signal, signal2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window);
+        [sig, sig2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window);
         cn = size(data,1);
         ts=[];
         for i=1:length(events.categories)
             ts=[ts events.categories(i).start];
         end
         [~,A]=sort(ts);
-        sdata{N} = signal(:,:,A);
-        sdata2{N} = signal2(:,:,A);
+        sdata{N} = sig(:,:,A);
+        sdata2{N} = sig2(:,:,A);
         
         %% In case it crashes 0_0
-        assignin ('base','Signal',sdata{N});
-        assignin ('base','Signal2',sdata2{N});
+        try
+            Signal = evalin('base', 'Signal');
+            Signal2 = evalin('base', 'Signal2');
+            Signal{N} = sdata{N};
+            Signal2{N} = sdata2{N};
+        catch    
+            assignin ('base','Signal',sdata{N});
+            assignin ('base','Signal2',sdata2{N});
+        end
         %% Some arrangements
         for i = 1:cn
             m = 1;
@@ -271,7 +278,7 @@ if ~exist('signal_all','var')
     end
     beh_fp=total_plot;
     save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','save_print','type','bc_type','total_plot2');
+        'beh_fp','labels','plot_cond','save_print','type','bc_type');
     signal_all=beh_fp;
 end
 
@@ -285,9 +292,9 @@ end
 %Plot_script;
 
 %% Run this to open a GUI and inspect the plots and images (electrodes)
-sparam = 15;
+sparam = 25;
 page = 1;
-yl= [-0.3 1.5];
+yl= [-0.3 1.8];
 if ~exist('total_plot2','var')
     total_plot2 = cell(1,length(evtfile));
 end
