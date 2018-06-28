@@ -1,4 +1,4 @@
-function [badind, filtered_beh,spkevtind,spkts] = LBCN_filt_bad_trial(data_raw,fs,spk_thr,...
+function [badind, filtered_beh,spkevtind,spkts,badind2] = LBCN_filt_bad_trial(data_raw,fs,spk_thr,...
     tapers,exwin,amp,pre_defined_bad, inspect)
 %
 %   This function examines each epoched data and get the indicies of sharp spike/noise/artifact in a epoch.
@@ -81,7 +81,7 @@ for j = find(~badind)
     dat = data_raw(:,j);
     checkhf = filtfilt(b2,a2,dat);
     check = filtfilt(b,a,dat);
-    [~,thhf] = get_threshold(checkhf,16,8,'std',spk_thr);
+    [~,thhf] = get_threshold(checkhf,round(16*fs/1000),round(8*fs/1000),'std',spk_thr);
     %[~,th2] = get_threshold(check,16,8,'std',18);
     peakind = find(diff(sign(diff(check))) ~= 0)+1;
     peakind2 = find(diff(sign(diff(checkhf))) ~= 0)+1;
@@ -91,15 +91,15 @@ for j = find(~badind)
     %ind = peakind(abs(peaks) > th2);
     ind2 = peakind2(abs(peaks2) > thhf);
     if isempty(ind2) && length(ind) >=4
-        [~,thhf] = get_threshold(checkhf,16,8,'std',spk_thr-0.5);
+        [~,thhf] = get_threshold(checkhf,round(16*fs/1000),round(8*fs/1000),'std',spk_thr-0.5);
         ind2 = peakind2(abs(peaks2) > thhf);
     end
     match = false(1,length(ind));
     match2 = false(1,length(ind2))';
     for ii = 1:length(ind)
-        if any(ismember(ind2,ind(ii)-20:ind(ii)+20))
+        if any(ismember(ind2,ind(ii)-round(20*fs/1000):ind(ii)+round(20*fs/1000)))
             match(ii) = 1;
-            match2 = match2 + ismember(ind2,ind(ii)-20:ind(ii)+20);
+            match2 = match2 + ismember(ind2,ind(ii)-round(20*fs/1000):ind(ii)+round(20*fs/1000));
         end
     end
     match2 = logical(match2);
@@ -109,7 +109,7 @@ for j = find(~badind)
         neg=peakind2(sign(peaks2)==-1);
         pos=peakind2(sign(peaks2)==1);
         
-        group = abs(diff(ind2)) > 40;
+        group = abs(diff(ind2)) > round(40*fs/1000);
         group = [1 group'];
         fg = find(group);
         gw = zeros(length(fg),2);
@@ -123,7 +123,7 @@ for j = find(~badind)
         gw(length(fg),1)=fg(end);
         gw(length(fg),2)=length(group);
         
-        if any((gw(:,2)-gw(:,1))>20)
+        if any((gw(:,2)-gw(:,1))>round(20*fs/1000))
             badind(j) = 1;
             continue;
         end
@@ -131,7 +131,7 @@ for j = find(~badind)
         sig=checkhf;
         sigsq=2*sig.*sig;
         ev=real(sqrt(filtfilt(b3,a3,sigsq)));
-        lt=median(abs(ev(1:300)))*2.5;
+        lt=median(abs(ev(1:round(300*fs/1000))))*2.5;
         if max(abs(ev))>lt
             for ii=1:size(gw,1)   %find(dd')
                 
@@ -164,9 +164,9 @@ for j = find(~badind)
                 aa1 = [median(abs(pv(pv<0)));median(pv(pv>0))]*amp;
                 aa2 = [max(abs(pv(pv<0)));max(pv(pv>0))]*amp;
                 
-                if (all(middiff(~isnan(middiff)) > aa2) && (length(tind) <= 6))...
+                if (all(middiff(~isnan(middiff)) > aa2) && (length(tind) <= round(6*fs/1000)))...
                         ||( any(middiff(~isnan(middiff)) > aa2)...
-                        && (match2(abs(pv) == max(abs(pv)))) &&(length(tind)<8))
+                        && (match2(abs(pv) == max(abs(pv)))) &&(length(tind) < round(8*fs/1000)))
                     
                 elseif (any(middiff > aa1) && any(middiff < aa2))
                     ind2(gw(ii,1):gw(ii,2)) = tind(abs(pv) == max(abs(pv)));
@@ -180,8 +180,9 @@ for j = find(~badind)
         end
     end
     ind = sort(unique([ind2(~isnan(ind2)); find(pre_defined_bad(:,j))]));%(logical(match2));
-    ind(diff(ind) < 20)=[];
+    ind(diff(ind) < round(20*fs/1000))=[];
     if ~isempty(ind)
+        exwin = round(exwin*fs/1000);
         window = [ind-exwin ind+exwin];
         [~,A] = sort(window(:,1));
         window = window(A,:);
@@ -196,7 +197,7 @@ for j = find(~badind)
         catch
         end
         if   size(window,1) <= 6 ...
-                && max(abs(dat)) < 2000 && sum(window(:,2) - window(:,1)) <= 600
+                && max(abs(dat)) < 2000 && sum(window(:,2) - window(:,1)) <= round(600*fs/1000)
             
             if tapers
                 %checkhf=filtfilt(b4,a4,dat);
@@ -248,7 +249,9 @@ for j = find(~badind)
     end
     filtered_beh(:,j) = checkhf;
 end
-
+vspk = var(filtered_beh(:,spkevtind));
+badind2 = find(spkevtind); % May exclude these epochs when computing the baseline ... 
+badind2 = badind2(vspk>3*median(vspk));
 if inspect
     if length(find(badind)) > 0.5*tn
         checkdata = questdlg('More than half of the epoches were labeled as bad. Do you want to check the data?', ...
