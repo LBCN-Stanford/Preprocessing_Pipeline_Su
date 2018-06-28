@@ -8,3 +8,13 @@
 		Additional baseline method added. 
 		Add different colors to electrode groups and showing electrode labels.
 		Optimized the funcitons to automatically identify tasks/load files/locate imaging data.
+06/28 Update:	Fixed tons of bugs. 
+		Improved speed.
+		Optimized the code for mismatched channel labels (between edf file and image data).. but there are always thousands of ways of getting errors -- if there's any trouble linking the signal to subject's image just igore the image part (when choosing image folder click on cancel).
+		Did some minor changes in SPM files so don't forget to replace the original functions in the SPM_toReplace folder.
+		Tips: 	-- Change param in the main function to switch between GUI/no-GUI;
+			-- Change notch settings in the main function (line 109) when processing data from China/US cohorts.
+			-- Put bad chan index to exclude (e.g. redundant channels collected from China) in the main function.
+			-- The viewer can now be used to review the results generated from origianl pipeline (SHFBXXX.mat file) by running "script_view_results.m" and select files (but still need some testing).
+		
+		
