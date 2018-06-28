@@ -155,7 +155,7 @@ switch type
         narrown = narrown.*conj(narrown);
 end
 window = round((window(1) : downsamp : window(end))./downsamp);
-%bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
+bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
 nanid = nanid(:,1:downsamp:end,:);
 %signal = narrown;
 [signalbc, signalbc2] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid);
