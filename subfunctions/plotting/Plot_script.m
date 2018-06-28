@@ -15,9 +15,6 @@ if save_print
             mkdir(resultdname);
         end
 end
-for i=1:length(labels)
-    labels{i}(ismember(labels{i},'_'))=' ';
-end
 
 [yl1, yl2] = get_ylim(signal_all,chanlabels(D{1}),0.9,1.4);
 
@@ -36,7 +33,7 @@ for i=1:cn
     for j=1:Nt
         signal=signal_all{j}{i};
         signal = ndnanfilter(signal,'hamming',20,[],[],[],1);
-        signal=signal(51:end-50,:);
+        signal=signal(edge+1 : end - edge,:);
         if isempty(signal) || size(signal,2) == 1
             %title(['Channel ',num2str(i),'  ',char(chanlabels(D{1},chanp(i))),' ','Ignoring bad cond.']);
             allcond(j)=0;

@@ -52,22 +52,27 @@ function plot_window_OpeningFcn(hObject, ~, handles, varargin)
 % varargin   command line arguments to plot_window (see VARARGIN)
 
 %plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch)
-
-handles.signal_all= varargin{1};
-handles.sparam = varargin{2};
-handles.labels = varargin{3};
-handles.D = varargin{4} ;
-handles.window = varargin{5};
-handles.plot_cond = varargin{6} ;
-handles.page = varargin{7};
-handles.yl = varargin{8};
-handles.bch = varargin{9};
-handles.t = varargin{10};
-%handles.atf = [];
-setappdata(hObject,'signal_other',varargin{11});
-handles.bc_type = varargin{12};
-handles.bc_win = 100:300;
+%LBCN_viewer_getDefault
+try
+    handles.signal_all= varargin{1};
+    handles.sparam = varargin{2};
+    handles.labels = varargin{3};
+    handles.D = varargin{4} ;
+    handles.window = varargin{5};
+    handles.plot_cond = varargin{6} ;
+    handles.page = varargin{7};
+    handles.yl = varargin{8};
+    handles.bch = varargin{9};
+    handles.t = varargin{10};
+    setappdata(hObject,'signal_other',varargin{11});
+    handles.bc_type = varargin{12};
+catch
+    script_view_results; % In case nothing is sent in
+end
 handles.signal_backup=handles.signal_all;
+if length(varargin) == 13
+    handles.nanid = varargin{13};
+else
 nanid = cell(size(handles.signal_all));
 for k=1:length(handles.plot_cond)
     for j = 1:length(handles.signal_all{k})
@@ -75,12 +80,14 @@ for k=1:length(handles.plot_cond)
     end
 end
 handles.nanid = nanid;
+end
 handles.showslice = 0;
     handles.elecMatrix=[];
     handles.elecLabels=[];
     handles.elecRgb=[];
     handles.eleinuse = [];
     handles.V = [];
+    handles.m = {};
     handles.order = 1:nchannels(handles.D{1});
 handles.sel_cond = true(length(handles.plot_cond),1)';
 handles.output = hObject;
@@ -125,7 +132,12 @@ try
             handles.m(ii,:)=strsplit(handles.elecLabels{ii},'_');
         end
         for ii=1:length(chanlabels(handles.D{1}))
-            modi(ii)=string(erase(char(chanlabels(handles.D{1},ii)),[string('_'),string('-'),string('.'),string('EEG'),string(' ')]));
+            mc = char(chanlabels(handles.D{1},ii));
+            modi(ii)=string(erase(mc,["EEG","_","-","."," "]));
+        end
+        if size(handles.m,2) ~=3
+            side = cell(size(handles.m,1),1);
+            handles.m = [side  handles.m];
         end
         order = cell(1, length(handles.elecLabels));
         handles.order = nan(1, length(handles.elecLabels));
@@ -133,16 +145,21 @@ try
             order{ii}=find(strcmpi(strcat(handles.m(ii,2),handles.m(ii,3)),modi));
             if isempty(order{ii})
                 if ii < length( handles.elecLabels) && ii > 1
-                    if find(strcmpi(strcat(handles.m(ii+1,2),handles.m(ii+1,3)),modi))-order{ii-1}==-2
+                    next = find(strcmpi(strcat(handles.m(ii+1,2),handles.m(ii+1,3)),modi));
+                    if ~isempty(next) && next-order{ii-1}==-2
                         order{ii} = order{ii-1}-1;
-                    elseif (find(strcmpi(strcat(handles.m(ii+1,2),handles.m(ii+1,3)),modi))-order{ii-1}==2)
+                    elseif ~isempty(next) && next-order{ii-1}==2
                         order{ii} = order{ii-1}+1;
+                    else
+                        order{ii} = nan;
                     end
                 else
                     order{ii} = nan;
                 end
             elseif length(order{ii})>1
                 order{ii} = order{ii}(end);
+                handles.m(ii,2)=strcat(handles.m(ii,2),'_',handles.m(ii,1));
+                
             end
             handles.order(ii) = order{ii};
         end
@@ -151,12 +168,12 @@ try
             eind=sort(handles.order);
             eind(isnan(eind))=[];
             check=1:(nchannels(handles.D{1}));
-            check(eind)=[];
+            check(eind)=[];%labels in edf that do not match the image data
             fin = find(isnan(handles.order));
-            compareind=handles.order([fin+1 fin-1]);
+            compareind=handles.order([fin+1 fin-1]);%Neighbors of labels in the image data that did not find a match
             for i=1:length(check)
-                cname = lower(chanlabels(handles.D{1},check(i)));
-                if any(abs(check(i)-compareind)==1) && ...
+                cname = lower(modi(check(i)));%channel label in edf file
+                if any(abs(check(i)-compareind)==1) && ... % For those mismatched labels, first look for neiboring labels
                         ~contains(cname,'ref') && ...
                         ~contains(cname,'ekg') && ...
                         ~contains(cname,'ecg') && ...
@@ -166,7 +183,23 @@ try
                         found = found -length(misind);
                     end
                     handles.order(misind(found))=check(i);
+                elseif length(find(diff(diff(misind))==0)) == length(find(diff(diff(check))==0)) && ~isempty(find(diff(diff(misind))==0, 1))
+                    fc = find(diff(diff(check))==0);
+                    handles.order(misind)=sort(check(fc(1):(fc(end)+2)),'descend'); % If the mislabeled chan = missing chan
+                    break;
                 end
+            end
+        end
+        if any(isnan(handles.order))%if there is still mismatched label
+            misind2=find(isnan(handles.order));
+            for k = misind2
+                index = find_most_similar(strcat(handles.m{k,2},handles.m{k,3}), modi(check));
+                index = index(end);
+                handles.order(k)=check(index);
+                %cn = char(modi(check(index)));
+                cn = char(chanlabels(handles.D{1},check(index)));
+                handles.m{k,2} = cn(isstrprop(cn,'alpha'));
+                check(index) = [];
             end
         end
     end
@@ -210,7 +243,7 @@ if ~isempty(handles.elecoor) || ~isempty(handles.elecMatrix)
     end
     %% add label
     handles.labeltext = text(handles.eleinuse(1,1),handles.eleinuse(1,2),handles.eleinuse(1,3),...
-        string(strcat(handles.m(1,2),' ',handles.m(1,3))),'FontSize',18);
+        strcat(handles.m(1,2),handles.m(1,3)),'FontSize',18);
     if handles.showslice
         set(handles.labeltext,'color',[1 1 1]);
     end
@@ -250,7 +283,7 @@ for k=length(handles.plot_cond):-1:1
                        'Value',1,'Position',...
                        round([fl*(handles.legendp(1)+handles.legendp(3)+0.01) ...
                        fw*(handles.legendp(2)+(handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
-                       fw*((handles.legendp(4)))  ...
+                       fw*((handles.legendp(3))*0.8)  ...
                        fw*((handles.legendp(4)*0.8/length(handles.plot_cond)))]),'Unit','normalized',...
                        'backgroundcolor',[1 1 1],...
                        'Callback',{@checkBoxCallback,k, handles});
@@ -283,6 +316,10 @@ if handles.page < length(handles.order)
     %plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
     if handles.showslice
         move_slice(handles);
+    elseif ~isempty(handles.m) && ~strcmp(handles.m(handles.page,1),handles.m(handles.page-1,1))
+            axes(handles.axes3);
+            view(handles.eleinuse(handles.page,:));
+            set(handles.light,'position',handles.eleinuse(handles.page,:));   
     end
     if ~isempty(handles.eleinuse)
         set(handles.labeltext,'position',...
@@ -295,7 +332,7 @@ if handles.page < length(handles.order)
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
         handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
     
-    move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
+    move_2dslice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
 end
 set(handles.listbox1,'value',handles.page);
 guidata(hObject, handles);
@@ -375,10 +412,6 @@ end
 setappdata(gcf,'signal_other',handles.signal_backup);
 handles.signal_all = signal_other;
 handles.signal_backup = signal_other;
-% for i = 1:length(handles.signal_org)
-%     signalbc{i} = baseline_norm(handles.signal_org{i}, handles.window, handles.bc_win, handles.bc_type);
-% end
-%handles = arrange(signalbc, handles);
 axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
@@ -413,6 +446,10 @@ if handles.page > 1
     %plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page)
     if handles.showslice
         move_slice(handles);
+    elseif ~isempty(handles.m) && ~strcmp(handles.m(handles.page,1),handles.m(handles.page+1,1))
+            axes(handles.axes3);
+            view(handles.eleinuse(handles.page,:));
+            set(handles.light,'position',handles.eleinuse(handles.page,:));  
     end
     if ~isempty(handles.eleinuse)
         set(handles.labeltext,'position',...
@@ -421,7 +458,7 @@ if handles.page > 1
         set(handles.currele,'xdata',...
             handles.eleinuse(handles.page,1),'ydata' ,handles.eleinuse(handles.page,2),'zdata' ,handles.eleinuse(handles.page,3));
     end
-    move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
+    move_2dslice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
     
     axes(handles.axes1);
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
@@ -473,7 +510,11 @@ for k=1:length(handles.plot_cond)
         progress(j,length(handles.signal_all{k})*length(handles.plot_cond),80,0)
         nanid = handles.nanid{k}{j};
         results=imdilate(nanid,se);
-        handles.signal_all{k}{j}(results)=nan;
+        try
+            handles.signal_all{k}{j}(results)=nan;
+        catch
+            handles.signal_all{k}{j}(:,end+1) = nan;
+        end
         handles.signal_all{k}{j} = fillmissing(handles.signal_all{k}{j},'movmean',param*5);
     end
 end
@@ -550,7 +591,7 @@ plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox1
-move_2dslice(handles.eleinuse, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
+move_2dslice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
 guidata(hObject, handles);
 
 % --- Executes during object creation, after setting all properties.
@@ -617,7 +658,7 @@ function export_Callback(hObject, ~, handles)
 % hObject    handle to export (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-assignin ('base','Signal',handles.signal_all);
+assignin ('base','hfb',handles.signal_all);
 disp('-------------Data exported to workspace--------------')
 guidata(hObject, handles);
 

@@ -6,9 +6,8 @@ Nt = length(plot_cond);
 cn = nchannels(D{1});
 chanp=1:cn;
 cc = linspecer(Nt);
-
+edge = (round(size(signal_all{1}{1},1)-length(window))/2);
 for i = page
-    
     name=char(chanlabels(D{1},chanp(i)));
     if contains(lower(name), 'ekg') || contains(lower(name), 'edf') || contains(lower(name), 'ref')
         continue;
@@ -19,7 +18,7 @@ for i = page
     for j=1:Nt
         signal=signal_all{j}{i};
         signal = ndnanfilter(signal,'hamming',round(sparam),[],[],[],1);
-        signal=signal(51:end-50,:);
+        signal=signal(edge+1:end-edge,:);
         if isempty(signal) || size(signal,2) == 1
             allcond(j)=0;
             continue;
@@ -66,7 +65,7 @@ for i = page
     xlim([t(1) t(end)])
     xlabel('Time (s)');
     if showlegend
-        le = legend(labels(plot_cond(allcond)),'Location','NorthEast','box','off');
+        le = legend(labels(plot_cond(allcond)),'Location','NorthEastoutside','box','off');
 %     else
 %         lb_emp = repmat({''},size(labels));
 %         [le, ~] = legend(lb_emp(plot_cond(allcond)),'Location','NorthEast','box','off');

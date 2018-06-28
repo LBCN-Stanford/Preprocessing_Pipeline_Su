@@ -52,11 +52,16 @@ axes(handles.axes3);
 % set(gca,'color',[0 0 0]);
 %s = slice(V,xyz(handles.page,1),xyz(handles.page,2),xyz(handles.page,3),'edgecolor','none');colormap(gray);
 hold on
+e = zeros(1,size(handles.group,1));
 for j=1:size(handles.group,1)
-    type = char(handles.m(handles.group(j,1),1));
+    try
+        type = char(handles.m(handles.group(j,1),1));
+    catch
+        type = '_D';
+    end
     if strcmpi(type(2),'s') || strcmpi(type(2),'g')
         xyz=handles.elecMatrix.*1.01;
-        [side,top,~]=scatter3d(xyz(handles.group(j,1):handles.group(j,2),1),...
+        [side,top,~]=electrode3d(xyz(handles.group(j,1):handles.group(j,2),1),...
             xyz(handles.group(j,1):handles.group(j,2),2),...
             xyz(handles.group(j,1):handles.group(j,2),3),...
             handles.elecRgb(handles.group(j,1),:),1.5,1,5,0,handles.head_center);
@@ -65,7 +70,7 @@ for j=1:size(handles.group,1)
             side.vertices,'edgecolor','none','facecolor',(handles.elecRgb(handles.group(j,1),:)),'facelighting',...
             'gouraud');
         
-        handles.curr_elec.top=patch('faces',top.faces,'vertices',...
+        e(j)=patch('faces',top.faces,'vertices',...
             top.vertices,'edgecolor','none','facecolor',handles.elecRgb(handles.group(j,1),:),'facelighting',...
             'gouraud',...
             'DiffuseStrength',  0.5, ...
@@ -83,7 +88,7 @@ xlim([lim lim2]);
 ylim([lim lim2]);
 zlim([lim lim2]);
 legend(e, handles.groupNames,'location','northeast','AutoUpdate','off', ...
-    'box','off','fontsize',12,'NumColumns',ceil(size(handles.group,1)/length(handles.plot_cond)));
+    'box','off','fontsize',12)%,'NumColumns',ceil(size(handles.group,1)/length(handles.plot_cond)));
 
 % if ~handles.showslice
 %     set(s,'visible','off');

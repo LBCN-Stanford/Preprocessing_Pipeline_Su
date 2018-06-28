@@ -1,6 +1,6 @@
-function move_2dslice(elec_inuse, elecRgb, V,elecId, slice2d_axes)
+function move_2dslice(elecMatrix, elecRgb, V,elecId, slice2d_axes)
 
-if isempty(elec_inuse) || isempty(V)
+if isempty(elecMatrix) || isempty(V)
     return;
 end
 
@@ -8,7 +8,11 @@ mri.vol = V;
 mx=max(max(max(mri.vol)))*.7;
 mn=min(min(min(mri.vol)));
 sVol=size(mri.vol);
-xyz = elec_inuse;
+%xyz = round(elecMatrix);
+
+xyz(:,1)=elecMatrix(:,2);
+xyz(:,2)=elecMatrix(:,1);
+xyz(:,3)=sVol(3)-elecMatrix(:,3);
 
 % set(hm(1),'color',elecRgb(elecId,:),'markersize',30,'xdata',xyz(elecId,3),'ydata',xyz(elecId,2));hold on
 % set(hm(2),'color',elecRgb(elecId,:),'markersize',30,'xdata',xyz(elecId,3),'ydata',xyz(elecId,2));hold on
@@ -47,9 +51,10 @@ limYa=max(intersect(1:(sVol(1)/2),find(mxY==0)));
 limYb=min(intersect((sVol(1)/2:sVol(1)),find(mxY==0)));
 %keep image square
 centershift = sVol(3)/2-((limXb-limXa)/2+limXa);
+if limYa-(limYb-limYa) < limYb+(limYb-limYa)
 axis([limYa-(limYb-limYa)*0.05 limYb+(limYb-limYa)*0.05...
     limYa-(limYb-limYa)*0.05-centershift limYb+(limYb-limYa)*0.05-centershift ])
-
+end
 % tempMin=min([limXa limYa]);
 % tempMax=max([limXb limYb]);
 % if tempMin<tempMax
@@ -71,8 +76,11 @@ limYa=max(intersect(1:(sVol(2)/2),find(mxY==0)));
 limYb=min(intersect((sVol(2)/2:sVol(2)),find(mxY==0)));
 %keep image square
 centershift = sVol(3)/2-((limYb-limYa)/2+limYa);
+if limXa-(limXb-limXa) < limXb+(limXb-limXa)
 axis([limXa-(limXb-limXa)*0.07 limXb+(limXb-limXa)*0.07...
     limXa-(limXb-limXa)*0.07-centershift limXb+(limXb-limXa)*0.07-centershift ])
+end
+
 
 
 % tempMin=min([limXa limYa]);
