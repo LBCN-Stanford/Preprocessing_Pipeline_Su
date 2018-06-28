@@ -644,11 +644,13 @@ set(f,'Position',[500 600 800 600]);
 set(f,'color',[1 1 1]);  
 disp('-------------Saving all figures--------------')
 for i = 1:length(handles.order)
-    name=char(chanlabels(handles.D{1},i));
+    chanid = handles.order(i);
+    name=char(chanlabels(handles.D{1},handles.order(i)));
+    filename = strcat('Chan',num2str(chanid),'_',name);
     progress(i,length(handles.order),80,0)
-    plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond, handles.order(i), handles.yl,handles.bch,handles.t,1);
-print(f, fullfile(resultdname,name),'-opengl','-r300','-dpng');
+    plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1);
+print(f, fullfile(resultdname,filename),'-opengl','-r300','-dpng');
 
 end
  
