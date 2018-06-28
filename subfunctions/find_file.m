@@ -5,8 +5,12 @@ en = fullfile(filepath,prefix);
             S = dir(en);
             for k = 1:numel(S)
                 N{k} = S(k).name;
-                if contains(N{k}, fix)
+                if isempty(fix)
+                    match = 1:numel(S);
+                    continue;
+                elseif contains(N{k}, fix)
                     match = [match, k];
+                
                 end
             end
             if ~isempty(match)

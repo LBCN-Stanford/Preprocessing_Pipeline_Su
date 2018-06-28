@@ -1,17 +1,40 @@
-function new_sig = arrange(sig, handles)
-
-Nt=length(handles.plot_cond);
-try
-    task = identify_task(path(handles.D{1}));
-    fp = find_file(path(handles.D{1}),'Epoched_data*',task);
-    savedparam = load(fp);
-    if strcmpi(savedparam.plot_cond,'subcat')
-        merge = 1;
-    else
-        merge = 0;
+function new_sig = arrange(sig, handles, D, plot_cond, exclude)
+merge = 0;
+if ~isempty(handles)
+    plot_cond = handles.plot_cond;
+    D = handles.D;
+    labels = handles.labels;
+    try
+        task = identify_task(path(handles.D{1}));
+        fp = find_file(path(handles.D{1}),'Epoched_data*',task);
+        savedparam = load(fp);
+        if strcmpi(savedparam.plot_cond,'subcat')
+            merge = 1;
+        end
+        
+    catch
     end
-catch
-    merge = 0;
+elseif iscell(plot_cond)
+        if any(strcmp(plot_cond,'subcat'))
+            labels = [{'faces'} {'bodies'} {'buildings & scenes'} {'numbers'} ...
+                {'words'} {'logos & shapes'} {'other'}];
+            plot_cond = [5 4 1 2 3 6];
+            merge = 1;
+        else
+            labels = condlist(D{1});
+            for i = length(plot_cond)
+                condid(i) = find(strcmpi(labels,plot_cond{i}));
+            end
+            plot_cond = condid;
+        end
+else
+    labels = condlist(D{1});
+end
+
+Nt = length(plot_cond);
+if ~iscell(sig)
+    s{1}=sig;
+    sig=s;
 end
 for N=1:length(sig)
     data = sig{N};
@@ -19,22 +42,30 @@ for N=1:length(sig)
     for i = 1:cn
         m = 1;
         dt=squeeze(data(i,:,:));
-        try
-            ex=savedparam.exclude{N}{i}(1,all(savedparam.exclude{N}{i}));
-        catch
-            ex = [];
+        if nargin<4 || isempty(exclude)
+            try
+                ex=savedparam.exclude{N}{i}(1,all(savedparam.exclude{N}{i}));
+            catch
+                ex = [];
+            end
+        else
+            try
+            ex = exclude{N}{i}(1,all(exclude{N}{i}));
+            catch
+                ex = [];
+            end
         end
-        conditionList = conditions(handles.D{N});
+        conditionList = conditions(D{N});
         con=conditionList;
         con(ex)=[];
         
         dt(:,ex)=[];
         curr_id=false(Nt,size(dt,2));
         
-        for k = handles.plot_cond
+        for k = plot_cond
             %ex=[];
             %curr_cond=labs(plot_cond(k));
-            curr_cond=handles.labels(k);
+            curr_cond=labels(k);
             if merge
                 if ~strcmp(curr_cond,'other')
                     if strcmp(curr_cond,'words')

@@ -8,19 +8,20 @@ sbjpath = path(meeg);
 sublist = strsplit(genpath(sbjpath),':')';
 n = 1;
 elecpath = find(contains(sublist,'elec_recon'));
-while isempty(elecpath)
-    %if isempty(elecpath)
+while isempty(elecpath) && n < 3  
         [upper,~] = fileparts(sbjpath);
         sbjpath = upper;
         sublist = strsplit(genpath(upper),':')';
         elecpath = find(contains(sublist,'elec_recon'));
-        if length(elecpath) >3 || n > 3
+        if numel(elecpath) >3 
             elecpath = [];
             sbjpath = path(meeg);
             break;
+        elseif numel(elecpath) == 1 || numel(elecpath) ==2
+             elecpath = elecpath(1);
+            break; 
         end
         n = n+1;
-    %end
 end
 
 if isempty(elecpath) 

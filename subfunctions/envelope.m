@@ -5,7 +5,7 @@ function envmax=envelope(sig,fs,param)
 if nargin<3
     param=8;
 end
-env=real(hilbert(sig));
+env=abs(hilbert(sig));
 
 f_s=round(fs/2);
 cutoff=param/f_s;

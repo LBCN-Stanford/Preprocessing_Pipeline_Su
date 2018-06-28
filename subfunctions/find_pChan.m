@@ -56,12 +56,12 @@ chanNames{d+1}=D.channels(d+1).label;
 %Detecting events
 
 fprintf('%s\n','---- Detecting pathological events ----');
-b = fir1(64,[80 450]/(fs/2));
+b = fir1(64,[80 (fs/2)-20]/(fs/2));
 a = 1;
 input_filtered = filtfilt(b,a,eeg_bi);
 n = size(input_filtered,2);
 for i = 1:n
-    [v(:,i),th] = get_threshold(input_filtered(:,i),100,50,'std',5);
+    [v(:,i),th] = get_threshold(input_filtered(:,i),round(100*fs/1000),0.5,'std',5);
     try
         timestamp{i}(:,1) = find_event(input_filtered(:,i),th,2,1);
         timestamp{i}(:,2) = i;
@@ -72,7 +72,7 @@ end
 T = cat(1,timestamp{:});
 [~,I] = sort(T(:,1));
 event.timestamp = T(I,:);
-[alligned,allignedIndex,K] = getaligneddata(eeg_bi,event.timestamp(:,1),[-150 150]);
+[alligned,allignedIndex,K] = getaligneddata(eeg_bi,event.timestamp(:,1),[-round(150*fs/1000) round(150*fs/1000)]);
 event.timestamp=event.timestamp(logical(K),:);
 ttlN = size(alligned,3);
 for i = 1:ttlN

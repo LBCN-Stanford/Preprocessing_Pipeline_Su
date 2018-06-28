@@ -1,4 +1,4 @@
-function [v,th]=get_threshold(data,frame,overlap,type,param,input)
+function [v,th]=get_threshold(data,frame,overlap_rate,type,param,input)
 %     data: single channel raw data.
 %   window: window length for rectangular window, or pre-defined window.
 %  overlap: overlaping samples when calculating the variance.
@@ -13,10 +13,10 @@ elseif input==0
     input=[];
 end
 if strcmp(type,'std')==1
-    v=temp_variance(data,frame,overlap,2);
+    v=temp_variance(data,frame,round(overlap_rate*frame),2);
     m=median(v);
 else
-    v=temp_variance(data,frame,overlap);
+    v=temp_variance(data,frame,round(overlap_rate*frame));
             switch type
                 case 'Mean'
                     m=mean(v);

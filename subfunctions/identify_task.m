@@ -2,7 +2,7 @@ function task = identify_task(filepath)
 tasklist = {'faces' 'vtc' 'mmr' 'race' 'animal' 'emotion' 'hkat'};
 tasks = {'EmotionF' ,'category', 'MMR' ,'RACE_CAT' ,'Animal', 'EmotionF','RACE_CAT'};
 
-%[filename] = find_file(filepath,'sodata*.mat','run1');
+
 try
     so = load(filepath);
     taskdir = strsplit(so.thePath.main,'\');
@@ -23,10 +23,12 @@ end
      end
     end
  catch
-     
-
+end
+try
+     [filename] = find_file(filepath,'eventsSODATA*.mat',[]);
+     so = load(filename);     
+catch
  end
- 
  try
      ncond = length(so.events.categories);
      if ncond >= 20
@@ -42,4 +44,12 @@ end
         warning('Could not identify the task. Will assign OTHER');
         task = 'OTHER';
  end
-         
+
+% try
+%      sublist = strsplit(genpath(filepath),':')';
+% for n = 1: length(sublist)
+% match = find(contains(sublist(n),tasklist));
+% end
+%  catch
+% 
+%  end
