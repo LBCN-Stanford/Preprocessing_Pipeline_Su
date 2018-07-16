@@ -30,10 +30,11 @@ try
     deftask = getfield(def,task);
 catch
     warning('Task name provided is not in defaults');
-    deftask = struct('skip_before',0,'skip_after',0,'thresh_dur',0,...
-        'listcond',{});
+    task = 'other';
+    deftask = getfield(def,'other');
+%     deftask = struct('skip_before',0,'skip_after',0,'thresh_dur',0,...
+%         'listcond',{});
 end
-
 
 %% Reading PsychData BAHAVIORAL DATA
 
@@ -105,6 +106,12 @@ end
 
 
 stim_onset = [evt(:).onsets];
+if isempty(stim_onset)
+    def.ichan = find_diod(fullfile(D.path,D.fname));
+    [evt] = get_events_diod(fullfile(D.path,D.fname), task, def.ichan, ...
+        deftask.skip_before, deftask.skip_after, deftask.thresh_dur);
+    stim_onset = [evt(:).onsets];
+end
 rsp_onset= [evt(:).offsets];
 stim_dur = [evt(:).durations];
 
@@ -453,11 +460,12 @@ switch task
     case 'other'
         cond= [K.conds]';
         cond = cond(goodtrials);
-        if ~isempty(deftask.listcond)
-            categNames = deftask.listcond;
-        else
-            categNames = cellstr(num2str(unique(cond)'));
-        end
+%         if ~isempty(deftask.listcond)
+%             categNames = deftask.listcond;
+%         else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+%        end
         stimNum= 1:length(stim_onset);
         
         for ci=1:length(categNames)

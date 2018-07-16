@@ -25,7 +25,11 @@ end
 if nargin<2 || isempty(task)
     task = 'other';
 end
-deftask = getfield(def, task);
+try
+    deftask = getfield(def, task);
+catch
+    aaa
+end
 try
     D = spm_eeg_load(fname);
     if nargin<3 || isempty(ichan)
