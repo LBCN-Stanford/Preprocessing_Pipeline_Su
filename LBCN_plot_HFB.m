@@ -245,7 +245,11 @@ if ~exist('signal_all','var')
                 if merge
                     if ~strcmp(curr_cond,'other')
                         if strcmp(curr_cond,'words')
+                            try
                             curr_id(k,:)=strcmpi(con,curr_cond);
+                            catch
+                                aaa
+                            end
                         else
                             curr_id(k,:)=contains(string(con),strsplit(string(curr_cond)));
                         end

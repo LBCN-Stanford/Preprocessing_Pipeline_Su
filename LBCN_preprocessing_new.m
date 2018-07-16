@@ -59,7 +59,8 @@ if nargin < 8 || isempty(viewer)
     viewer = 1;
 end
 
-p =  task_config(task);
+%p =  task_config(task);
+task_config(task);
 
 
 fnamep = cell(size(filename,1),1);
@@ -86,13 +87,15 @@ for i = 1:size(filename,1)
     fname = fullfile(D.path,D.fname);
     
     % Get events from SODATA
-    if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
-            || strcmpi(task,'category') || strcmpi(task,'EmotionF') ...
-            || strcmpi(task,'RACE_CAT')
-        [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
-    else
-        evtfile{i} = sodata(i,:);
-    end
+%     if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
+%             || strcmpi(task,'category') || strcmpi(task,'EmotionF') || strcmpi(task,'EmotionA') ...
+%             || strcmpi(task,'RACE_CAT')
+%         [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
+%     else
+%         task = 'other';
+%         %evtfile{i} = sodata(i,:);
+%     end
+    [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
     % Save events in SPM data file
     D = get_events_SPMformat(fname,evtfile{i});
     fnamep{i} = fullfile(D.path,D.fname);
@@ -106,7 +109,7 @@ fname = char(fnamep);
 %fd = notch_meeg(fname,50,4);
 
 for i = 1: size(filename,1)
-    fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, 50);%Change to 60 if not looking at China datasets!!!
+    fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, 60);%Change to 60 if not looking at China datasets!!!
     fname1 = fullfile(fd{1}.path,fd{1}.fname);
 
     d = LBCN_montage(fname1);
