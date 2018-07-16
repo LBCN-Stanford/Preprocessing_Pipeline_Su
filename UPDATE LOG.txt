@@ -16,5 +16,7 @@
 			-- Change notch settings in the main function (line 109) when processing data from China/US cohorts.
 			-- Put bad chan index to exclude (e.g. redundant channels collected from China) in the main function.
 			-- The viewer can now be used to review the results generated from origianl pipeline (SHFBXXX.mat file) by running "script_view_results.m" and select files (but still need some testing).
-		
+07/16 Update:	Fixed several bugs. 
+		Improved the code to analyze unrecognized task (Thanks to Jeniffer). 
+		Added significance test when running the GUI. Channels with significant activation will be marked with "*" in different colors. Still need to be tested but should become a useful tool.
 		
