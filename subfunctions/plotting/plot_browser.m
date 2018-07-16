@@ -1,11 +1,13 @@
-function po = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t,showlegend)
-if nargin < 12
+function po = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t,showlegend, cc)
+if nargin < 11
     showlegend = 1;
 end
 Nt = length(plot_cond);
+if nargin < 12
+    cc = linspecer(Nt);
+end
 cn = nchannels(D{1});
 chanp=1:cn;
-cc = linspecer(Nt);
 edge = (round(size(signal_all{1}{1},1)-length(window))/2);
 for i = page
     name=char(chanlabels(D{1},chanp(i)));

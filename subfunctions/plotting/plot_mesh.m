@@ -101,5 +101,10 @@ for j=1:size(handles.group,1)
     end
     hold on
 end
+try
 legend(e, handles.groupNames,'Orientation','horizontal','location',...
     'south','AutoUpdate','off','NumColumns',6, 'fontsize',12);
+catch
+legend(e, handles.groupNames,'Orientation','horizontal','location',...
+    'south','AutoUpdate','off', 'fontsize',12);
+end

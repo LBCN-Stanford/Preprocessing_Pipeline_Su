@@ -68,7 +68,30 @@ try
     handles.bc_type = varargin{12};
 catch
     script_view_results; % In case nothing is sent in
+    return
 end
+%% Run permutation test
+
+%onset = find(handles.t==0);
+resampR = length(handles.signal_all{1}{1})/fsample(handles.D{1});%see if data length is approximately equal to 1s. 
+ending = round(800*resampR);
+start = round(180*resampR);
+sig_chan = cell(length(handles.plot_cond),1);
+fprintf('-------- Running permutation teset for condition 1');
+for k=1:length(handles.plot_cond)
+        if k>1
+            for idisp = 1:ceil(log10(k)) % delete previous counter display
+                fprintf('\b');
+            end
+        fprintf('%d',k);
+        end
+   sig_chan{handles.plot_cond(k)} = permutation_test(handles.signal_all{handles.plot_cond(k)},1:start-1,start:ending);   
+end
+fprintf('-----------\n');
+handles.sig_chan = sig_chan;
+
+%% 
+
 handles.signal_backup=handles.signal_all;
 if length(varargin) == 13
     handles.nanid = varargin{13};
@@ -133,7 +156,7 @@ try
         end
         for ii=1:length(chanlabels(handles.D{1}))
             mc = char(chanlabels(handles.D{1},ii));
-            modi(ii)=string(erase(mc,["EEG","_","-","."," "]));
+            modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' ')]));
         end
         if size(handles.m,2) ~=3
             side = cell(size(handles.m,1),1);
@@ -260,12 +283,51 @@ end
 set(gca,'color',[1 1 1]);
 
 
-%% plot signal
+%% plot signal and show significant channels with suffix
+Nt = length(handles.plot_cond);
+handles.cc = linspecer(Nt);
 axes(handles.axes1);
 handles.legendp = plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond, handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond, handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc);
 
-set(handles.listbox1,'string',chanlabels(handles.D{1},handles.order(~isnan(handles.order))));
+order = handles.order(~isnan(handles.order));
+%clr = repmat( [0.7 0.7 0.7],nchannels(handles.D{1}),1);
+% for j = 1:length(handles.plot_cond)
+%     id = handles.sig_chan{j};
+%     clr(id,:) = repmat(cc(j,:),length(id),1);%make significant channels the same color as the corresponding condition
+% end
+% sig_any=[];
+% for jj = 1:length(handles.plot_cond)
+%     sig_any = [sig_any;handles.sig_chan{jj}];
+% end
+% sig_any = unique(sig_any);
+% sig_names = chanlabels(handles.D{1},sig_any);
+
+for jj = 1:length(handles.plot_cond)
+    sig_names{jj} = chanlabels(handles.D{1},handles.sig_chan{jj});
+end
+ppre = '<HTML>';
+ppost = '</HTML>';
+pre = '<FONT color="';
+post = '</FONT>';
+for j = 1:length(order)
+    chanstr(j).name = chanlabels(handles.D{1},order(j));
+    chanstr(j).Color = [179 179 179];
+    suffix{j} = '';
+    for jj = 1:length(handles.plot_cond)
+        if any(strcmp(chanstr(j).name,sig_names{jj}))
+            suffix{j} = strcat(suffix{j},pre, rgb2Hex( round(handles.cc(jj,:).*255) ), '">' ,'*' ,post);
+        end
+    end
+end
+
+listboxStr = cell(numel( chanstr ),1);
+for i = 1:numel( chanstr )
+   str = strcat(ppre, pre, rgb2Hex( chanstr(i).Color ), '">' ,chanstr(i).name ,post ,suffix{i},ppost);
+   listboxStr(i) = str;
+end
+%set(handles.listbox1,'string',chanlabels(handles.D{1},handles.order(~isnan(handles.order))));
+set(handles.listbox1,'string',listboxStr);
 set(handles.popupmenu1,'string',{'Zscore' 'Log'});
 switch handles.bc_type
     case 'z'
@@ -330,7 +392,8 @@ if handles.page < length(handles.order)
     end
     axes(handles.axes1);
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), ...
+        handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
     
     move_2dslice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
 end
@@ -414,7 +477,7 @@ handles.signal_all = signal_other;
 handles.signal_backup = signal_other;
 axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 guidata(hObject, handles);
 % Hints: contents = get(hObject,'String') returns popupmenu1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from popupmenu1
@@ -462,7 +525,7 @@ if handles.page > 1
     
     axes(handles.axes1);
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+        handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
     
 end
 
@@ -479,7 +542,7 @@ handles.sparam = sv*60;
 axes(handles.axes1);
 cla;
 plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 guidata(hObject, handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -522,7 +585,7 @@ disp('.');
 disp('-----------Done------------');
 axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 guidata(hObject, handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
@@ -588,7 +651,7 @@ end
 
 axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox1
 move_2dslice(handles.elecMatrix, handles.elecRgb, handles.V,handles.page, handles.slice2d_axes);
@@ -649,7 +712,7 @@ for i = 1:length(handles.order)
     filename = strcat('Chan',num2str(chanid),'_',name);
     progress(i,length(handles.order),80,0)
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 print(f, fullfile(resultdname,filename),'-opengl','-r300','-dpng');
 
 end
@@ -723,5 +786,6 @@ handles = guidata(gcf);
     handles.sel_cond(checkBoxId) = get(hObject_b,'Value');
     axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t);
+    handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page),...
+    handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 guidata(hObject, handles);
