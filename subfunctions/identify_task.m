@@ -1,24 +1,26 @@
 function task = identify_task(filepath)
-tasklist = {'faces' 'vtc' 'mmr' 'race' 'animal' 'emotion' 'hkat'};
-tasks = {'EmotionF' ,'category', 'MMR' ,'RACE_CAT' ,'Animal', 'EmotionF','RACE_CAT'};
+tasklist = {'faces' 'vtc' 'mmr' 'race' 'animal' 'hkat' 'appraisal' 'emotionf' 'emotiona'  'emotion' };
+tasks = {'EmotionF' ,'category', 'MMR' ,'RACE_CAT' ,'Animal', 'RACE_CAT', 'EmotionA', 'EmotionF', 'EmotionA', 'EmotionF'};
 
 
 try
-    so = load(filepath);
-    taskdir = strsplit(so.thePath.main,'\');
-catch
     cont = lower(strsplit(filepath,'/'));
     for i=1:length(cont)
-        t(i) = contains(cont{i},{'faces' 'vtc' 'mmr' 'race' 'emotion'});
+        t(i) = contains(cont{i},{'faces' 'vtc' 'mmr' 'race' 'appraisal' 'emotionf' 'emotiona'  'emotion' });
     end
-    taskdir = cont(t);
+    ft = find(t);
+    ft = ft(1);
+    taskdir = cont(ft);
+catch
+    so = load(filepath);
+    taskdir = strsplit(so.thePath.main,'\');    
 end
  try
     taskname = char(join(regexp(taskdir{end},'[a-z]','Match','ignorecase'),''));
     for i = 1:length(tasklist)
      if contains(lower(taskname),tasklist{i} )
          task = char(tasks{i});
-         fprintf('-----------Identified as %s----------\n',task);
+         fprintf('-----------Task identified as %s----------\n',task);
          return;
      end
     end
@@ -37,11 +39,13 @@ catch
          task = 'RACE_ACT';
      elseif ncond == 5
          task = 'EmotionF';
+     elseif ncond == 8
+         task = 'EmotionA';
      else
          task = 'OTHER';
      end
  catch
-        warning('Could not identify the task. Will assign OTHER');
+        warning('Could not identify the task. Will assign to OTHER');
         task = 'OTHER';
  end
 

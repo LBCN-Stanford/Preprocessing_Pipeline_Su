@@ -12,7 +12,12 @@ if nargin < 6 || isempty(remove)
 end
 
 [cn, fn, ~, tn] = size(original);
-% if window(end) > size(original,3)
+% if window(1) <=0
+%     window = window-window(1)+1;
+%     bc_win = bc_win-bc_win(1);
+%     bc_win(1) = [];
+% end
+    
 %     window(window)
 slength = length(window);
 SIG=nan(cn,fn,slength,tn);

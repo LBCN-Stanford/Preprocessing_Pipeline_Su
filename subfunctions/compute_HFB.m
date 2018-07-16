@@ -79,22 +79,22 @@ if atf_check
                 badind(badind2) = 1; 
             case 2 
                 %for data with overall good quality. 
-                %Mark spiky data points +/- 1 ms to minimize the unnecessary deduction of data. 
+                %Mark spiky data points +/- 2 ms to minimize the unnecessary deduction of data. 
                 %Bad epochs wil be removed.
                 
                 [badind,~,~,spkts] = LBCN_filt_bad_trial(dat,...
-                    fs,[],0, 5, 0.4, squeeze(pre_defined_bad(:,:,i))',inspectatf);
+                    fs,[],0, 2, 0.4, squeeze(pre_defined_bad(:,:,i))',inspectatf);
                  nanid(:,:,i) = spkts';
                  nanid(badind,:,i)=1;
                 
             case 3 
                 %should be good for most of the datasets. 
-                %Mark spiky data points +/- 10ms. 
+                %Mark spiky data points +/- 10 ms. 
                 %Bad epochs wil be removed. 
                 %Both bad and spiky epochs will be excluded from baseline calculation.
                 
                 [badind,~,~,spkts,badind2] = LBCN_filt_bad_trial(dat,...
-                    fs,[],0, 15, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);
+                    fs,[],0, 10, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);
                 nanid(:,:,i) = spkts';
                 nanid(badind,:,i)=1;
                 badind(badind2) = 1;
@@ -103,7 +103,7 @@ if atf_check
                 % for noisy data may consider removing the corrupted segments and taper with neighboring signal. 
                 
                 [badind,fbeh,~,spkts,badind2] = LBCN_filt_bad_trial(dat,...
-                    fs,[],1, 30, 0.3, squeeze(pre_defined_bad(:,:,i))',inspectatf);
+                    fs,[],1, 10, 0.3, squeeze(pre_defined_bad(:,:,i))',inspectatf);
                 nanid(:,:,i) = spkts';
                 nanid(badind,:,i)=1;
                 data(:,:,i) = fbeh';

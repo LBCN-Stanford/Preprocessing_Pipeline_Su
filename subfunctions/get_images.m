@@ -12,6 +12,9 @@ while isempty(elecpath) && n < 3
         [upper,~] = fileparts(sbjpath);
         sbjpath = upper;
         sublist = strsplit(genpath(upper),':')';
+        if numel(sublist)>20
+            break;
+        end
         elecpath = find(contains(sublist,'elec_recon'));
         if numel(elecpath) >3 
             elecpath = [];

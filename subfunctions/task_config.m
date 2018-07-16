@@ -71,6 +71,16 @@ switch lower(task)
         p.twResc = [-200 0];
         p.twsmooth = [-200 800];
         p.plot_cond = [];
+    case 'emotiona'
+        p.fieldepoch = 'start';
+        p.twepoch = [-300 1000];
+        p.bc = 1;
+        p.bcfield = 'start';
+        p.twbc = [-200 0];
+        p.smoothwin = 50;
+        p.twResc = [-200 0];
+        p.twsmooth = [-200 800];
+        p.plot_cond = 1:8;
 end
 
 
