@@ -20,3 +20,5 @@
 		Improved the code to analyze unrecognized task (Thanks to Jeniffer). 
 		Added significance test when running the GUI. Channels with significant activation will be marked with "*" in different colors. Still need to be tested but should become a useful tool.
 		
+07/21 Update:	Changed LBCN_epoch_bc function to make it more compatible with "unknown" type of task.
+		Fixed a bug in LBCN_plot_HFB. Now it reads the input params correctly when using epoched signal ("Epoched_data_TASK.mat") as the input (before it was overwritting the input params using default settings).
