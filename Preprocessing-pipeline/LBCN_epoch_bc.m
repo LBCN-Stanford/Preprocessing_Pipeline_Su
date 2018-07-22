@@ -65,7 +65,7 @@ end
 if nargin<5 || isempty(bc)
     bc = 0;                         % default: no baseline correction
 elseif bc == 1
-    if nargin<6 || isempty(fieldbc)
+    if nargin<7 || isempty(fieldbc)
         fieldbc = def.fieldbc;      % default: baseline correction on onset
     else
         if ~isfield(evt.categories(indc(1)),fieldbc)
@@ -106,7 +106,8 @@ for i = 1:length(indc)
     end
     for j = 1:length(nevc)
         ons = indsample(D,nevc(j) + (twepoch(1)/1000));
-        off = indsample(D,nevc(j) + (twepoch(2)/1000));
+        off = ons + diff(twepoch)/1000*fsample(D);
+        %off = indsample(D,nevc(j) + (twepoch(2)/1000));
         trl = [trl; [ons, off]];
         if bc
             bc1 = indsample(D,nebc(j)+(twbc(1)/1000));
@@ -137,6 +138,12 @@ end
 
 timeOns = twepoch(1)/1000;
 ntrial = size(trl, 1);
+% [checkns, checkid] = unique(round(diff(trl, [], 2)));
+% if length(checkns) > 1
+%     for n = find(checkid ~=1)
+%         trl(checkid(n),2) = trl(checkid(n),2)+checkns(checkid ==1)-checkns(n);
+%     end
+% end
 nsampl = unique(round(diff(trl, [], 2)))+1;
 ev = D.events;
 art = [];
@@ -165,7 +172,7 @@ if length(size(D))==4
     Dnew = clone(D, [prefix D.fname], [D.nchannels, D.nfrequencies, nsampl, ntrial]);
     isTF = 1;
 else
-    Dnew = clone(D, [prefix D.fname], [D.nchannels, nsampl, ntrial]);
+    Dnew = clone(D, [prefix D.fname], [D.nchannels, nsampl(1), ntrial]);
     isTF = 0;
 end
 

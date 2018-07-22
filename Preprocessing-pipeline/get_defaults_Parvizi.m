@@ -83,7 +83,7 @@ def.category.thresh_dur = 0.01;
 def.category.listcond =  {'words','pseodowords','tools','numbers','mammal_faces','mammal_bodies','bird_faces','bird_bodies' ...
     ,'human_faces','human_bodies','cars_front','logos','buildings','shapes','cars_sides','chairs','false_fonts','hands','natural_scenes' ...
     ,'scrambled_images'};
-% faces
+% Emotion faces
 def.EmotionF.skip_before = 0;
 def.EmotionF.skip_after = 0;
 def.EmotionF.thresh_dur = 0.01;
