@@ -49,15 +49,28 @@ if nargin<2 || isempty(D)
             plot_cond = L.plot_cond;
             fprintf('%s\n','-------- Epoched signal loaded --------');
         elseif isfield(L,{'DAT','evtfile','exclude','conditionList','bch'})
-            D = L.DAT;
-            evtfile = L.evtfile;
-            bch = L.bch;
-            exclude = L.exclude;
-            exclude_ts = L.exclude_ts;
-            conditionList = L.conditionList;
-            plot_cond = L.plot_cond;
+            inputs = {'evtfile','DAT','bch','exclude','conditionList',...
+                'plot_cond','save_print','type','exclude_ts','atf_check','twsmooth','twbc'};
+            fdn = fieldnames(L);
+            varargin = cell(12,1);
+            for ii = 1:length(inputs)
+                if any(strcmp(fdn,inputs(ii)))
+                    varargin{ii}=getfield(L,fdn{strcmp(fdn,inputs(ii))});
+                elseif exist(inputs{ii},'var')
+                    eval(['inputvar = ',inputs{ii},';']);
+                    varargin{ii} = inputvar;
+                end
+            end
+%             D = L.DAT;
+%             evtfile = L.evtfile;
+%             bch = L.bch;
+%             exclude = L.exclude;
+%             exclude_ts = L.exclude_ts;
+%             conditionList = L.conditionList;
+%             plot_cond = L.plot_cond;
             fprintf('%s\n','-------- Epoched data loaded --------');
-            signal_all = LBCN_plot_HFB(evtfile,D,bch,exclude,conditionList,plot_cond,[],[],exclude_ts);
+%            signal_all = LBCN_plot_HFB(evtfile,D,bch,exclude,conditionList,plot_cond,[],[],exclude_ts);
+            signal_all = LBCN_plot_HFB(varargin{:});
             return;
         elseif length(size(getfield(L,char(fieldnames(L))))) == 3
             data = getfield(L,char(fieldnames(L)));
@@ -77,7 +90,7 @@ if ~exist('signal_all','var')
             fixind = regexp(name,'DCchans')+8;
             [name2] = find_file(filepath,'/eM*.mat',name(fixind:end));
             if ~isempty(name2)
-
+                
                 D{i} = spm_eeg_load(name2);
                 continue;
             else
@@ -129,7 +142,7 @@ if nargin<7 || isempty(save_print)
     save_print = 0;
 end
 if nargin<8 || isempty(type)
-    type = 1;
+    type = 2;
 end
 if nargin<9 || isempty(pre_defined_bad)
     pre_defined_bad = repmat({[]},length(evtfile),1);
@@ -137,16 +150,16 @@ end
 if nargin<10 || isempty(atf_check)
     atf_check = 3;
 end
-if ~exist('twsmooth','var')
-    if nargin<11 || isempty(twsmooth)
+if ~exist('twsmooth','var') || isempty(twsmooth)
+    %if nargin<11 || isempty(twsmooth)
         twsmooth = [-200 800];
-    end
+    %end
     if nargin<12 || isempty(twbc)
         twbc = [-200 0];
     end
 end
 if (nargin<13 || isempty(dsamp)) &&  ~exist('dsamp','var')
-        dsamp = 2;
+    dsamp = 2;
 end
 merge = 0;
 fs = fsample(D{1});
@@ -168,9 +181,9 @@ if iscell(plot_cond)
     end
 end
 
-    if ~exist('evtfile','var') 
-        evtfile = cellstr(fname);
-    end
+if ~exist('evtfile','var')
+    evtfile = cellstr(fname);
+end
 Nt = length(plot_cond);
 cn = D{1}.nchannels;
 time_start = min(time(D{1}));
@@ -180,7 +193,7 @@ total_raw = cell(length(cellstr(evtfile)),1);
 t = time_start:(time_end-time_start)/(D{1}.nsamples-1):time_end;
 t = t(1:dsamp:end);
 window = round(((twsmooth(1) - time_start*1000)) +1 : ceil(((twsmooth(2)/1000-time_start)*fs)/1));
-window_bc = round(((twbc(1) - time_start*1000)) +1 : indsample(D{1},0)); 
+window_bc = round(((twbc(1) - time_start*1000)) +1 : indsample(D{1},0));
 %fbands = zeros(11,1);
 
 fbands = linspace(70,180,12);
@@ -197,9 +210,9 @@ if ~exist('signal_all','var')
         data = D{N}(:,:,:);
         pre_defined = pre_defined_bad{N};
         %% Just to test something. Comment this
-        bc_type = 'z';
-        type = 2;
-        atf_check = 3;
+                 bc_type = 'z';
+        %         type = 2;
+        %         atf_check = 3;
         %% Signal 2 is the other un-chosen baseline correction method. (Just get ready for the plotting)
         [sig, sig2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window, dsamp);
         cn = size(data,1);
@@ -246,7 +259,7 @@ if ~exist('signal_all','var')
                     if ~strcmp(curr_cond,'other')
                         if strcmp(curr_cond,'words')
                             try
-                            curr_id(k,:)=strcmpi(con,curr_cond);
+                                curr_id(k,:)=strcmpi(con,curr_cond);
                             catch
                                 aaa
                             end
@@ -287,7 +300,7 @@ if ~exist('signal_all','var')
     end
     beh_fp=all_plot;
     save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','save_print','type','bc_type','dsamp');
+        'beh_fp','labels','plot_cond','type','bc_type');
     signal_all=beh_fp;
 end
 window = round((window(1) : dsamp : window(end))./dsamp);

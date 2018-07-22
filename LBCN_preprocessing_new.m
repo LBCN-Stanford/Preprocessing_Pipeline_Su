@@ -22,7 +22,7 @@ function LBCN_preprocessing_new(filename,sodata,badchan,task,pipeline,atf_check,
 %                           indicies will be tapered in the high-pass
 %                           filtered signal. 
 %               dsamp  :    whether to reduce the sampling rate by the
-%               input number. Default 2.
+%               input number. Default none.
 %               viewer :    whether to use a GUI to review the results. 
 %   -----------------------------------------
 %   =^._.^=   Su Liu
@@ -179,7 +179,8 @@ if ~ pipeline
     save_plot = 0;
     method = 2;%type 1 fft; type 2 wavelet.
     % plot_cond=[1 4 5 9];%which conditions to plot
-    save(fullfile(D.path,strcat('Epoched_data_',task,'.mat')),'evtfile','DAT','bch','exclude','conditionList','exclude_ts','plot_cond');
+    save(fullfile(D.path,strcat('Epoched_data_',task,'.mat')),'evtfile','DAT','bch',...
+        'exclude','conditionList','exclude_ts','plot_cond','twsmooth','twbc');
     LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc);
 elseif viewer
         signal_all = format_signal([],df,plot_cond,exclude);
