@@ -87,8 +87,11 @@ end
 xlim([lim lim2]);
 ylim([lim lim2]);
 zlim([lim lim2]);
+try
 legend(e, handles.groupNames,'location','northeast','AutoUpdate','off', ...
-    'box','off','fontsize',12)%,'NumColumns',ceil(size(handles.group,1)/length(handles.plot_cond)));
+    'box','off','fontsize',12)%,'NumColumns',ceil(size(handles.group,1)/length(handles.plot_cond)))
+catch
+end;
 
 % if ~handles.showslice
 %     set(s,'visible','off');

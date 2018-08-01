@@ -73,9 +73,11 @@ end
 %% Run permutation test
 
 %onset = find(handles.t==0);
-resampR = length(handles.signal_all{1}{1})/fsample(handles.D{1});%see if data length is approximately equal to 1s. 
-ending = round(800*resampR);
-start = round(180*resampR);
+%resampR = length(handles.signal_all{1}{1})/fsample(handles.D{1});%see if data length is approximately equal to 1s. 
+%ending = round(800*resampR/1);
+%start = round(180*resampR/1);
+ending = length(handles.signal_all{1}{1})-50;
+start = round(length(handles.signal_all{1}{1})/5);
 sig_chan = cell(length(handles.plot_cond),1);
 fprintf('-------- Running permutation teset for condition 1');
 for k=1:length(handles.plot_cond)
@@ -118,6 +120,7 @@ set(handles.slider1,'value',0.3);
 set(handles.slider3,'enable','off');
 set(handles.axes4,'visible','off');
 set(handles.checkbox2,'visible','off');
+set(handles.popupmenu1,'value',handles.bc_type);
 % if isempty(handles.atf)
 %     set(handles.slider2,'enable','off');
 % end
@@ -134,26 +137,56 @@ guidata(hObject, handles);
 set(gcf,'color',[1 1 1]);
 handles.overlay=1;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-[V,mgridfilenames,leptoCoor, surfpath] = get_images(handles.D{1});
+try %structured data with image info
+    ptimage = brain3d(handles.D{1});
+    handles.elecoor = ptimage.elect_native;
+    handles.elecLabels = cellstr(ptimage.elect_names);
+    handles.elecRgb = [0 0.4470 0.7410].*ones(size(handles.elecoor));
+    handles.elecMatrix=round(ptimage.elect_MNI);
+    V = ptimage.volume;
+     V=V./max(V(:));
+     V=smooth3(V,'gaussian',3);
+     handles.V = V;
+    surfpath = ptimage.cortex;
+catch 
+    [V,mgridfilenames,leptoCoor, surfpath] = get_images(handles.D{1});
+    V=V./max(V(:));
+    try
+        V=smooth3(V,'gaussian',3);
+    catch
+    end
+    handles.V = V;
+    try
+        [handles.elecMatrix, handles.elecLabels, handles.elecRgb]=mgrid2matlab(mgridfilenames);
+        handles.elecMatrix=round(handles.elecMatrix);
+    catch
+    end
+    handles.elecoor = leptoCoor;
+end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-V=V./max(V(:));
-try
-    V=smooth3(V,'gaussian',3);
-catch
-end
-handles.V = V;
-try
-    [handles.elecMatrix, handles.elecLabels, handles.elecRgb]=mgrid2matlab(mgridfilenames);
-    handles.elecMatrix=round(handles.elecMatrix);
-catch
-end
-handles.elecoor = leptoCoor;
 %% rearrange the channel labels 
 try
     if ~isempty(handles.elecLabels)
-        for ii=1:length( handles.elecLabels)
-            handles.m(ii,:)=strsplit(handles.elecLabels{ii},'_');
+        if contains(handles.elecLabels{1},'_')
+            for ii=1:length( handles.elecLabels)
+                handles.m(ii,:)=strsplit(handles.elecLabels{ii},'_');
+            end
+        else
+            for ii=1:length( handles.elecLabels)
+                eid(ii) = str2num((join(regexp(string(handles.elecLabels{ii}),'[1-9]','Match'),'')));
+            end
+            if max(eid)>=16
+                etype='s';
+            else
+                etype='d';
+            end
+            for ii=1:length( handles.elecLabels)
+                handles.m(ii,1) = cellstr(strcat(handles.elecLabels{ii}(1),etype));
+                handles.m(ii,2) = cellstr((join(regexp(string(handles.elecLabels{ii}),'[A-Z]','Match','ignorecase'),'')));
+                handles.m(ii,3) = cellstr((join(regexp(string(handles.elecLabels{ii}),'[1-9]','Match'),'')));
+            end
         end
+        
         for ii=1:length(chanlabels(handles.D{1}))
             mc = char(chanlabels(handles.D{1},ii));
             modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' ')]));
@@ -165,6 +198,7 @@ try
         order = cell(1, length(handles.elecLabels));
         handles.order = nan(1, length(handles.elecLabels));
         for ii=1:length( handles.elecLabels)
+            
             order{ii}=find(strcmpi(strcat(handles.m(ii,2),handles.m(ii,3)),modi));
             if isempty(order{ii})
                 if ii < length( handles.elecLabels) && ii > 1
@@ -230,7 +264,7 @@ catch
     disp('Can not match the channel names with imaging data.')
 end
 
-%% Get group names, add some color if needed
+%% Get group names, add color if needed
 if length(unique(sum(handles.elecRgb,2))) == 1
     handles.elecRgb = map_color(handles.m(:,2));
 end
@@ -246,7 +280,12 @@ end
 %% Plot cortex model
 if ~isempty(handles.elecoor) || ~isempty(handles.elecMatrix)
     axes(handles.axes3);
-    if exist(fullfile(surfpath,'rh.pial'),'file') && ~isempty(handles.elecoor)
+    if isstruct(surfpath) && ~isempty(handles.elecoor)
+        handles = plot_mesh(handles, surfpath);
+        set(handles.slider3,'enable','on');
+        handles.eleinuse = handles.elecoor;
+        
+    elseif exist(fullfile(surfpath,'rh.pial'),'file') && ~isempty(handles.elecoor)
         
         handles = plot_mesh(handles, surfpath);
         set(handles.slider3,'enable','on');
@@ -285,7 +324,7 @@ set(gca,'color',[1 1 1]);
 
 %% plot signal and show significant channels with suffix
 Nt = length(handles.plot_cond);
-handles.cc = linspecer(Nt);
+handles.cc = brewermap(Nt,'Set2');%linspecer(Nt);
 axes(handles.axes1);
 handles.legendp = plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
     handles.window,handles.plot_cond, handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc);
@@ -541,7 +580,7 @@ sv = get(hObject,'Value')+0.02;
 handles.sparam = sv*60;
 axes(handles.axes1);
 cla;
-plot_browser(handles.signal_all, handles.sparam,handles.labels,handles.D,...
+plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
 guidata(hObject, handles);
 % Hints: get(hObject,'Value') returns position of slider
@@ -567,7 +606,7 @@ function slider2_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 param = get(hObject,'Value')*100;
 handles.signal_all=handles.signal_backup;
-se = strel('line',param*100,90);
+se = strel('line',param*40,90);
 for k=1:length(handles.plot_cond)
     for j = 1:length(handles.signal_all{k})
         progress(j,length(handles.signal_all{k})*length(handles.plot_cond),80,0)
@@ -578,11 +617,11 @@ for k=1:length(handles.plot_cond)
         catch
             handles.signal_all{k}{j}(:,end+1) = nan;
         end
-        handles.signal_all{k}{j} = fillmissing(handles.signal_all{k}{j},'movmean',param*5);
+        %handles.signal_all{k}{j} = fillmissing(handles.signal_all{k}{j},'movmean',param*5);
     end
 end
 disp('.');
-disp('-----------Done------------');
+%disp('-----------Done------------');
 axes(handles.axes1);
 plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
@@ -703,16 +742,20 @@ function savebtn_Callback(hObject, eventdata, handles)
         end
        
 f = figure;
-set(f,'Position',[500 600 800 600]);
+set(f,'Position',[400 600 700 700]);
 set(f,'color',[1 1 1]);  
 disp('-------------Saving all figures--------------')
+ax1 = axes('Position',[0.1 0.45 0.85 0.5]);
 for i = 1:length(handles.order)
     chanid = handles.order(i);
     name=char(chanlabels(handles.D{1},handles.order(i)));
     filename = strcat('Chan',num2str(chanid),'_',name);
     progress(i,length(handles.order),80,0)
+    
+    axes(ax1);
     plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
     handles.window,handles.plot_cond(handles.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:));
+plot_slice(handles.elecMatrix, handles.elecRgb, handles.V,handles.order(i));
 print(f, fullfile(resultdname,filename),'-opengl','-r300','-dpng');
 
 end

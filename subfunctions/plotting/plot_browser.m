@@ -4,13 +4,14 @@ if nargin < 11
 end
 Nt = length(plot_cond);
 if nargin < 12
-    cc = linspecer(Nt);
+    cc = brewermap(Nt,'Set2');
+    %cc = linspecer(Nt);
 end
 cn = nchannels(D{1});
 chanp=1:cn;
 edge = (round(size(signal_all{1}{1},1)-length(window))/2);
 for i = page
-    name=char(chanlabels(D{1},chanp(i)));
+     name=char(chanlabels(D{1},chanp(i)));
     if contains(lower(name), 'ekg') || contains(lower(name), 'edf') || contains(lower(name), 'ref')
         continue;
     end
@@ -19,7 +20,7 @@ for i = page
     temp_std = nan(length(window),Nt);
     for j=1:Nt
         signal=signal_all{j}{i};
-        signal = ndnanfilter(signal,'hamming',round(sparam),[],[],[],1);
+        signal = ndnanfilter(signal,'hanning',round(sparam),[],[],[],1);
         signal=signal(edge+1:end-edge,:);
         if isempty(signal) || size(signal,2) == 1
             allcond(j)=0;
@@ -29,11 +30,12 @@ for i = page
         vs=nanvar(signal);
         elim=vs>5*nanmedian(vs);
         temp_mean(:,j ) = nanmean(signal(:,~elim),2);
-        temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),10,3,1);
-        temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(nt);
-        temp_std(:,j ) = smooth_sig(temp_std(:,j ),10,3,1);
+        pp=round(length(temp_mean)*10/500);
+        temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),pp,2,1);
+        temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(1.1*nt);
+        temp_std(:,j ) = smooth_sig(temp_std(:,j ),pp,2,1);
         try
-            plot(t,temp_mean(:,j),'color',cc(j,:),'linewidth',2);
+            plot(t,temp_mean(:,j),'color',cc(j,:),'linewidth',3);
             hold on
         catch
             allcond(j)=0;
