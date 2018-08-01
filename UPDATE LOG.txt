@@ -22,3 +22,4 @@
 		
 07/21 Update:	Changed LBCN_epoch_bc function to make it more compatible with "unknown" type of task.
 		Fixed a bug in LBCN_plot_HFB. Now it reads the input params correctly when using epoched signal ("Epoched_data_TASK.mat") as the input (before it was overwritting the input params using default settings).
+08/01 Update:	The GUI is now compatible with new data structure. When saving figures it also saves corresponding MRI slices. 
