@@ -76,7 +76,7 @@ for i = 1:size(filename,1)
     % Convert data
     %[D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],0,[20 40 41 64:67 102:190]);
     [D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:),[], 1,badchan);
-    if dsamp > 1 && D.fsample/dsamp >= 500
+    if dsamp > 1 && round(D.fsample)/dsamp >= 500
         S.D = D;
         S.fsample_new = D.fsample/dsamp;
         D = spm_eeg_downsample(S);
@@ -103,13 +103,15 @@ for i = 1:size(filename,1)
     %%%%%%%%%%%%%%find pathological%%%%%%%%%%%%%%%%%
     [bch{i},exclude{i},exclude_ts{i},conditionList{i},]=find_pChan(fnamep{i},3,twepoch);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %bch{i}=[];exclude{i}=[];exclude_ts{i}=[];conditionList{i}=[];
 end
-
+%conditionList=[];
 fname = char(fnamep);
 %fd = notch_meeg(fname,50,4);
 
 for i = 1: size(filename,1)
     fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, 60);%Change to 60 if not looking at China datasets!!!
+    
     fname1 = fullfile(fd{1}.path,fd{1}.fname);
 
     d = LBCN_montage(fname1);

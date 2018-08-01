@@ -134,6 +134,7 @@ if (nargin<4 || isempty(exclude)) && ~exist('exclude','var')
 end
 
 if nargin<5 || isempty(conditionList)
+    evtfile = cellstr(fname);
     for i=1:length(evtfile)
         conditionList{i} = conditions(D{i});
     end
@@ -304,7 +305,7 @@ if ~exist('signal_all','var')
     signal_all=beh_fp;
 end
 window = round((window(1) : dsamp : window(end))./dsamp);
-edge = round(50*fs/1000/dsamp);
+edge = round(30*fs/1000/dsamp);
 win = window(edge+1 : end - edge);
 window = win;
 t = t(window);
