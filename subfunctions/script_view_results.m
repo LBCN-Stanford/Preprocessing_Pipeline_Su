@@ -2,57 +2,107 @@
 % Input files are Epoched_HFB (new pipeline), SHFBXXX (standard pipeline),
 % or Var_guiXX (standard pipeline).
 [filename,pathname] = uigetfile({'*.mat','Data format (*.mat)'},...
-        'MultiSelect', 'on');
-    fname = fullfile(pathname,filename); 
-    if iscell(fname)
-        head_file = fname;
-    else
-        head_file{1} = fname;
-    end
-    
-    for i = 1:length(head_file)
-        if contains(head_file{i},'Epoched_HFB')
-            LBCN_plot_HFB(head_file{i});
+    'MultiSelect', 'on');
+fname = fullfile(pathname,filename);
+head_file = cellstr(fname);
+dh = dir(head_file{1});
+%     if iscell(fname)
+%         head_file = fname;
+%     else
+%         head_file{1} = fname;
+%     end
+signal = cell(length(head_file),1);
+nan_all = cell(length(head_file),1);
+D = cell(length(head_file),1);
+plot_cond = [];
+exclude = [];
+conditionList = cell(length(head_file),1);
+bch = cell(length(D),1);
+for i = 1:length(head_file)
+    if contains(head_file{i},'Epoched_HFB')
+        LBCN_plot_HFB(head_file{i});
         return;
+    elseif dh.bytes > 100000000
+        
+        v = load(head_file{i});
+        s = v.data_all.wave;
+        signal{i}=permute(s,[1 3 2]);
+        cn = size(signal{1},1);
+        tn = size(signal{1},3);
+        dn = size(signal{1},2);
+        handles=[];
+        %try
+        %    labels = unique(v.data_all.trialinfo{1}.conds_math_memory);
+        %    conditionList{i} = v.data_all.trialinfo{1}.conds_math_memory;
+        %catch
+            labels = unique(v.data_all.trialinfo{1}.condNames);
+            conditionList{i} = v.data_all.trialinfo{1}.condNames;
+        %end
+        plot_cond = 1:length(labels);
+        nan_all{i} = false(size(signal{1}));
+        for j = 1:cn
+            for k = 1:tn
+                try
+                nan_all{i}(j,v.data_all.trialinfo{j}.bad_inds{k},k) = true;
+                catch
+                    continue;
+                end
+            end
         end
-       try
-           D{i} = spm_eeg_load(head_file{i});
-       catch
-           var_file = head_file{i};
-           v = load(var_file);
-           D = v.df;
-           plot_cond = v.plot_cond;
-           exclude = v.exclude;
-           break;
-       end
-       try
-        var_file = find_file(path(D{1}),'Var_gui',[]);
-           v = load(var_file);
-           plot_cond = v.plot_cond;
-           exclude = v.exclude;
-       catch
-           plot_cond = [];
-           exclude = [];
-       end
-    end
+        try
+            D{i} = header(v.data_all.fsample/2,cn,v.data_all.labels,bch{i},pathname,v.subjVar);
+        catch
+            D{i} = header(v.data_all.fsample/2,cn,v.data_all.labels,bch{i},pathname);
+        end
+    else
+        try
+            D{i} = spm_eeg_load(head_file{i});
+        catch
+            var_file = head_file{i};
+            v = load(var_file);
+            D = v.df;
+            plot_cond = v.plot_cond;
+            exclude = v.exclude;
+            break;
+        end
+        try
+            var_file = find_file(path(D{1}),'Var_gui',[]);
+            v = load(var_file);
+            plot_cond = v.plot_cond;
+            exclude = v.exclude;
+        catch
 
- signal_all = format_signal([],D,plot_cond,exclude);
- nan_all = format_signal([],D,plot_cond,exclude);
- sparam = 25;
- labels = condlist(D{1});
- t = time(D{1});
- page = 1;
- yl = [-0.3 2];
- w1 = indsample(D{1},t(1));
- w2 = indsample(D{1},t(end));
- window = w1:w2;
- bc_type = 2;
- if isempty(plot_cond)
-     plot_cond = 1:length(labels);
- end
- if ~exist('bch','var')
-        bch = cell(length(D),1);
- elseif isempty(bch)
-     bch = cell(length(D),1);
- end
- plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all);
+        end
+    end
+end
+if isempty(signal)
+   signal_all = format_signal([],D,plot_cond,exclude);
+   nan_all = format_signal([],D,plot_cond,exclude);  
+   labels = condlist(D{1});
+   t = time(D{1});
+   w1 = indsample(D{1},t(1));
+   w2 = indsample(D{1},t(end));
+   yl = [-0.3 2.5];
+   sparam = 25;
+else
+   signal_all = format_signal(signal,D,plot_cond,exclude,labels,conditionList);
+   nan_all = format_signal(nan_all,D,plot_cond,exclude,labels,conditionList);
+   t = v.data_all.time;
+   w1 = 1;
+   w2 = dn;
+   yl = [-0.4 1];
+   sparam = 30;
+end
+page = 1;
+window = w1:w2;
+bc_type = 2;
+if isempty(plot_cond)
+    plot_cond = 1:length(labels);
+end
+% if ~exist('bch','var')
+%     bch = cell(length(D),1);
+% elseif isempty(bch)
+%     bch = cell(length(D),1);
+
+% end
+plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all);

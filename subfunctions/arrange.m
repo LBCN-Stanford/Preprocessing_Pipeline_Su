@@ -1,4 +1,4 @@
-function new_sig = arrange(sig, handles, D, plot_cond, exclude)
+function new_sig = arrange(sig, handles, D, plot_cond, exclude,labels,conditionList)
 merge = 0;
 if ~isempty(handles)
     plot_cond = handles.plot_cond;
@@ -28,7 +28,9 @@ elseif iscell(plot_cond)
             plot_cond = condid;
         end
 else
-    labels = condlist(D{1});
+    if nargin<6 || isempty(labels)
+        labels = condlist(D{1});
+    end
 end
 
 Nt = length(plot_cond);
@@ -55,8 +57,12 @@ for N=1:length(sig)
                 ex = [];
             end
         end
-        conditionList = conditions(D{N});
-        con=conditionList;
+        if nargin < 7 || isempty(conditionList)
+            condList = conditions(D{N});
+        else
+            condList = conditionList{N};
+        end
+        con=condList;
         con(ex)=[];
         
         dt(:,ex)=[];
