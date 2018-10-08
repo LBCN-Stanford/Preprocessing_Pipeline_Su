@@ -7,7 +7,7 @@ function [evtfile] = LBCN_read_events_diod_sodata(D,sodata, task)
 % -------------------------------------------------------------------------
 % Written by J. Schrouff, LBCN, Stanford, 11/13/2015, based on LBCM code
 %
-% Updated by Su Liu, 2018. Automatically identifys the mismatched skip triggers, DC chans and mislabeled channels. 
+% Updated by Su Liu, 2018. Automatically identifys the mismatched skip triggers, DC chans and mislabeled channels.
 
 
 %% Get inputs
@@ -32,79 +32,80 @@ catch
     warning('Task name provided is not in defaults');
     task = 'other';
     deftask = getfield(def,'other');
-%     deftask = struct('skip_before',0,'skip_after',0,'thresh_dur',0,...
-%         'listcond',{});
+    %     deftask = struct('skip_before',0,'skip_after',0,'thresh_dur',0,...
+    %         'listcond',{});
 end
 
 %% Reading PsychData BAHAVIORAL DATA
 
-K = load(sodata);
-if isfield(deftask,'block') %this is for the race task; for different blocks (active/recall..), just edit the get_Parvizi_default file.
-    for i = 1:length(K.theData)
-        allconds{i} = K.theData(i).tasktype;
+try K = load(sodata);catch;kk = strsplit(sodata); K = load(kk{1});end;try
+    if isfield(deftask,'block') %this is for the race task; for different blocks (active/recall..), just edit the get_Parvizi_default file.
+        for i = 1:length(K.theData)
+            allconds{i} = K.theData(i).tasktype;
+        end
+        lsi = find(strcmpi(allconds,deftask.block));
+    else
+        lsi = 1:length(K.theData);
     end
-    lsi = find(strcmpi(allconds,deftask.block));
-else
-    lsi = 1:length(K.theData);
-end
-SOT = zeros(1,length(lsi));
-%sbj_resp = NaN*ones(1,lsi);
-ind = 1;
-for si = lsi
-    try
-        SOT(ind) = K.theData(si).flip.StimulusOnsetTime;
+    SOT = zeros(1,length(lsi));
+    %sbj_resp = NaN*ones(1,lsi);
+    ind = 1;
+    for si = lsi
         try
-            if iscell(K.theData(si).keys(1))
-                temp_key = num2str(cell2mat(K.theData(si).keys(1)));
-            else
-                temp_key = K.theData(si).keys;
+            SOT(ind) = K.theData(si).flip.StimulusOnsetTime;
+            try
+                if iscell(K.theData(si).keys(1))
+                    temp_key = num2str(cell2mat(K.theData(si).keys(1)));
+                else
+                    temp_key = K.theData(si).keys;
+                end
+                switch temp_key
+                    case 'DownArrow'
+                        K.theData(si).keys ='2';
+                    case 'End'
+                        K.theData(si).keys ='1';
+                end
+            catch
+                temp_key = 'NaN';
             end
-            switch temp_key
-                case 'DownArrow'
-                    K.theData(si).keys ='2';
-                case 'End'
-                    K.theData(si).keys ='1';
+            if isfield(K,'stimInf') && isfield(K.stimInf,'name')
+                stim_Name(ind) = K.stimInf(si).name;
+                stim_List(ind) = K.stimInf(si).list;
+            end
+            if ~isnan(str2num(temp_key))
+                sbj_resp(ind) = str2num(temp_key);
+            else
+                sbj_resp(ind) = NaN;
             end
         catch
-            temp_key = 'NaN';
+            SOT(ind) = 0;
         end
-        if isfield(K,'stimInf') && isfield(K.stimInf,'name')
-            stim_Name(ind) = K.stimInf(si).name;
-            stim_List(ind) = K.stimInf(si).list;
-        end
-        if ~isnan(str2num(temp_key))
-            sbj_resp(ind) = str2num(temp_key);
-        else
-            sbj_resp(ind) = NaN;
-        end
-    catch
-        SOT(ind) = 0;
+        ind = ind + 1;
     end
-    ind = ind + 1;
-end
-goodtrials = SOT>0;
-SOT = SOT(goodtrials);
-if isfield(K,'stimInf') && isfield(K.stimInf,'duration')
-    dur = [K.stimInf(goodtrials).duration];
-end
-if isfield(K,'stimInf') && isfield(K.stimInf(1),'oneback')
-    oneback = [K.stimInf(goodtrials).oneback];
-    if length(oneback) ~= length(SOT)
-        oneback = [0 oneback]; %add first empty
+    goodtrials = SOT>0;
+    SOT = SOT(goodtrials);
+    if isfield(K,'stimInf') && isfield(K.stimInf,'duration')
+        dur = [K.stimInf(goodtrials).duration];
     end
-    indback = find(oneback==1);
-    oneback(indback-1)=2;
-end
-
-
-%% reading analog channel
-
-%1st version works when diod is 0 to 5Volts, 2nd version works when it is DC channel
-[evt] = get_events_diod(fullfile(D.path,D.fname), task, [], deftask.skip_before, deftask.skip_after, deftask.thresh_dur);
-% [evt] = get_events_clin_diod(fullfile(D.path,D.fname),def.ichan,0.5, ...
-%     deftask.thresh_dur,deftask.skip_before,deftask.skip_after);
-
-
+    if isfield(K,'stimInf') && isfield(K.stimInf(1),'oneback')
+        oneback = [K.stimInf(goodtrials).oneback];
+        if length(oneback) ~= length(SOT)
+            oneback = [0 oneback]; %add first empty
+        end
+        indback = find(oneback==1);
+        oneback(indback-1)=2;
+    end
+    
+    
+    %% reading analog channel
+    
+    %1st version works when diod is 0 to 5Volts, 2nd version works when it is DC channel
+    [evt] = get_events_diod(fullfile(D.path,D.fname), task, [], deftask.skip_before, deftask.skip_after, deftask.thresh_dur);
+    % [evt] = get_events_clin_diod(fullfile(D.path,D.fname),def.ichan,0.5, ...
+    %     deftask.thresh_dur,deftask.skip_before,deftask.skip_after);
+catch
+    LBCN_readBehTabel;end
+clc
 stim_onset = [evt(:).onsets];
 if isempty(stim_onset)
     def.ichan = find_diod(fullfile(D.path,D.fname));
@@ -155,7 +156,9 @@ end
 %     find(abs(df)>.1)
 %     return
 % end
+SOT=reshape(SOT,[1 length(SOT)]);
 SOT0 = SOT-SOT(1);
+stim_onset = reshape(stim_onset, [1 length(stim_onset)]);
 stim_onset0 = stim_onset-stim_onset(1);
 insn = [];
 while 1
@@ -197,7 +200,7 @@ while 1
         stim_onset0 = stim_onset-stim_onset(1);
         insn = [];
         while 1
-            onsetDiff = SOT0-[stim_onset0 zeros(1,length(SOT0)-length(stim_onset0))];
+            try onsetDiff = SOT0-[stim_onset0 zeros(1,length(SOT0)-length(stim_onset0))]; catch; [onsetDiff,SOT0, SOT, ~, stim_onset,stim_onset0, stim_dur,skipbefore_beh, skipafter_beh] = force_match(evt, SOT0); end
             onsetMiss = find(abs(onsetDiff)>0.1);
             if onsetMiss
                 insn = [insn onsetMiss(1)];
@@ -221,7 +224,7 @@ end
 
 % insn = [90 183 281];
 if insn
-    insn
+    insn;
     for i = 1:length(insn)
         ins_pul(i) = SOT(insn(i))-SOT(1)+stim_onset(1);
         ins_dur(i) = stim_dur(1);
@@ -249,19 +252,21 @@ df_SOT = diff(SOT);
 
 df_stim_onset= diff(stim_onset);
 save('test','SOT','stim_onset')
-
+goodtrials = SOT>0;
 figure, plot(df_SOT,'o','MarkerSize',8,'LineWidth',3),hold on, plot(df_stim_onset,'r*')
 save('test','df_SOT','df_stim_onset');
 df= df_SOT - df_stim_onset;
 print('-opengl','-r300','-dpng',strcat([path,filesep,'figs',filesep,'Comparison_Diod_Behav_Events_',name]));
-
-
+if exist('skipbefore_beh', 'var')
+    K.conds(skipbefore_beh) = [];
+    K.conds(skipafter_beh) = [];
+end
 if ~all(abs(df)<.1)
     disp('behavioral data and photodiod mismatch')
     er = find(abs(df)>.1);
-er=er(1)-1;
-goodtrials(er)=0;
-stim_onset(er)=[];
+    er=er(1)-1;
+    goodtrials(er)=0;
+    stim_onset(er)=[];
     %return
 end
 
@@ -459,13 +464,249 @@ switch task
         end
     case 'other'
         cond= [K.conds]';
+        try cond = cond(goodtrials);catch; end;
+        %         if ~isempty(deftask.listcond)
+        %             categNames = deftask.listcond;
+        %         else
+        Names = cellstr(num2str(unique(cond)'));
+        categNames = strsplit(Names{1},' ');
+        %        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalmemrecall'
+        
+        cond= [K.conds]';
         cond = cond(goodtrials);
-%         if ~isempty(deftask.listcond)
-%             categNames = deftask.listcond;
-%         else
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
             Names = cellstr(num2str(unique(cond)'));
             categNames = strsplit(Names{1},' ');
-%        end
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalmemrecallnew'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalcogtaskold'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'sponmem'
+        
+        
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        cond= [K.conds]';
+        try
+            cond = cond(goodtrials);
+        catch
+        end
+        
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalcogbaselinecombined'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalcogrecallcombined'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'ictalcogmem2'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
         stimNum= 1:length(stim_onset);
         
         for ci=1:length(categNames)
@@ -490,6 +731,72 @@ switch task
             
         end
         
+    case  'emotiona_concat'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
+    case  'emotiona_facelock'
+        
+        cond= [K.conds]';
+        cond = cond(goodtrials);
+        if ~isempty(deftask.listcond)
+            categNames = deftask.listcond;
+        else
+            Names = cellstr(num2str(unique(cond)'));
+            categNames = strsplit(Names{1},' ');
+        end
+        stimNum= 1:length(stim_onset);
+        
+        for ci=1:length(categNames)
+            events.categories(ci).name= sprintf('%s',categNames{ci});
+            events.categories(ci).categNum= ci;
+            events.categories(ci).numEvents= sum(cond==ci);
+            events.categories(ci).start= stim_onset(find(cond==ci));
+            events.categories(ci).duration= stim_dur(find(cond==ci));
+            events.categories(ci).stimNum= stimNum(find(cond==ci));
+            events.categories(ci).wlist= [];
+            events.categories(ci).RT= [];
+            events.categories(ci).RTons= [];
+            events.categories(ci).sbj_resp= sbj_resp(find(cond==ci));
+            %
+            try
+                events.categories(ci).stimName = stim_Name(find(cond==ci));
+                events.categories(ci).stimList = stim_List(find(cond==ci));
+                events.categories(ci).dur = dur(find(cond==ci));
+                events.categories(ci).oneback = oneback(find(cond==ci));
+            catch
+            end
+            
+        end
 end
 
 
