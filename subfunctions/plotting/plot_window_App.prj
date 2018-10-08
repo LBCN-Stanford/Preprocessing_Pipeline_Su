@@ -1,0 +1,1180 @@
+<deployment-project plugin="plugin.ezdeploy" plugin-version="1.0">
+  <configuration file="/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer/plot_window_App.prj" location="/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer" name="plot_window_App" target="target.ezdeploy.standalone" target-name="Application Compiler">
+    <param.appname>LBCNeuro</param.appname>
+    <param.icon />
+    <param.icons />
+    <param.version>1.0</param.version>
+    <param.authnamewatermark>Su Liu</param.authnamewatermark>
+    <param.email>suliu@stanford.edu</param.email>
+    <param.company>LBCN Stanford</param.company>
+    <param.summary>Data Preprocessing and result navigation.</param.summary>
+    <param.description />
+    <param.screenshot>/Users/suliu/Desktop/Screen Shot 2018-08-10 at 4.05.17 PM.png</param.screenshot>
+    <param.guid />
+    <param.installpath.string>/LBCN_Stanford/LBCNeuro/</param.installpath.string>
+    <param.installpath.combo>option.installpath.systemwideapp</param.installpath.combo>
+    <param.logo />
+    <param.install.notes />
+    <param.target.install.notes>In the following directions, replace MR/v94 by the directory on the target machine where MATLAB is installed, or MR by the directory where the MATLAB Runtime is installed.
+
+If the environment variable DYLD_LIBRARY_PATH is undefined, set it to the following string:
+
+MR/v94/runtime/maci64:MR/v94/sys/os/maci64:MR/v94/bin/maci64
+
+If it is defined, set it to the following:
+
+${DYLD_LIBRARY_PATH}:MR/v94/runtime/maci64:MR/v94/sys/os/maci64:MR/v94/bin/maci64</param.target.install.notes>
+    <param.intermediate>${PROJECT_ROOT}/plot_window_App/for_testing</param.intermediate>
+    <param.files.only>${PROJECT_ROOT}/plot_window_App/for_redistribution_files_only</param.files.only>
+    <param.output>${PROJECT_ROOT}/plot_window_App/for_redistribution</param.output>
+    <param.logdir>${PROJECT_ROOT}/plot_window_App</param.logdir>
+    <param.enable.clean.build>false</param.enable.clean.build>
+    <param.user.defined.mcr.options />
+    <param.target.type>subtarget.standalone</param.target.type>
+    <param.support.packages />
+    <param.web.mcr>true</param.web.mcr>
+    <param.package.mcr>false</param.package.mcr>
+    <param.no.mcr>false</param.no.mcr>
+    <param.web.mcr.name>MyAppInstaller_web</param.web.mcr.name>
+    <param.package.mcr.name>MyAppInstaller_mcr</param.package.mcr.name>
+    <param.no.mcr.name>MyAppInstaller_app</param.no.mcr.name>
+    <param.windows.command.prompt>false</param.windows.command.prompt>
+    <param.create.log>false</param.create.log>
+    <param.log.file />
+    <param.native.matlab>false</param.native.matlab>
+    <param.checkbox>false</param.checkbox>
+    <param.example />
+    <param.help.text />
+    <unset>
+      <param.icon />
+      <param.icons />
+      <param.version />
+      <param.description />
+      <param.guid />
+      <param.installpath.string />
+      <param.installpath.combo />
+      <param.logo />
+      <param.install.notes />
+      <param.intermediate />
+      <param.files.only />
+      <param.output />
+      <param.logdir />
+      <param.enable.clean.build />
+      <param.user.defined.mcr.options />
+      <param.target.type />
+      <param.support.packages />
+      <param.web.mcr />
+      <param.package.mcr />
+      <param.no.mcr />
+      <param.web.mcr.name />
+      <param.package.mcr.name />
+      <param.no.mcr.name />
+      <param.windows.command.prompt />
+      <param.create.log />
+      <param.log.file />
+      <param.native.matlab />
+      <param.checkbox />
+      <param.example />
+      <param.help.text />
+    </unset>
+    <fileset.main>
+      <file>${PROJECT_ROOT}/plot_window_App.mlapp</file>
+    </fileset.main>
+    <fileset.resources />
+    <fileset.package />
+    <fileset.depfun>
+      <file>${MATLAB_ROOT}/toolbox/local/userpath.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/doc/IEEEandUCUM.1b.txt</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/bdf2biosig_events.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/bkropen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/bni2hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/bv2biosig_events.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/cntopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/famosopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/fefopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/fltopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/gdfdatatype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/getfiletype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/iopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/iread.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/leadidcodexyz.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/matread.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/mwfopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/opendicom.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/openiff.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/openldr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/openxml.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/physicalunits.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/rs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/scpopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/private/str2double.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/sclose.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/sopen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Edf_Convert/biosig/sread.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/DeNoising/HT.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/DeNoising/HardThresh.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/DownDyadHi.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/DownDyadLo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/FWT_PO.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/IWT_PO.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/MirrorFilt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/UpDyadHi.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/UpDyadLo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/UpSampleN.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/aconv.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/dyad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/dyadlength.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/iconv.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/lshift.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Orthogonal/rshift.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Utilities/ShapeAsRow.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Utilities/ShapeLike.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/Utilities/expand.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/Wavelab850/reverse.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/functions/loadcnt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/ECoG/Scripts/functions/tree.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/Anonymize_edf/edf_hdr_reader.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/Anonymize_edf/edf_hdr_writer.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/FASST_tools/CRC_electrodes.mat</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/FASST_tools/SPTfunctions/butter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/FASST_tools/SPTfunctions/filtfilt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/FASST_tools/crc_electrodes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/FASST_tools/crc_fasst_utils.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/LBCN_montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/LBCN_smooth_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/LBCN_FDRcorrect.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/LBCN_plot_averaged_signal_epochs2.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/batch_ArtefactRejection_TFrescale_AvgFreqRT.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/get_events_SPMformat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/insertX.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN/Preprocessing-pipeline-master/utils/shadedErrorBar2.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/LBCN_plot_HFB.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/LBCN_preprocessing_new.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/data_inspection.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/selectdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/Atf Detect/LBCN_filt_bad_trial.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/EditDist.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/External/freesurfer_fread3.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/External/freesurfer_read_surf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/External/point2trimesh/point2trimesh.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_convert_NKnew_rename.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/FASST_tools/crc_eeg_rdata_edf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/FASST_tools/crc_eeg_readHeaderEDF.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/LBCN_epoch_bc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/get_defaults_Parvizi.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/utils/LBCN_filter_badchans.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/utils/LBCN_read_events_diod_sodata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/LBCN_toReplace_self/utils/get_events_diod.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/SPM_toReplace/chanlabels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/arrange.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/baseline_norm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/changelabels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/compute_HFB.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/data_norm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/derive_grid_lines.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/eliminate_noise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/envelope.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/exclude_trial.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_diod.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_event.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_file.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_most_similar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_pChan.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/find_skip.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/format_signal.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/get_images.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/get_info.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/get_threshold.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/getaligneddata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/identify_task.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/linspecer.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/mgrid2matlab.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/ndnanfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/permutation_test.m</file>
+      <file>${PROJECT_ROOT}/a1.png</file>
+      <file>${PROJECT_ROOT}/a2.png</file>
+      <file>${PROJECT_ROOT}/add.png</file>
+      <file>${PROJECT_ROOT}/checkBoxCallback.m</file>
+      <file>${PROJECT_ROOT}/down.png</file>
+      <file>${PROJECT_ROOT}/electrode3d.m</file>
+      <file>${PROJECT_ROOT}/export.png</file>
+      <file>${PROJECT_ROOT}/home1.png</file>
+      <file>${PROJECT_ROOT}/home2.png</file>
+      <file>${PROJECT_ROOT}/ins.png</file>
+      <file>${PROJECT_ROOT}/logos2.png</file>
+      <file>${PROJECT_ROOT}/map_color.m</file>
+      <file>${PROJECT_ROOT}/move_2dslice.m</file>
+      <file>${PROJECT_ROOT}/move_slice.m</file>
+      <file>${PROJECT_ROOT}/new.png</file>
+      <file>${PROJECT_ROOT}/open.png</file>
+      <file>${PROJECT_ROOT}/plot_3dslice.m</file>
+      <file>${PROJECT_ROOT}/plot_browser.m</file>
+      <file>${PROJECT_ROOT}/plot_mesh.m</file>
+      <file>${PROJECT_ROOT}/plot_slice.m</file>
+      <file>${PROJECT_ROOT}/plot_slice_fig.m</file>
+      <file>${PROJECT_ROOT}/plot_window.m</file>
+      <file>${PROJECT_ROOT}/rgb2Hex.m</file>
+      <file>${PROJECT_ROOT}/rot3d.m</file>
+      <file>${PROJECT_ROOT}/rot_e.m</file>
+      <file>${PROJECT_ROOT}/save2.png</file>
+      <file>${PROJECT_ROOT}/shadedErrorBar3.m</file>
+      <file>${PROJECT_ROOT}/up.png</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/DrosteEffect-BrewerMap-96d1503/brewermap.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/template.mat</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/template_t1.mat</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/tight_subplot.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/progress.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/smooth_sig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/task_config.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/temp_variance.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/tripatchDG.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/universalNo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/universalYes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/wv_morlet.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/zerocross_count.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/view_results.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/Contents.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/cat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/ctranspose.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/disp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/double.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/end.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/file_array.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/horzcat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/initialise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/isnan.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/length.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/loadobj.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/ndims.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/numel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/numeric.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/permute.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/datatypes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/dim.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/dtype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/file2mat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/file2mat.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/fname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/init.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/init.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/mat2file.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/mat2file.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/mystruct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/offset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/permission.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/resize_scales.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/scl_inter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/private/scl_slope.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/reshape.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/size.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/transpose.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@file_array/vertcat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/Contents.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/badchannels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/badsamples.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/badtrials.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/blank.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/chanlabels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/chantype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/check.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/clone.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/conditions.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/condlist.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/coor2D.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/copy.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/delete.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/events.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fiducials.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fnamedat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/frequencies.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fsample.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/ftraw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fttimelock.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/fullfile.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/getfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/history.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/indchannel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/indchantype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/indfrequency.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/indsample.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/indtrial.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/isempty.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/isequal.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/isfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/islinked.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/link.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/meeg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/modality.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/move.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/nchannels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/nconditions.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/nfrequencies.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/nsamples.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/ntrials.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/path.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/private/checkmeeg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/private/fixpnt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/private/getset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/private/match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/private/warning_flexible.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/reload.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/repl.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/rmdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/rmfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/save.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/sconfounds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/selectchannels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/selectdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/sensors.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/size.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/time.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/timeonset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/transformtype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/trialonset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/trialtag.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/type.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@meeg/unlink.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/Contents.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/create.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/disp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/nifti.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/M2Q.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/Q2M.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/decode_qform0.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/empty_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/encode_qform0.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/findindict.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/getdict.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/mayo2nifti1.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/mayostruc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/nifti1struc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/nifti2struc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/nifti_stats.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/niftistruc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/read_extras.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/read_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/read_hdr_raw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/write_extras.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/private/write_hdr_raw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/structn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@nifti/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/Contents.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/add.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/attributes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/branch.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/char.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/children.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/convert.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/copy.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/delete.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/editor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/find.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/flush.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/get.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/getfilename.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/isfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/length.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/move.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/parent.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/private/xml_findstr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/private/xml_findstr.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/private/xml_parser.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/root.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/save.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/set.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/setfilename.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/view.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/@xmltree/xmltree.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/compat/loadxml.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/ctf/getCTFBalanceCoefs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/ctf/getCTFdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/ctf/readCPersist.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/ctf/readCTFds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/eeprobe/read_eep_avr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/eeprobe/read_eep_avr.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/eeprobe/read_eep_cnt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/eeprobe/read_eep_cnt.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/signal/gausswin.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/signal/hilbert.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanmean.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanmean.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanstd.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanstd.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nansum.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nansum.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanvar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/nanvar.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/external/stats/range.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_chantype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_chanunit.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_filetype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_read_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_read_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_read_spike.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/ft_write_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ReadHeader.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/bti2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/buffer_wait_dat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/channelposition.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/cornerpoints.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ctf2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/dataset2files.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/db_insert.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/db_insert_blob.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/db_open.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/db_select.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/db_select_blob.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/decode_fif.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/decode_nifti1.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/decode_res4.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/defaultId.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/dimlength.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/encode_nifti1.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fetch_url.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fif2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fiff_open_le.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/filetype_check_extension.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/filetype_check_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/filetype_check_uri.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixdimord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixinside.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixoldorg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixpos.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/fixsampleinfo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_apply_montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_checkdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_convert_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_comp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_dip.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_freq.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_mvar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_raw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_source.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_spike.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_datatype_timelock.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_determine_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_estimate_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_fetch_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_fetch_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_findcfg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_getopt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_getopt.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_hastoolbox.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_notification.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_platform_supports.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_progress.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_scalingfactor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_senslabel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_senstype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_voltype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_warning.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ft_warp_apply.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/getdatfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/getdimord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/getdimsiz.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/getsubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/hasyokogawa.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/homer2opto.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/in_fopen_manscan.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/in_fread_manscan.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/inflate_file.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/inifile.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/issubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/istrue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/itab2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/jaga16_packet.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/labelcmb2indx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/littleendian.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/mne2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/mxDeserialize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/mxSerialize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/ndgrid.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/netmeg2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/neuralynx_crc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/neuralynx_getheader.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/neuralynx_timestamp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/np_read_splitted_fileinfo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/np_readdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/np_readfileinfo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/openbdf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/pos2dim.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/pos2transform.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_16bit.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_24bit.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_4d_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ah5_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ahdf5_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_asa.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_besa_avr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_besa_besa.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_besa_swf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_biosemi_bdf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_biosig_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_biosig_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_brainvision_eeg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_brainvision_vhdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_bti_m4d.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_bucn_nirsdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_bucn_nirshdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_buffer_offline_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_buffer_offline_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ced_son.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_combined_ds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ctf_meg4.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ctf_res4.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ctf_shm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_deymed_dat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_deymed_ini.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_edf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_eeglabdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_eeglabheader.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_egis_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_egis_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_erplabdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_erplabheader.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_eyelink_asc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_itab_mhd.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_mclust_t.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_mff_bin.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_micromed_trc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_mpi_dap.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_mpi_ds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nervus_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nervus_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_bin.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_cds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_dma.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_ds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_ncs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_nse.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_nst.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_nts.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_ntt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_sdma.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuralynx_ttl.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neuroshare.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neurosim_evolution.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neurosim_signals.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_neurosim_spikes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nex_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nex_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nexstim_nxe.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nihonkohden_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nihonkohden_m00.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nimh_cortex.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nmc_archive_k_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_nmc_archive_k_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ns_avg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ns_eeg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_ns_hdr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_plexon_ddt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_plexon_ds.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_plexon_nex.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_plexon_plx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_sbin_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_sbin_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_shm_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_shm_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_smi_txt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_spike6mat_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_spike6mat_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_spmeeg_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_spmeeg_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_tmsi_poly5.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_tobii_tsv.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_videomeg_aud.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_videomeg_vid.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_wdq_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_wdq_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_yokogawa_data.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_yokogawa_data_new.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_yokogawa_header.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/read_yokogawa_header_new.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/readbdf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/rotate.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/setsubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/time2offset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/timestamp_neuralynx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/timestamp_plexon.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/tokenize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/translate.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/undobalancing.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_brainvision_eeg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_ctf_shm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_edf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_gdf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_neuralynx_ncs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/write_plexon_nex.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/xml2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/yokogawa2grad.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/fileio/private/yokogawa2grad_new.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_apply_montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_average_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_convert_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_determine_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_estimate_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_senslabel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_senstype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_transform_headshape.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_transform_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/ft_voltype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/channelposition.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/cornerpoints.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/defaultId.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/fixoldorg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/fixpos.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_datatype_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_getopt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_getopt.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_headcoordinates.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_notification.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_platform_supports.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_scalingfactor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_warning.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/ft_warp_apply.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/issubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/istrue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/forward/private/undobalancing.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/ft_defaults.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/ft_definetrial.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/ft_prepare_montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/ft_preprocessing.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/ft_timelockanalysis.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_axes.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_dipole.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_headshape.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_mesh.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_ortho.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_slice.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/ft_plot_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/bg_rgba2rgb.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/channelposition.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/coordsys2label.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/cornerpoints.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/cylinder.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/defaultId.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/fixoldorg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/fixpos.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_apply_montage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_convert_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_datatype_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_determine_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_estimate_units.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_getopt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_notification.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_platform_supports.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_progress.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_scalingfactor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_senslabel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_senstype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_voltype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_warning.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ft_warp_apply.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/icosahedron.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/icosahedron2562.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/icosahedron42.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/icosahedron642.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/intersect_plane.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/issubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/istrue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/lmoutrn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ltrisect.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/mesh2edge.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ndgrid.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/pinvNx2.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ptriprojn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/ptriside.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/refine.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/rotate.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/scale.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/translate.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/plotting/private/undobalancing.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_bandpassfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_bandstopfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_baselinecorrect.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_denoise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_derivative.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_detrend.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_dftfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_highpassfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_hilbert.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_lowpassfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_medianfilter.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_padding.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_polyremoval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_rectify.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_rereference.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_resample.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_smooth.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/ft_preproc_standardize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/defaultId.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/filter_with_correction.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/fir_df.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/fir_filterdcpadded.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/firws.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/firwsord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/fixname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/ft_notification.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/ft_platform_supports.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/ft_warning.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/invfirwsord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/istrue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/kaiserbeta.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/minphaserceps.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/plotfresp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/print_once.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/preproc/private/windows.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/ft_getuserfun.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/iscompatwrapper.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/isfunction.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/issubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/mergeconfig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/offset2time.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/preproc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/rollback_provenance.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/private/time2offset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/copyfields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_channelcombination.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_channelselection.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_checkconfig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_checkdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_comp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_dip.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_freq.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_headmodel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_mvar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_parcellation.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_raw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_segmentation.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_sens.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_source.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_spike.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_timelock.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_datatype_volume.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_debug.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_determine_coordsys.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_error.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_getopt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_getopt.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_hash.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_hastoolbox.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_info.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_keyval2cfg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_notice.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_platform_supports.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_postamble.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_preamble.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_progress.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_scalingfactor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_selectdata.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_selectdata_old.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_setopt.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_struct2double.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_trackusage.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_transform_geometry.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_version.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_warning.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/ft_warp_apply.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/getsubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/hasyokogawa.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/issubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/istrue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/keepfields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/memtic.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/memtoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/nearest.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/CalcMD5.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/avgoverdim.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/avgoverlabel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/base64encode.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/channelposition.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/convert_segmentationstyle.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/coordsys2label.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/cornerpoints.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/dataset2files.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/debugCleanup.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/defaultId.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/determine_segmentationstyle.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/dimindex.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/dimlength.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixdimord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixinside.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixoldorg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixpos.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixsampleinfo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/fixsegmentation.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_findcfg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_notification.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_debug.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_history.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_previous.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_provenance.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_randomseed.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_savevar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_postamble_trackconfig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_debug.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_init.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_loadvar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_provenance.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_randomseed.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_preamble_trackconfig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_struct2json.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ft_urlread.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/getaddress.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/getdatfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/getdimord.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/getdimsiz.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/gethostname.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/getusername.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/ignorefields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/individual2sn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/labelcmb2indx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/leaveoneout.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/loadvar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/memprofile.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/mergeconfig.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/mxSerialize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/pos2dim.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/pos2transform.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/printor.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/randomseed.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/savevar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/selfromraw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/seloverdim.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/selparam.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/smartinput.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/sn2individual.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/time2offset.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/undobalancing.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/unparcellate.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/volumeflip.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/volumepermute.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/volumesmooth.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/private/volumethreshold.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/removefields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/rmsubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/setsubfield.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/fieldtrip/utilities/tokenize.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_define_constants.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_dir_tree_find.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_find_evoked.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_invert_transform.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_make_dir_tree.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_open.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_bad_channels.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_ctf_comp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_epochs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_events.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_evoked_all.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_meas_info.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_named_matrix.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_proj.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_raw_segment.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_tag.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_read_tag_info.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_setup_read_raw.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_split_name_list.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_transform_eeg_chs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/fiff_transform_meg_chs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/mne_file_name.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/mne/mne_load_coil_def.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwData.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrAcqCond.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrChannel.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrCoregist.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrDigitize.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrSource.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwHdrSystem.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/external/yokogawa_meg_reader/getYkgwVersion.p</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/all_leafs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/all_set.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/all_set_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/cfg2jobsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/cfg2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/cfg_branch.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/checksubs_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/clearval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/expand.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/fillvals.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/harvest.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/initialise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/list.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/private/mysubs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/setval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/showdetail.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/showdoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/showmydoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subsasgn_check.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subsasgn_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/subsref_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/tag2cfgsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/tagnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/treepart.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/update_deps.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_branch/val2def.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/cfg2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/cfg_const.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/private/mysubs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/showdetail.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/showdoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/subs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_const/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/cfg2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/cfg_entry.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/gencode_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/match.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/private/mysubs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/showdetail.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/showdoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/subs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/subsasgn_check.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_entry/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_intree/cfg_intree.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_intree/disp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_intree/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/all_leafs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/all_set.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/all_set_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/cat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/cfg2jobsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/cfg2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/cfg_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/clearval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/disp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/docheck.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/expand.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/fillvals.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/gencode.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/gencode_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/gettag.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/harvest.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/horzcat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/initialise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/list.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/match.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/private/mysubs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/resolve_deps.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/setval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/showdetail.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/showdoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsasgn_check.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsasgn_checkstr.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsasgn_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/subsref_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/tag2cfgsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/update_deps.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/val2def.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_item/vertcat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_leaf/cfg_leaf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_leaf/disp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_leaf/display.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/all_leafs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/all_set.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/all_set_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/cfg2jobsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/cfg2struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/cfg_repeat.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/checksubs_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/clearval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/expand.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/fieldnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/fillvals.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/gencode_item.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/gettag.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/harvest.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/initialise.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/list.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/private/mysubs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/setval.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/showdetail.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/showdoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/showmydoc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subs_fields.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subsasgn.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subsasgn_check.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subsasgn_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subsref.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/subsref_job.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/tag2cfgsubs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/tagnames.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/treepart.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/update_deps.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/@cfg_repeat/val2def.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_callbuiltin.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_dbstop.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_findspec.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_get_defaults.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_getfile.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_load_jobs.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_message.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_struct2cfg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_tropts.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_ui.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_ui_multibatch.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_ui_util.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/cfg_util.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/gencode.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/gencode_rvalue.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/gencode_substruct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_disp_error.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_eval_valedit.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_justify.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_maxextent.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_mlbatch_defaults.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_mlbatch_root.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_onscreen.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_run_cm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_textfill.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_ui_disable.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_ui_getListboxTop.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_ui_restore.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/cfg_util_persistent.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/getnicedialoglocation.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/inputdlg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/int2str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/listdlg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/num2str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/private/setdefaultbutton.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/subsasgn_check_funhandle.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/subsasgn_check_num.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/matlabbatch/subsasgn_check_valcfg.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_DesMtx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_FcUtil.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_SpUtil.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_Welcome.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_authors.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_browser.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_bsplinc.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_bsplinc.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_bwlabel.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_bwlabel.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_cat_struct.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_check_installation.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_check_orientations.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_check_version.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_clf.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_conman.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_conv_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_conv_vol.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_create_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_dctmtx.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_defaults.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_diffeo.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_diffeo.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_eeg_downsample.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_eeg_load.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_eeg_merge.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_existfile.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_existfile.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_figure.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_file.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_file_template.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_fileparts.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_flip_analyze_images.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_get_defaults.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_help.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_input.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_jobman.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_jsonread.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_jsonread.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_match_str.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_matrix.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_mesh_detect.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_platform.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_print.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_progress_bar.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_read_vols.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_sample_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_sample_vol.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_select.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_slice_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_slice_vol.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_smooth.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_smoothkern.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_sp.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_squeeze.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_str_manip.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_toolbox.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_type.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_unlink.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_unlink.mexmaci64</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_update.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_vol_nifti.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_write_plane.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/spm_write_vol.m</file>
+      <file>/Users/suliu/Dropbox/MATLAB/spm12/toolbox/OldSeg/spm_invdef.m</file>
+    </fileset.depfun>
+    <build-deliverables>
+      <file location="${PROJECT_ROOT}/plot_window_App/for_testing" name="splash.png" optional="false">/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer/plot_window_App/for_testing/splash.png</file>
+      <file location="${PROJECT_ROOT}/plot_window_App/for_testing" name="LBCNeuro.app" optional="false">/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer/plot_window_App/for_testing/LBCNeuro.app</file>
+      <file location="${PROJECT_ROOT}/plot_window_App/for_testing" name="readme.txt" optional="true">/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer/plot_window_App/for_testing/readme.txt</file>
+      <file location="${PROJECT_ROOT}/plot_window_App/for_testing" name="run_LBCNeuro.sh" optional="false">/Users/suliu/Dropbox/MATLAB/LBCN_preprop_alter/HFB plot/subfunctions/plotting/Designer/plot_window_App/for_testing/run_LBCNeuro.sh</file>
+    </build-deliverables>
+    <workflow />
+    <matlab>
+      <root>/Applications/MATLAB_R2018a.app</root>
+      <toolboxes>
+        <toolbox name="matlabcoder" />
+      </toolboxes>
+      <toolbox>
+        <matlabcoder>
+          <enabled>true</enabled>
+        </matlabcoder>
+      </toolbox>
+    </matlab>
+    <platform>
+      <unix>true</unix>
+      <mac>true</mac>
+      <windows>false</windows>
+      <win2k>false</win2k>
+      <winxp>false</winxp>
+      <vista>false</vista>
+      <linux>false</linux>
+      <solaris>false</solaris>
+      <osver>10.13.6</osver>
+      <os32>false</os32>
+      <os64>true</os64>
+      <arch>maci64</arch>
+      <matlab>true</matlab>
+    </platform>
+  </configuration>
+</deployment-project>
