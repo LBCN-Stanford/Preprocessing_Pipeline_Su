@@ -20,10 +20,10 @@ function LBCN_preprocessing_new(filename,sodata,badchan,task,pipeline,atf_check,
 %                           3 -- both 1 and 2 will be used (defualt)
 %                           4 -- bad data will be excluded, artifact
 %                           indicies will be tapered in the high-pass
-%                           filtered signal. 
+%                           filtered signal.
 %               dsamp  :    whether to reduce the sampling rate by the
-%               input number. Default none.
-%               viewer :    whether to use a GUI to review the results. 
+%               input number. Default no.
+%               viewer :    whether to use a GUI to review the results.
 %   -----------------------------------------
 %   =^._.^=   Su Liu
 %
@@ -43,7 +43,11 @@ if nargin<3 || isempty(badchan)
 end
 
 if nargin<4 || isempty(task)
-    task = identify_task(sodata(1,:));
+    %task = identify_task(sodata(1,:));
+    [task,sbjname] = get_info(sodata(1,:));
+    out = timer_getinfo_main(task,sbjname);
+    task = out.task;
+    sbjname = out.sname;
 end
 
 if nargin<5 || isempty(pipeline)
@@ -60,7 +64,16 @@ if nargin < 8 || isempty(viewer)
 end
 
 %p =  task_config(task);
-task_config(task);
+try
+    task_config(task);
+catch
+    mytask;
+    confn = fieldnames(p);
+    for i = 1:length(confn)
+        val = getfield(p,confn{i});
+        assignin('caller',confn{i},val);
+    end
+end
 
 
 fnamep = cell(size(filename,1),1);
@@ -87,14 +100,14 @@ for i = 1:size(filename,1)
     fname = fullfile(D.path,D.fname);
     
     % Get events from SODATA
-%     if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
-%             || strcmpi(task,'category') || strcmpi(task,'EmotionF') || strcmpi(task,'EmotionA') ...
-%             || strcmpi(task,'RACE_CAT')
-%         [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
-%     else
-%         task = 'other';
-%         %evtfile{i} = sodata(i,:);
-%     end
+    %     if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
+    %             || strcmpi(task,'category') || strcmpi(task,'EmotionF') || strcmpi(task,'EmotionA') ...
+    %             || strcmpi(task,'RACE_CAT')
+    %         [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
+    %     else
+    %         task = 'other';
+    %         %evtfile{i} = sodata(i,:);
+    %     end
     [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
     % Save events in SPM data file
     D = get_events_SPMformat(fname,evtfile{i});
@@ -108,12 +121,21 @@ end
 %conditionList=[];
 fname = char(fnamep);
 %fd = notch_meeg(fname,50,4);
+try
+    if strcmp(sbjname(1),'S')
+        plnotch = 60;
+    else
+        plnotch = 50;
+    end
+catch
+    plnotch = 60;
+end
 
 for i = 1: size(filename,1)
-    fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, 60);%Change to 60 if not looking at China datasets!!!
+    fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, plnotch);%Change to 60 if not looking at China datasets!!!
     
     fname1 = fullfile(fd{1}.path,fd{1}.fname);
-
+    
     d = LBCN_montage(fname1);
     %fname1b = fullfile(d{1}.path,d{1}.fname);
     %d2 = montage_commonAvg_local(fname1b,bch{i});
@@ -182,48 +204,48 @@ if ~ pipeline
     method = 2;%type 1 fft; type 2 wavelet.
     % plot_cond=[1 4 5 9];%which conditions to plot
     save(fullfile(D.path,strcat('Epoched_data_',task,'.mat')),'evtfile','DAT','bch',...
-        'exclude','conditionList','exclude_ts','plot_cond','twsmooth','twbc');
-    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc);
+        'exclude','conditionList','exclude_ts','plot_cond','twsmooth','twbc','task','sbjname');
+    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc,2,0,task,sbjname);
 elseif viewer
-        signal_all = format_signal([],df,plot_cond,exclude);
-        nan_all = format_signal([],df,plot_cond,exclude);
-        sparam = 25;
-        labels = chanlabels(df{1});
-        t = time(df{1});
-        page = 1;
-        yl = [-0.3 2];
-        window = t1:t2;
-        bc_type = 2;
-        save(fullfile(D.path,strcat('Var_gui_',task,'.mat')),'df','plot_cond','exclude','bch');
-        plot_window(signal_all, sparam,labels,df,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all);
+    signal_all = format_signal([],df,plot_cond,exclude);
+    nan_all = format_signal([],df,plot_cond,exclude);
+    sparam = 25;
+    labels = chanlabels(df{1});
+    t = time(df{1});
+    page = 1;
+    yl = [-0.3 2];
+    window = t1:t2;
+    bc_type = 2;
+    save(fullfile(D.path,strcat('Var_gui_',task,'.mat')),'df','plot_cond','exclude','bch');
+    plot_window(signal_all, sparam,labels,df,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all);
 else
-        REMOVEID = removeid(:,t1:t2,:);    
-        BCH = [];
-        for i = 1:length(bch)
-            BCH = [BCH bch{i}];
-        end
-        BCH = unique(BCH);
-        if ~ isempty(exclude)
-            EXCLUDE = exclude{1};
-        else
-            EXCLUDE = [];
-        end
-            tomerge = char(fnamesmooth);
-        if size(tomerge,1)>1 %merge multiple files
-            S.D = tomerge;
-            S.recode = 'same';
-            D = spm_eeg_merge(S);
-            final = fullfile(D.path,D.fname);
-            for kk=1:nchannels(D)
-                for nn=2:size(tomerge,1)
-                    EXCLUDE{kk}=[EXCLUDE{kk} exclude{nn}{kk}+nd(nn-1)];
-                end
+    REMOVEID = removeid(:,t1:t2,:);
+    BCH = [];
+    for i = 1:length(bch)
+        BCH = [BCH bch{i}];
+    end
+    BCH = unique(BCH);
+    if ~ isempty(exclude)
+        EXCLUDE = exclude{1};
+    else
+        EXCLUDE = [];
+    end
+    tomerge = char(fnamesmooth);
+    if size(tomerge,1)>1 %merge multiple files
+        S.D = tomerge;
+        S.recode = 'same';
+        D = spm_eeg_merge(S);
+        final = fullfile(D.path,D.fname);
+        for kk=1:nchannels(D)
+            for nn=2:size(tomerge,1)
+                EXCLUDE{kk}=[EXCLUDE{kk} exclude{nn}{kk}+nd(nn-1)];
             end
-        else
-            final = tomerge;
         end
-        save(fullfile(D.path,strcat('Var_',task,'.mat')),'evtfile','plot_cond','EXCLUDE','BCH','REMOVEID','twsmooth');
-        LBCN_plot_averaged_signal_epochs2(final,[],plot_cond,[], 0,task,[],[],EXCLUDE,BCH,REMOVEID);
+    else
+        final = tomerge;
+    end
+    save(fullfile(D.path,strcat('Var_',task,'.mat')),'evtfile','plot_cond','EXCLUDE','BCH','REMOVEID','twsmooth');
+    LBCN_plot_averaged_signal_epochs2(final,[],plot_cond,[], 0,task,[],[],EXCLUDE,BCH,REMOVEID);
 end
 
 
