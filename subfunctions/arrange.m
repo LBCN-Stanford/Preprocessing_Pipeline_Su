@@ -38,7 +38,12 @@ if ~iscell(sig)
     s{1}=sig;
     sig=s;
 end
+
+    
 for N=1:length(sig)
+    if isempty(sig{N}) && ~isempty(D)
+        sig{N} = D{N}(:,:,:);
+    end
     data = sig{N};
     cn = size(data,1);
     for i = 1:cn

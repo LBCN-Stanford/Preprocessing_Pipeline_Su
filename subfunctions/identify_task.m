@@ -13,7 +13,10 @@ try
     taskdir = cont(ft);
 catch
     so = load(filepath);
-    taskdir = strsplit(so.thePath.main,'\');    
+    try
+        taskdir = strsplit(so.thePath.main,'\');    
+    catch
+    end
 end
  try
     taskname = char(join(regexp(taskdir{end},'[a-z]','Match','ignorecase'),''));
@@ -45,8 +48,10 @@ catch
          task = 'OTHER';
      end
  catch
-        warning('Could not identify the task. Will assign to OTHER');
-        task = 'OTHER';
+       % warning('Could not identify the task. Will assign to OTHER');
+       warning('Could not identify the task.')
+        %task = 'OTHER';
+        task = [];
  end
 
 % try

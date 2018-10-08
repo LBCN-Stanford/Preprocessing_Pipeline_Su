@@ -1,4 +1,4 @@
-function [signalbc, signalbc2,nanid] = compute_HFB(data, fs, type, fbands, atf_check, ...
+function [signalbc, signalbc2,nanid, spec, spec2] = compute_HFB(data, fs, type, fbands, atf_check, ...
     bc_type, bc_win , pre_defined_bad, window, downsamp)
 
 if nargin<1 || isempty(data)
@@ -15,7 +15,13 @@ if nargin<1 || isempty(data)
     end
 end
 if (nargin<2 || isempty(fs)) && ~exist('fs','var')
-    fs = 1000;
+    try
+        D = spm_eeg_load(names);
+        data = D(:,:,:);
+        fs = D.fsample;
+    catch
+        fs = 1000;
+    end
 end
 if (nargin<3 || isempty(type)) 
     type = 1;
@@ -23,7 +29,7 @@ end
 if nargin<4 || isempty(fbands)
 %     fbands = [70 80; 80 90; 90 100; 100 110; 110 120; 120 130;...
 %         130 140; 140 150; 150 160; 160 170; 170 180];
-    fbands = linspace(70,180,12);         
+    fbands = linspace(70,180,12);        
 end
 if (nargin<5 || isempty(atf_check))  && ~exist('atf_check','var')
     atf_check = 3;
@@ -46,7 +52,9 @@ end
 if nargin<10 || isempty(downsamp)
     downsamp = 2;
 end
-
+%spec_all = linspace(0,180,19);
+spec_all = fbands;
+spec_all(1) = 1;
 cn = size(data,1);
 dlength_org = size(data,2);
 dlength = length(1 : downsamp : dlength_org);
@@ -74,7 +82,7 @@ if atf_check
                 %Bad epochs will not be removed but will be excluded from baseline calculation.
                 
                 [badind,~,~,spkts,badind2] = LBCN_filt_bad_trial(dat,...
-                    fs,[],0, 10, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);
+                    fs,[],0, 10, 0.6, squeeze(pre_defined_bad(:,:,i))',inspectatf);
                 nanid(:,:,i) = spkts';
                 badind(badind2) = 1; 
             case 2 
@@ -139,7 +147,12 @@ switch type
         narrown = permute(env,[1,4,2,3]); %cn x fn x dn xtn
     case 2
         t = 1*1000/fs;
-        wvmat = wv_morlet(6, t, fbands);
+        wvmat = wv_morlet(7,t,spec_all);
+        fa = abs(spec_all - fbands(1));
+        fb = abs(spec_all - fbands(end));
+        freqID = find(fa==min(fa)) : find(fb==min(fb));
+        %wvmat = wv_morlet(7, t, fbands);
+        fbands = spec_all;
         narrown = zeros(cn,size(fbands,1),ceil((dlength_org)/downsamp) ,tn);
         for k = 1:tn
             progress(k,tn,50,0)
@@ -155,8 +168,27 @@ switch type
         narrown = narrown.*conj(narrown);
 end
 window = round((window(1) : downsamp : window(end))./downsamp);
-bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
 nanid = nanid(:,1:downsamp:end,:);
 %signal = narrown;
-[signalbc, signalbc2] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid);
+if ~exist('freqID','var')
+    freqID = 1:size(fbands,1);
+end
+if ~isnumeric(bc_win)%use a specific condition as baseline; 
+    bls = str2num(bc_win{2})/downsamp;
+    ble = str2num(bc_win{3})/downsamp;
+    if ble > size(narrown,3)
+        ble = size(narrown,3);
+    end
+    if bls < 0 && ble > 300/downsamp
+        bls = ble-300/downsamp;
+    end
+    bc_sig = narrown(:,:,round(bls:ble),bc_win{1});
+    [signalbc, signalbc2, spec] = baseline_norm2(narrown, window, bc_sig, bc_type, bad, nanid, freqID);
+else
+    bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
+    bc_win(bc_win < window(1)) = [];
+    [signalbc, signalbc2, spec, ~] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid, freqID);
+end
+
+nanid=nanid(:,window,:);
 progress(1,1,1,1);

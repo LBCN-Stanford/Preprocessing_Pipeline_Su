@@ -19,6 +19,7 @@ for i = 1:length(chanid)
         signal{i}(:,end+1:end+missing) = nan;%padding missing trials
     end
     % Counter of channels to be updated
+    %win_bl=200:550;
         conddata = nanmean(signal{i}(win_bh,:),1);
         baseline = nanmean(signal{i}(win_bl,:),1);
     if tail

@@ -36,7 +36,7 @@ if isempty(elecpath)
             leptoCoor = [];
             return;
         end
-        [upper,curr] = fileparts(selpath);
+        [~,curr] = fileparts(selpath);
         if contains(lower(selpath),'jparvizi')
             serverpath = selpath;
             fprintf('----------Copying files from the server ------------\n')
@@ -48,7 +48,7 @@ if isempty(elecpath)
             [~,~] = copyfile(fullfile(serverpath,'surf','rh.pial'),elecpath);
             fprintf('---------------  Finished  ---------------\n')
         elseif strcmpi(curr,'elec_recon')
-            sbjpath = upper;
+            %sbjpath = upper;
             elecpath = selpath;
         else
             sbjpath = selpath;

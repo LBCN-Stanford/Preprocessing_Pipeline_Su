@@ -1,5 +1,4 @@
-function [signalbc, signalbc2, spec , spec2] = baseline_norm(original, window, bc_win, bc_type, badind, remove, freqID)
-
+function [signalbc, signalbc2, spec] = baseline_norm2(original, window, bc_sig, bc_type, badind, remove, freqID)
 if isempty(original)
     signalbc =[];
     return;
@@ -30,10 +29,11 @@ remove = repmat(remove,[1 1 1 11]);
 remove = permute(remove,[1,4,2,3]);
 originalb=original;
 original(remove) = nan;
+xbase = nanmean(bc_sig,4);
 for i=1:tn
     progress(i,tn,10,0)
     xx= spm_squeeze(original(:, :,window, i), 4);
-    xbase = xx(:, :, bc_win-window(1)+1);
+    %xbase = xx(:, :, bc_win-window(1)+1);
     xx= spm_squeeze(originalb(:, :,window, i), 4);
     %rpc = nanmean(xbase(~badind,:,:),1);
     %xbase(badind, :,:) = rpc;
@@ -41,7 +41,8 @@ for i=1:tn
     xx(badind(:,i), :,:) = nan;
     stdev   =  nanstd(xbase, [], 3);
     xbase1   =  nanmean(xbase , 3);
-    xbase2 = nanmean(log10(xbase),3);
+    %xbase2 = nanmean(log10(xbase),3);
+    xbase2 = nanmean(sqrt(xbase),3);
     SIG(:,:,:,i)= (xx - repmat(xbase1,[1 1 slength 1]))./repmat(stdev,[1 1 slength 1]);
     %SIG2(:,:,:,i)=10*log10((xx)./ repmat(xbase,[1 1 slength 1]));
     SIG2(:,:,:,i)=10*(log10(xx) - repmat(xbase2,[1 1 slength 1]));
@@ -56,7 +57,9 @@ switch bc_type
         signalbc=real(signalbc);
         signalbc2=squeeze(nanmean(SIG(:,freqID,:,:),2));
 end
+signalbc = signalbc - mean(signalbc(:,5:round(slength*0.2),:),2); 
+signalbc2 = signalbc2 - mean(signalbc2(:,5:round(slength*0.2),:),2); 
 spec = SIG;
-spec2 = SIG2;
+%spec2 = SIG2;
 % signalbc=squeeze(nanmean(SIG,2));
 % signalbc=real(signalbc);
