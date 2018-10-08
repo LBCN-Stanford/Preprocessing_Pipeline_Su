@@ -4,7 +4,7 @@
 load('sample_data_S123.mat');
 
 
-[badind, filtered_beh,spkevtind,spkts] = LBCN_filt_bad_trial(data_raw,fs,[],1,8,0.6);
+[badind, filtered_beh,spkevtind,spkts,badind2] = LBCN_filt_bad_trial(data_raw,fs,[],0,8,0.6);
 
 
 %%%%%%%%%%%%%plot the results

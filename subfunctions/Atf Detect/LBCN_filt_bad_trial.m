@@ -81,7 +81,7 @@ for j = find(~badind)
     dat = data_raw(:,j);
     checkhf = filtfilt(b2,a2,dat);
     check = filtfilt(b,a,dat);
-    [~,thhf] = get_threshold(checkhf,round(16*fs/1000),round(8*fs/1000),'std',spk_thr);
+    [~,thhf] = get_threshold(checkhf,round(16*fs/1000),0.5,'std',spk_thr);
     %[~,th2] = get_threshold(check,16,8,'std',18);
     peakind = find(diff(sign(diff(check))) ~= 0)+1;
     peakind2 = find(diff(sign(diff(checkhf))) ~= 0)+1;
