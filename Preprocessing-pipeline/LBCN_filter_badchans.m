@@ -1,4 +1,4 @@
-function d = LBCN_filter_badchans(files,chanfile, bch, filter,conserv)
+function d = LBCN_filter_badchans(files,chanfile, bch, filter,conserv,powf)
 
 % This function first filters the channels for line noise + two harmonics
 % using the batch 'Filter_NKnew_SPM_job.m'. It then takes the channel file
@@ -56,6 +56,10 @@ if nargin<5 || isempty(conserv)
     conserv = 0;
 end
 
+if nargin<6 || isempty(powf)
+    powf = 60;
+end
+
 def = get_defaults_Parvizi;
 
 % Step 1: Filter the data using the batch
@@ -67,7 +71,13 @@ for i = 1:size(files,1)
             spm_jobman('initcfg')
             spm('defaults', 'EEG');
         end
-        jobfile = {which('Filter_NKnew_SPM_job.m')};
+        if powf == 60
+                jobfile = {which('Filter_NKnew_SPM_job.m')};
+        elseif powf == 50
+                jobfile = {which('Filter_NKnew_SPM_China_job.m')};
+        else     
+            jobfile = {which('LBCN_spm_notch_pfn.m')};
+        end
         [out] = spm_jobman('run', jobfile,{deblank(files(i,:))});
         d{i} = out{end}.D;
     else

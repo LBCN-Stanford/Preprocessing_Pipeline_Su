@@ -56,6 +56,7 @@ def.smooth_win = 50/1000; % s
 
 % Default values for reading SODATA files
 % -------------------------------------------------------------------------
+
 % MMR
 def.MMR.skip_before = 12;
 def.MMR.skip_after = 0;
@@ -115,4 +116,84 @@ def.other.skip_before = 0;
 def.other.skip_after = 0;
 def.other.thresh_dur = 0.01;
 def.other.listcond = {''};
+
+
+def.ictalmemrecall.skip_before = 0;
+def.ictalmemrecall.skip_after = 0;
+def.ictalmemrecall.thresh_dur = 0.01;
+def.ictalmemrecall.listcond = cell(1, 6);
+def.ictalmemrecall.listcond{1} = 'Cond1';
+def.ictalmemrecall.listcond{2} = 'Cond2';
+def.ictalmemrecall.listcond{3} = 'Cond3';
+def.ictalmemrecall.listcond{4} = 'Cond4';
+def.ictalmemrecall.listcond{5} = 'ITI';
+def.ictalmemrecall.listcond{6} = 'Conf';
+
+
+def.ictalmemrecallnew.skip_before = 12;
+def.ictalmemrecallnew.skip_after = 0;
+def.ictalmemrecallnew.thresh_dur = 0.01;
+def.ictalmemrecallnew.listcond = cell(1, 5);
+def.ictalmemrecallnew.listcond{1} = 'Cond1';
+def.ictalmemrecallnew.listcond{2} = 'Cond2';
+def.ictalmemrecallnew.listcond{3} = 'Cond3';
+def.ictalmemrecallnew.listcond{4} = 'Cond4';
+def.ictalmemrecallnew.listcond{5} = 'Conf';
+
+def.ictalcogtaskold.skip_before = 12;
+def.ictalcogtaskold.skip_after = 0;
+def.ictalcogtaskold.thresh_dur = 0.01;
+def.ictalcogtaskold.listcond = cell(1, 2);
+def.ictalcogtaskold.listcond{1} = 'Stim';
+def.ictalcogtaskold.listcond{2} = 'ITI';
+
+def.sponmem.skip_before = 0;
+def.sponmem.skip_after = 0;
+def.sponmem.thresh_dur = 0.01;
+def.sponmem.listcond = cell(1, 3);
+def.sponmem.listcond{1} = 'Cond1';
+def.sponmem.listcond{2} = 'Cond2';
+def.sponmem.listcond{3} = 'Cond3';
+
+
+def.ictalcogbaselinecombined.skip_before = 0;
+def.ictalcogbaselinecombined.skip_after = 0;
+def.ictalcogbaselinecombined.thresh_dur = 0.01;
+def.ictalcogbaselinecombined.listcond = cell(1, 2);
+def.ictalcogbaselinecombined.listcond{1} = 'Stim';
+def.ictalcogbaselinecombined.listcond{2} = 'ITI';
+
+def.ictalcogrecallcombined.skip_before = 0;
+def.ictalcogrecallcombined.skip_after = 0;
+def.ictalcogrecallcombined.thresh_dur = 0.01;
+def.ictalcogrecallcombined.listcond = cell(1, 4);
+def.ictalcogrecallcombined.listcond{1} = 'Old';
+def.ictalcogrecallcombined.listcond{2} = 'New';
+def.ictalcogrecallcombined.listcond{3} = 'ITI';
+def.ictalcogrecallcombined.listcond{4} = 'Conf';
+
+def.ictalcogmem2.skip_before = 0;
+def.ictalcogmem2.skip_after = 0;
+def.ictalcogmem2.thresh_dur = 0.01;
+def.ictalcogmem2.listcond = cell(1, 6);
+def.ictalcogmem2.listcond{1} = 'Cond1';
+def.ictalcogmem2.listcond{2} = 'Cond2';
+def.ictalcogmem2.listcond{3} = 'Cond3';
+def.ictalcogmem2.listcond{4} = 'Cond4';
+def.ictalcogmem2.listcond{5} = 'ITI';
+def.ictalcogmem2.listcond{6} = 'Conf';
+
+def.emotiona_facelock.skip_before = 0;
+def.emotiona_facelock.skip_after = 0;
+def.emotiona_facelock.thresh_dur = 0.01;
+def.emotiona_facelock.listcond = cell(1, 8);
+def.emotiona_facelock.listcond{1} = 'ITI';
+def.emotiona_facelock.listcond{2} = 'Cond1';
+def.emotiona_facelock.listcond{3} = 'Cond2';
+def.emotiona_facelock.listcond{4} = 'Cond3';
+def.emotiona_facelock.listcond{5} = 'Negitive';
+def.emotiona_facelock.listcond{6} = 'Positive';
+def.emotiona_facelock.listcond{7} = 'Neutral';
+def.emotiona_facelock.listcond{8} = 'Rsp';
+
 

@@ -91,12 +91,37 @@ trl = [];
 bctrl = [];
 evtspm = [];
 conditionlabels = [];
+if ~isnumeric(twbc)
+    if length(cellstr(twbc)) == 3
+        bls = str2num(twbc{2});
+        ble = str2num(twbc{3});
+    else
+        bls = twepoch(2)-300;
+        ble = twepoch(2);
+    end
+    for ii=1:length(evt.categories)
+        name = evt.categories(ii).name;
+        if strcmpi(twbc{1},name)
+            bctrl_id =  evt.categories(ii).stimNum;
+            nebc =  evt.categories(ii).start;
+            break;
+        end
+    end
+    for j = 1:length(nebc)
+        bc1 = indsample(D,nebc(j)+(bls/1000));
+        bc2 = indsample(D,nebc(j)+(ble/1000));
+        bctrl = [bctrl bc1 : bc2];
+        %bctrl_id = 1:length(conditionlabels);
+        %bctrl =  [twepoch(2)-300 twepoch(2)];
+    end
+        mbaseline = mean(D(:,bctrl),2);
+end
 for i = 1:length(indc)
     nevc = getfield(evt.categories(indc(i)),fieldons);
     if isempty(nevc) % No information for this category
         continue
     end
-    if bc
+    if bc && isnumeric(twbc)
         nebc = getfield(evt.categories(indc(i)),fieldbc);
         if length(nevc) ~= length(nebc)
             disp('Not the same number of values for event onset and baseline correction')
@@ -104,25 +129,26 @@ for i = 1:length(indc)
             return
         end
     end
+    aa = evt.categories(indc(i));
+    tempevt = struct('type',repmat({aa.name},1,aa.numEvents),...
+        'value',num2cell(aa.stimNum),...
+        'time',num2cell(aa.start),...
+        'duration',num2cell(aa.duration),...
+        'offset',repmat({0},1,aa.numEvents));
+    evtspm = [evtspm , tempevt];
+    conditionlabels = [conditionlabels; repmat({aa.name}, length(nevc),1)];
     for j = 1:length(nevc)
         ons = indsample(D,nevc(j) + (twepoch(1)/1000));
         off = ons + diff(twepoch)/1000*fsample(D);
         %off = indsample(D,nevc(j) + (twepoch(2)/1000));
         trl = [trl; [ons, off]];
-        if bc
+        if bc && isnumeric(twbc)
             bc1 = indsample(D,nebc(j)+(twbc(1)/1000));
             bc2 = indsample(D,nebc(j)+(twbc(2)/1000));
             bctrl = [bctrl; [bc1, bc2]];
+            bctrl_id = 1:length(conditionlabels);
         end
     end
-    aa = evt.categories(indc(i));
-    tempevt = struct('type',repmat({aa.name},1,aa.numEvents),...
-            'value',num2cell(aa.stimNum),...
-            'time',num2cell(aa.start),...
-            'duration',num2cell(aa.duration),...
-            'offset',repmat({0},1,aa.numEvents));
-    evtspm = [evtspm , tempevt];
-    conditionlabels = [conditionlabels; repmat({aa.name}, length(nevc),1)];
 end
 
 inbounds = (trl(:,1)>=1 & trl(:, 2)<=D.nsamples);
@@ -202,11 +228,10 @@ for i = 1:ntrial
     else
         d = D(:, trl(i, 1):trl(i, 2), 1);
         
-        if bc
-            mbaseline = mean(D(:, bctrl(i, 1):bctrl(i, 2)), 2);
-            d = d - repmat(mbaseline, 1, size(d, 2));
+        if bc && isnumeric(twbc)
+            mbaseline = mean(D(:, bctrl(i, 1):bctrl(i, 2)), 2); 
         end
-        
+        d = d - repmat(mbaseline, 1, size(d, 2));
         
        % [badind, filtered_beh,spkevtind,spkts] = LBCN_filt_bad_trial(d',1000);
         Dnew(:, :, i) = d;
