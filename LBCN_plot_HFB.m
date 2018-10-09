@@ -437,9 +437,7 @@ if ~exist('signal_all','var')
         %all_tf2=total_tf2{1};
     end
     beh_fp=all_plot;
-    fprintf('------ Saving signal ... \n');
-    save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','type','bc_type','all_nan','sbjname','task','window','t');
+    
     %    fprintf('------ Saving tfmaps ... \n');
     %     save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
     signal_all=beh_fp;
@@ -448,6 +446,9 @@ if ~exist('signal_all','var')
     win = window(edge+1 : end - edge);
     window = win;
     t = t(window);
+    fprintf('------ Saving signal ... \n');
+    save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
+        'beh_fp','labels','plot_cond','type','bc_type','all_nan','sbjname','task','window','t');
 else
     %     try
     %         tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
