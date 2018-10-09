@@ -1,0 +1,139 @@
+function [H1,H2,H3,H4] = move3slices(hObject, handles,dim,H1,H2,H3,H4)
+% pointer3d     3D coordinates in volume matrix (integers)
+handles.sp1=H1;
+handles.sp2=H2;
+handles.sp3=H3;
+handles.l=H4;
+handles.pointer3dt;
+size(handles.volume{1});
+switch dim
+    case 1
+        for i =1:handles.overlay
+sliceXY = squeeze(handles.volume{i}(:,:,handles.pointer3dt(3),handles.pointer3dt(4)));
+        sliceYZ = squeeze(handles.volume{i}(handles.pointer3dt(1),:,:,handles.pointer3dt(4)));
+        sliceXZ = squeeze(handles.volume{i}(:,handles.pointer3dt(2),:,handles.pointer3dt(4)));
+        sliceXY(sliceXY<0)=0;
+        sliceYZ(sliceYZ<0)=0;
+        sliceXZ(sliceXZ<0)=0;
+        max_xyz = max([ max(sliceXY(:)) max(sliceXZ(:)) ]);
+        min_xyz = min([ min(sliceXY(:)) min(sliceXZ(:)) ]);
+        clims = [ min_xyz max_xyz ];
+
+    %end;
+        sliceZY = squeeze(permute(sliceYZ, [2 1 3]));
+        handles.sp2{i}.CData = sliceXZ;
+        handles.sp2{i}.Parent.CLim=clims;
+
+        handles.sp3{i}.CData = sliceZY;
+        handles.sp3{i}.Parent.CLim=clims;
+        
+        end
+    case 2
+        for i =1:handles.overlay
+        sliceXY = squeeze(handles.volume{i}(:,:,handles.pointer3dt(3),handles.pointer3dt(4)));
+        sliceYZ = squeeze(handles.volume{i}(handles.pointer3dt(1),:,:,handles.pointer3dt(4)));
+        sliceXZ = squeeze(handles.volume{i}(:,handles.pointer3dt(2),:,handles.pointer3dt(4)));
+        sliceXY(sliceXY<0)=0;
+        sliceYZ(sliceYZ<0)=0;
+        sliceXZ(sliceXZ<0)=0;
+        max_xyz = max([ max(sliceXY(:)) max(sliceXZ(:)) ]);
+        min_xyz = min([ min(sliceXY(:)) min(sliceXZ(:)) ]);
+        clims = [ min_xyz max_xyz ];
+    %end;
+        sliceZY = squeeze(permute(sliceYZ, [2 1 3]));
+        handles.sp1{i}.CData = sliceXY;
+        handles.sp1{i}.Parent.CLim=clims;
+
+        handles.sp3{i}.CData = sliceZY;
+        handles.sp3{i}.Parent.CLim=clims;
+        end
+     case 3
+        for i =1:handles.overlay
+         sliceXY = squeeze(handles.volume{i}(:,:,handles.pointer3dt(3),handles.pointer3dt(4)));
+        sliceYZ = squeeze(handles.volume{i}(handles.pointer3dt(1),:,:,handles.pointer3dt(4)));
+        sliceXZ = squeeze(handles.volume{i}(:,handles.pointer3dt(2),:,handles.pointer3dt(4)));
+        sliceXY(sliceXY<0)=0;
+        sliceYZ(sliceYZ<0)=0;
+        sliceXZ(sliceXZ<0)=0;
+        max_xyz = max([ max(sliceXY(:)) max(sliceXZ(:)) ]);
+        min_xyz = min([ min(sliceXY(:)) min(sliceXZ(:)) ]);
+        clims = [ min_xyz max_xyz ];
+    %end;
+        sliceZY = squeeze(permute(sliceYZ, [2 1 3]));
+        handles.sp1{i}.CData = sliceXY;
+        handles.sp1{i}.Parent.CLim=clims;
+
+        handles.sp2{i}.CData = sliceXZ;
+        handles.sp2{i}.Parent.CLim=clims;
+        end
+    case 'all'
+%          a= get(handles.l(2,1),'xdata');
+%          b= get(handles.l(1,2),'ydata');
+%         c= get(handles.l(1,1),'xdata');
+%         handles.pointer3dt(3) = a(1);
+%         handles.pointer3dt(1) = b(1);
+%         
+%          handles.pointer3dt(1) = c(1);
+%         
+        for i =1:handles.overlay
+        sliceXY = squeeze(handles.volume{i}(:,:,handles.pointer3dt(3),handles.pointer3dt(4)));
+        sliceYZ = squeeze(handles.volume{i}(handles.pointer3dt(1),:,:,handles.pointer3dt(4)));
+        sliceXZ = squeeze(handles.volume{i}(:,handles.pointer3dt(2),:,handles.pointer3dt(4)));
+        sliceXY(sliceXY<0)=0;
+        sliceYZ(sliceYZ<0)=0;
+        sliceXZ(sliceXZ<0)=0;
+        max_xyz = max([ max(sliceXY(:)) max(sliceXZ(:)) ]);
+        min_xyz = min([ min(sliceXY(:)) min(sliceXZ(:)) ]);
+        clims = [ min_xyz max_xyz ];
+        sliceZY = squeeze(permute(sliceYZ, [2 1 3]));
+        handles.sp1{i}.CData = sliceXY;
+        handles.sp1{i}.Parent.CLim=clims;
+
+        handles.sp2{i}.CData = sliceXZ;
+        handles.sp2{i}.Parent.CLim=clims;
+        handles.sp3{i}.CData = sliceZY;
+        handles.sp3{i}.Parent.CLim=clims;
+        end
+    %end;
+        %sliceZY = squeeze(permute(sliceYZ, [2 1 3]));
+end
+
+if handles.overlay > 1
+    i=2;
+    clims = [5 150];
+    handles.sp1{handles.overlay}.Parent.CLim=clims;
+    alpham=data_norm(handles.sp1{i}.CData,5);
+    handles.sp1{i}.AlphaData = alpham.*0.85;
+    
+    %set(handles.sp1{2},'clim',clims);alpha('color');
+    handles.sp2{handles.overlay}.Parent.CLim=clims;
+    alpham=data_norm(handles.sp2{i}.CData,5);
+    handles.sp2{i}.AlphaData = alpham.*0.85;
+    handles.sp3{handles.overlay}.Parent.CLim=clims;
+    alpham=data_norm(handles.sp3{i}.CData,5);
+    handles.sp3{i}.AlphaData = alpham.*0.85;
+    set(handles.l(1,1),'ydata',[handles.pointer3dt(1) handles.pointer3dt(1)]);
+    set(handles.l(1,2),'xdata',[handles.pointer3dt(2) handles.pointer3dt(2)]);
+    set(handles.l(2,1),'ydata',[handles.pointer3dt(1) handles.pointer3dt(1)]);
+    set(handles.l(2,2),'xdata',[handles.pointer3dt(3) handles.pointer3dt(3)]);
+    set(handles.l(3,1),'xdata',[handles.pointer3dt(2) handles.pointer3dt(2)]);
+    set(handles.l(3,2),'ydata',[handles.pointer3dt(3) handles.pointer3dt(3)]);
+else
+    set(handles.l(1,1),'xdata',[handles.pointer3dt(2) handles.pointer3dt(2)]);
+    set(handles.l(1,2),'ydata',[handles.pointer3dt(1) handles.pointer3dt(1)]);
+    set(handles.l(2,1),'xdata',[handles.pointer3dt(3) handles.pointer3dt(3)]);
+    set(handles.l(2,2),'ydata',[handles.pointer3dt(1) handles.pointer3dt(1)]);
+    set(handles.l(3,1),'ydata',[handles.pointer3dt(3) handles.pointer3dt(3)]);
+    set(handles.l(3,2),'xdata',[handles.pointer3dt(2) handles.pointer3dt(2)]);
+    H1 = handles.sp1;
+    H2 = handles.sp2;
+    H3 = handles.sp3;
+    H4 = handles.l;
+    UpVector = [-sind(90), cosd(90), 0];
+    DAR      = get(handles.axes1, 'DataAspectRatio');
+    set(handles.axes1, 'CameraUpVector', DAR .* UpVector);
+    % DAR      = get(handles.axes2, 'DataAspectRatio');
+    % set(handles.axes2, 'CameraUpVector', DAR .* UpVector);
+    DAR      = get(handles.axes3, 'DataAspectRatio');
+    set(handles.axes3, 'CameraUpVector', DAR .* UpVector);
+end
