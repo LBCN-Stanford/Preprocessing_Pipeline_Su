@@ -75,7 +75,8 @@ if nargin<2 || isempty(D)
             catch
                 T = time(D{1});
                 t = T(1:2:end);
-                t = t + 0.05
+                t = t + 0.05;
+                t = t(1:length(window));
             end
             fprintf('%s\n','-------- Epoched signal loaded --------');
         elseif isfield(L,{'DAT','evtfile','exclude','conditionList','bch'})
