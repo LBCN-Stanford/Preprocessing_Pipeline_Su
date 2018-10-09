@@ -65,6 +65,18 @@ if nargin<2 || isempty(D)
             catch
                 task = [];
             end
+            try
+                window = L.window;
+            catch
+                window = size(signal_all{1}{1},1);
+            end
+            try
+                t = L.t;
+            catch
+                T = time(D{1});
+                t = T(1:2:end);
+                t = t + 0.05
+            end
             fprintf('%s\n','-------- Epoched signal loaded --------');
         elseif isfield(L,{'DAT','evtfile','exclude','conditionList','bch'})
             inputs = {'evtfile','DAT','bch','exclude','conditionList',...
@@ -241,18 +253,19 @@ try
 catch 
     cn = length(D{1}.channels);
 end
-
-all_plot = cell(Nt,1);
-all_plot2 = cell(Nt,1);
-all_tf = cell(Nt,1);
-total_raw = cell(length(cellstr(evtfile)),1);
-total_raw2 = cell(length(cellstr(evtfile)),1);
-total_nan = cell(length(cellstr(evtfile)),1);
-%total_tf = cell(length(cellstr(evtfile)),1);
-%total_tf2 = cell(length(cellstr(evtfile)),1);
-t = time_start:(time_end-time_start)/(D{1}.nsamples-1):time_end;
-t = t(1:dsamp:end);
-window = round(((twsmooth(1) - time_start*fs)) +1 : ceil(((twsmooth(2)/fs-time_start)*fs)/1));
+if ~exist('signal_all','var')
+    all_plot = cell(Nt,1);
+    all_plot2 = cell(Nt,1);
+    all_tf = cell(Nt,1);
+    total_raw = cell(length(cellstr(evtfile)),1);
+    total_raw2 = cell(length(cellstr(evtfile)),1);
+    total_nan = cell(length(cellstr(evtfile)),1);
+    %total_tf = cell(length(cellstr(evtfile)),1);
+    %total_tf2 = cell(length(cellstr(evtfile)),1);
+    t = time_start:(time_end-time_start)/(D{1}.nsamples-1):time_end;
+    t = t(1:dsamp:end);
+    window = round(((twsmooth(1) - time_start*fs)) +1 : ceil(((twsmooth(2)/fs-time_start)*fs)/1));
+end
 if isnumeric(twbc)
     window_bc = round(((twbc(1) - time_start*fs)) +1 : indsample(D{1},0));
 else
@@ -295,18 +308,18 @@ if ~exist('signal_all','var')
             ts=[ts events.categories(i).start];
         end
         
-%         ts=events.categories.start;
+        %         ts=events.categories.start;
         
         data = D{N}(:,:,:);
         pre_defined = pre_defined_bad{N};
-%         if ~isnumeric(window_bc)
-%             for cc = 1:length(events.categories)
-%                 if strcmpi(events.categories(cc).name,window_bc)
-%                     window_bc = {events.categories(cc).stimNum};
-%                     break;
-%                 end
-%             end
-%         end
+        if ~isnumeric(window_bc)
+            for cc = 1:length(events.categories)
+                if strcmpi(events.categories(cc).name,window_bc{1})
+                    window_bc{1} = events.categories(cc).stimNum;
+                    break;
+                end
+            end
+        end
         %% Just to test something. Comment this
         bc_type = 'z';
         %         type = 2;
@@ -425,23 +438,28 @@ if ~exist('signal_all','var')
     beh_fp=all_plot;
     fprintf('------ Saving signal ... \n');
     save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','type','bc_type','all_nan','sbjname','task');
-%    fprintf('------ Saving tfmaps ... \n');
-%     save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
-     signal_all=beh_fp;
+        'beh_fp','labels','plot_cond','type','bc_type','all_nan','sbjname','task','window','t');
+    %    fprintf('------ Saving tfmaps ... \n');
+    %     save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
+    signal_all=beh_fp;
+    window = round((window(1) : dsamp : window(end))./dsamp);
+    edge = round(30*fs/1000/dsamp);
+    win = window(edge+1 : end - edge);
+    window = win;
+    t = t(window);
 else
-%     try 
-%         tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
-%         load(tf_file);
-%     catch
-%     end
+    %     try
+    %         tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
+    %         load(tf_file);
+    %     catch
+    %     end
 end
 
-window = round((window(1) : dsamp : window(end))./dsamp);
-edge = round(30*fs/1000/dsamp);
-win = window(edge+1 : end - edge);
-window = win;
-t = t(window);
+% window = round((window(1) : dsamp : window(end))./dsamp);
+% edge = round(30*fs/1000/dsamp);
+% win = window(edge+1 : end - edge);
+% window = win;
+% t = t(window);
 for j=1:length(labels)
     labels{j}(ismember(labels{j},'_'))=' ';
 end
@@ -460,21 +478,21 @@ catch
 end
 %% Run this when no GUI is needed
 
-Plot_script;
+%Plot_script;
 
-% %% Run this to open a GUI and inspect the plots and images (electrodes)
-% 
-% [fpath,~,~] = fileparts(evtfile{1});
-% if ~exist('total_plot2','var')
-%     all_plot2 = cell(1,length(evtfile));
-% end
-% 
-% if ~exist('bc_type','var')
-%     bc_type = 'z';
-% end
-% if nop
-%     signal_all={signal_all,labels,D,window,plot_cond,t, all_plot2, bc_type,all_nan};
-%     return;
-% end
-% plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
-% %plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan);
+%% Run this to open a GUI and inspect the plots and images (electrodes)
+
+[fpath,~,~] = fileparts(evtfile{1});
+if ~exist('total_plot2','var')
+    all_plot2 = cell(1,length(evtfile));
+end
+
+if ~exist('bc_type','var')
+    bc_type = 'z';
+end
+if nop
+    signal_all={signal_all,labels,D,window,plot_cond,t, all_plot2, bc_type,all_nan};
+    return;
+end
+plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
+%plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan);
