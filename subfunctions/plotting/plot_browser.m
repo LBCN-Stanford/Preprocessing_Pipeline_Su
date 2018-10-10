@@ -11,7 +11,7 @@ cn = nchannels(D{1});
 chanp=1:cn;
 edge = round((size(signal_all{1}{1},1)-length(window))/2);%(round(size(signal_all{1}{1},1)-length(window))/2);
 if edge <0
-    edge = 15;
+    edge = 0;
 end
 for i = page
      name=char(chanlabels(D{1},chanp(i)));
