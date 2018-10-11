@@ -1,5 +1,9 @@
 function [slice2d_axes] = plot_slice_b(elecMatrix, elecRgb, V,elecId)
-
+try
+    p = findobj('tag','mripanel');
+catch
+    p = gcf;
+end
 if isempty(elecMatrix) || isempty(V)
     slice2d_axes = [];
     return;
@@ -16,12 +20,19 @@ xyz(:,3)=sVol(3)-elecMatrix(:,3);
 hm=zeros(1,3);
 colormap gray;
 %subplot(131);
-wdth=.28;
-wDelt=.3;
-xStart=.10;
-yStart=.01;
-ht=.4;
-slice2d_axes(1) = axes('position',[xStart yStart wdth ht]);
+% wdth=.28;
+% wDelt=.3;
+% xStart=.01;
+% yStart=.01;
+% ht=.4;
+
+wdth=.3;
+wDelt=.32;
+xStart=.02;
+yStart=.02;
+ht=.95;
+
+slice2d_axes(1) = axes('position',[xStart yStart wdth ht],'parent',p);
 
 imagesc(squeeze(mri.vol(:,xyz(elecId,1),:)),[mn mx]);
 axis square;
@@ -49,7 +60,7 @@ end
 set(gca,'xtick',[],'ytick',[],'xdir','reverse');
 
 %subplot(132);
-slice2d_axes(2) = axes('position',[xStart+wDelt yStart wdth ht]);
+slice2d_axes(2) = axes('position',[xStart+wDelt yStart wdth ht],'parent',p);
 imagesc(squeeze(mri.vol(xyz(elecId,2),:,:)),[mn mx]);
 axis square;
 hold on;
@@ -73,7 +84,7 @@ end
 set(gca,'xtick',[],'ytick',[]);
 
 %subplot(133);
-slice2d_axes(3) = axes('position',[xStart+wDelt*2 yStart wdth ht]);
+slice2d_axes(3) = axes('position',[xStart+wDelt*2 yStart wdth ht],'parent',p);
 imagesc(squeeze(mri.vol(:,:,xyz(elecId,3)))',[mn mx]);
 axis square;
 hold on;
