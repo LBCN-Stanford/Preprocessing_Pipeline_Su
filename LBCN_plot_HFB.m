@@ -68,7 +68,7 @@ if nargin<2 || isempty(D)
             try
                 window = L.window;
             catch
-                window = size(signal_all{1}{1},1);
+                window = 1:size(signal_all{1}{1},1);
             end
             try
                 t = L.t;
@@ -497,5 +497,8 @@ if nop
     signal_all={signal_all,labels,D,window,plot_cond,t, all_plot2, bc_type,all_nan};
     return;
 end
-plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
-%plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan);
+
+%    plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
+%% This is for earlier matlab versions (earlier than 2018a)
+    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan, info);
+
