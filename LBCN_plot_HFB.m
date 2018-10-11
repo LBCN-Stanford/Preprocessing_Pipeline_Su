@@ -265,10 +265,11 @@ if ~exist('signal_all','var')
     %total_tf2 = cell(length(cellstr(evtfile)),1);
     t = time_start:(time_end-time_start)/(D{1}.nsamples-1):time_end;
     t = t(1:dsamp:end);
-    window = round(((twsmooth(1) - time_start*fs)) +1 : ceil(((twsmooth(2)/fs-time_start)*fs)/1));
+    %window = round(((twsmooth(1) - time_start*1000)) +1 : ceil(((twsmooth(2)/1000-time_start)*1000)/1));
+    window = ceil((twsmooth(1)/1000 - time_start)*fs+1 : ceil(((twsmooth(2)/1000-time_start)*fs)));
 end
 if isnumeric(twbc)
-    window_bc = round(((twbc(1) - time_start*fs)) +1 : indsample(D{1},0));
+    window_bc = round(((twbc(1)/1000 - time_start)*fs) +1 : indsample(D{1},0));
 else
     if length(cellstr(twbc)) == 3
         bls = str2num(twbc{2}) - time_start*fs;
