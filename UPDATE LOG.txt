@@ -34,5 +34,7 @@
 10/09 Update:	Bug fix.		
 10/11 Update:	Bug fix. Please download the updated Main funcitons (LBCN_preprocessing_new, LBCN_plot_HFB) + subfunction folder. 
 		Added a simplified version of the GUI to make it more compatible with early matlab versions. 
-		To use it, uncomment line 503 in LBCN_plot_HFB, comment line 501, and run "plot_window" to open the GUI. 
+		To use it, uncomment line 503 in LBCN_plot_HFB, comment line 501, and do the same in view_result.m; run "plot_window" to open the simplified version of GUI. 
 		This has not been tested on many datasets, an update of matlab is still recommended. 
+		Now Supports TDT labeling.
+		
