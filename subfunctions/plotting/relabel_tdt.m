@@ -22,7 +22,7 @@ function varargout = relabel_tdt(varargin)
 
 % Edit the above text to modify the response to help relabel
 
-% Last Modified by GUIDE v2.5 11-Oct-2018 21:38:03
+% Last Modified by GUIDE v2.5 12-Oct-2018 05:22:30
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -52,6 +52,7 @@ function relabel_tdt_OpeningFcn(hObject, eventdata, handles, varargin)
 % handles    structure with handles and user data (see GUIDATA)
 % varargin   command line arguments to relabel (see VARARGIN)
 handles.eeglabel = varargin{1};
+handles.eeglabelb = varargin{1};
 handles.mrilabel = varargin{2};
 handles.selection = [];
 handles.newlabel = cell(size(handles.eeglabel));
@@ -60,6 +61,7 @@ set(handles.text3,'string',handles.mrilabel{1});
 set(handles.figure1,'name','Channel Relabel')
 po = get(handles.text3,'position');
 po2 = get(handles.edit1,'position');
+handles.inv = 0;
 for i = 1:length(handles.mrilabel)
      
    uicontrol('unit','normalized','style','pushbutton','position',...
@@ -91,7 +93,14 @@ function varargout = relabel_tdt_OutputFcn(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 
 % Get default command line output from handles structure
+handles.newlabels=get(handles.listbox1,'string');
+if get(handles.checkbox1,'value') == 1 || handles.inv == 1
+     handles.newlabels = handles.newlabels(length(handles.newlabels):-1:1);
+end
+handles.output = handles.newlabels;
+
 varargout{1} = handles.output;
+varargout{2} = handles.inv;
 
 
 % --- Executes on button press in pushbutton1.
@@ -99,8 +108,11 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-handles.newlabels=get(handles.listbox1,'string');
-handles.output = handles.newlabels;
+
+% if get(handles.checkbox1,'value') == 1
+%     handles.newlabels = handles.newlabels(length(handles.newlabels):-1:1);
+% end
+
 guidata(hObject, handles);
 uiresume;
 
@@ -109,8 +121,12 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton2 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+set(handles.listbox1,'string',handles.eeglabelb);
+handles.selection = [];
+for i = 1:length( handles.newedit)
+    set(handles.newedit(i),'string','');
+end
 guidata(hObject, handles);
-uiresume;
 
 
 function edit1_Callback(hObject, eventdata, handles)
@@ -167,11 +183,13 @@ rename = cell(length(handles.selection),1);
 for i = 1:length(handles.selection)
     rename{i} = string(strcat(groupname, num2str(i)));
 end
+txth = findobj('tag',groupname{1});
+txt = sprintf('Ch%s ',string(list(handles.selection))');
+
 list(handles.selection) = rename;
 set(handles.listbox1,'string',list);
-txth = findobj('tag',groupname{1});
-txt = sprintf('Chan %s',num2str(handles.selection));
-set(txth,'string',txt,'fontname','optima');
+
+set(txth,'string',txt,'fontname','optima','fontsize',10,'HorizontalAlignment','left');
 guidata(hObject, handles);
 
 
@@ -180,3 +198,32 @@ function pushbutton3_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton3 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+% --- Executes on button press in checkbox1.
+function checkbox1_Callback(hObject, eventdata, handles)
+% hObject    handle to checkbox1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hint: get(hObject,'Value') returns toggle state of checkbox1
+sel = get(hObject,'Value');
+if sel
+    list = handles.eeglabelb;
+    list = list(length(list):-1:1);
+    set(handles.listbox1,'string',list);
+    handles.selection = [];
+    for i = 1:length( handles.newedit)
+        set(handles.newedit(i),'string','');
+    end
+    handles.inv = 1;
+else
+    list = handles.eeglabelb;
+    set(handles.listbox1,'string',list);
+    handles.selection = [];
+    for i = 1:length( handles.newedit)
+        set(handles.newedit(i),'string','');
+    end
+    handles.inv = 0;
+end
+guidata(hObject, handles);

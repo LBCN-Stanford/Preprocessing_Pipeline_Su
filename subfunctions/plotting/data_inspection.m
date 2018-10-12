@@ -43,7 +43,6 @@ else
 end
 % End initialization code - DO NOT EDIT
 
-
 % --- Executes just before data_inspection is made visible.
 function data_inspection_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
@@ -75,8 +74,12 @@ red=null.*sig;
 handles.P=tight_subplot(8,5,[.03 .03],[.02 .05],[.02 .02]);
 
 if size(sig,2)>40
+   
     set(handles.pushbutton1,'visible','on');
     set(handles.pushbutton2,'visible','on');
+else
+   set(handles.pushbutton1,'visible','off');
+    set(handles.pushbutton2,'visible','off');
 end
 for n=1:40
     axes(handles.P(n));
@@ -97,7 +100,8 @@ for n=1:40
 %                 'position',pa,'value',0);
        set(gca,'ButtonDownFcn',@getMousePositionOnImage); 
     catch
-        break;
+        set(handles.P(n),'visible','off');
+        %break;
     end
     
     

@@ -62,7 +62,7 @@ try
     handles.plot_cond = varargin{6} ;
     handles.page = varargin{7};
     handles.cpath = varargin{8};
-    handles.yl = [-0.5 1.6];
+    handles.yl = [-0.5 1.8];
     handles.bch = varargin{9};
     handles.t = varargin{10};
     setappdata(hObject,'signal_other',varargin{11});
@@ -81,7 +81,13 @@ catch
                     fname = string(fname)';
                     LBCN_preprocessing_new(fname);
                 elseif strcmpi(format,'.mat')
-                    LBCN_plot_HFB(fname);
+                    try
+                        view_results_b(fname);
+                        return;
+                    catch
+                        LBCN_plot_HFB(fname);
+                        return;
+                    end
                 else
                     disp('------- Wrong data format');
                     return;
@@ -260,10 +266,11 @@ try
                 handles.m(ii,3) = cellstr((join(regexp(string(handles.elecLabels{ii}),'[1-9]','Match'),'')));
             end
         end
-        random_check = randi(length(handles.m),1,2);
-        if ~isempty(str2num(handles.m{random_check(1),2})) &&  ~isempty(str2num(handles.m{random_check(2),2})) 
+        lb = chanlabels(handles.D{1});
+        random_check = randi(length(chanlabels(handles.D{1})),1,2);
+        if ~isempty(str2num(lb{random_check(1)})) &&  ~isempty(str2num(lb{random_check(2)})) 
             mrilabel = unique(handles.m(:,2));
-            eeglabelnew = relabel_tdt(chanlabels(handles.D{1}), mrilabel);
+            [eeglabelnew,inv] = relabel_tdt(lb, mrilabel);
             for ii=1:length(eeglabelnew)
                 mc = char(eeglabelnew{ii});
                 modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' '),string('''')]));
@@ -405,7 +412,7 @@ if ~isempty(handles.elecoor) || ~isempty(handles.elecMatrix)
     axis(handles.axes3,'vis3d');
 else
     set(handles.axes3,'visible','off');
-    set(handles.axes1,'position',[0.2 0.08 0.75 0.8],'units','normalized');
+    set(handles.axes1,'position',[0.1 0.11 0.9 0.85],'units','normalized');
 end
 set(gca,'color',[1 1 1]);
 
@@ -464,19 +471,27 @@ switch handles.bc_type
 end
 
 %% Add checkboxes to for condition selection
-p = findobj('tag','uipanel8');
-fsize = get(gcf,'position');
-fl = fsize(3); fw = fsize(4);
+p = findobj('tag','condpanel');
+psize = get(p,'position');fsize = get(gcf,'position');psize = [psize(1)*fsize(1) psize(2)*fsize(2) psize(3)*fsize(3) psize(4)*fsize(4)];
+fl = psize(3); fw = psize(4);
 n = 1;
 for k=length(handles.plot_cond):-1:1
     handles.cbh(k) = uicontrol('Style','checkbox','String',handles.labels{handles.plot_cond(k)}, ...
-                        'fontname','optima','fontsize',12,...
-                       'Value',1,'Position', ([fl*(handles.legendp(1)+handles.legendp(3)+0.01) ...
-                       fw*(handles.legendp(2)+(handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
-                       fw*((handles.legendp(3))*0.8)  ...
-                       fw*((handles.legendp(4)*0.8/length(handles.plot_cond)))]),'Unit','normalized',...
-                       'backgroundcolor',[1 1 1],...
-                       'Callback',{@checkBoxCallback,k, handles});
+                        'fontname','optima','fontsize',15,...
+                       'Value',1,'Position', ([0.2 ...
+                       fw*(handles.legendp(2)/1.5+(1.5*handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
+                       fw*((handles.legendp(3))*1.5)  ...
+                       fw*((handles.legendp(4)*1.5/length(handles.plot_cond)))]),'Unit','normalized',...
+                       'backgroundcolor',[0.98 0.98 0.98],...
+                       'Callback',{@checkBoxCallback,k, handles},'parent',handles.condpanel);
+%     handles.cbh(k) = uicontrol('Style','checkbox','String',handles.labels{handles.plot_cond(k)}, ...
+%                         'fontname','optima','fontsize',12,...
+%                        'Value',1,'Position', ([fl*(handles.legendp(1)+handles.legendp(3)+0.01) ...
+%                        fw*(handles.legendp(2)+(handles.legendp(4)/length(handles.plot_cond))*(length(handles.plot_cond)-k))  ...
+%                        fw*((handles.legendp(3))*0.8)  ...
+%                        fw*((handles.legendp(4)*0.8/length(handles.plot_cond)))]),'Unit','normalized',...
+%                        'backgroundcolor',[1 1 1],...
+%                        'Callback',{@checkBoxCallback,k, handles});
 end
 
 %% plot 2D slice. Store the axes and electrode handles
@@ -683,7 +698,7 @@ function slider1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 sv = get(hObject,'Value')+0.02;
-handles.sparam = sv*50;
+handles.sparam = sv*60;
 axes(handles.axes1);
 cla;
 plot_browser_b(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
@@ -1006,7 +1021,7 @@ function inspectBtn_Callback(hObject, eventdata, handles)
 % handles    structure with handles and user data (see GUIDATA)
 allt=handles.signal_all(handles.sel_cond);
 alln=handles.nanid(handles.sel_cond);
-newnan = data_inspection(allt,alln,handles.order(handles.page),handles.labels(handles.plot_cond(handles.sel_cond)),handles.window(find(handles.t==0)));
+newnan = data_inspection(allt,alln,handles.order(handles.page),handles.labels(handles.plot_cond(handles.sel_cond)),handles.window(round(handles.t*1000)==0));
 for k=handles.plot_cond(handles.sel_cond)
     for j = 1:length(handles.signal_all{k})
         nanid = logical(newnan{k}{j});
