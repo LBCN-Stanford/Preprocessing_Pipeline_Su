@@ -5,6 +5,7 @@ if isempty(original)
     return;
 end
 if nargin < 5 || isempty(badind)
+   
     badind = false(size(original), 1);
 end
 

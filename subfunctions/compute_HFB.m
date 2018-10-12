@@ -102,7 +102,7 @@ if atf_check
                 %Both bad and spiky epochs will be excluded from baseline calculation.
                 
                 [badind,~,~,spkts,badind2] = LBCN_filt_bad_trial(dat,...
-                    fs,[],0, 10, 0.5, squeeze(pre_defined_bad(:,:,i))',inspectatf);
+                    fs,[],0, 10, 0.6, squeeze(pre_defined_bad(:,:,i))',inspectatf);
                 nanid(:,:,i) = spkts';
                 nanid(badind,:,i)=1;
                 badind(badind2) = 1;

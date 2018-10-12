@@ -4,7 +4,7 @@ if nargin<4 || isempty(chanid)
 end
 
 if nargin<5 || isempty(nperm)
-    nperm = 5000;
+    nperm = 2500;
 end
 
 if nargin<6 || isempty(tail)

@@ -137,5 +137,5 @@ end
 %     bch = cell(length(D),1);
 
 % end
-plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
+plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
 %plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
