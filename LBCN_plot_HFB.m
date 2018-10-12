@@ -502,7 +502,7 @@ if nop
     return;
 end
 
-%    plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
+    plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
 %% This is for earlier matlab versions (earlier than 2018a)
-    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan, info);
+%    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan, info);
 
