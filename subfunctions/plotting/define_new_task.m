@@ -28,7 +28,7 @@ def.(task).skip_after = str2num(varargin{6});
 def.(task).thresh_dur = 0.01;
 def.(task).listcond = strsplit(varargin{7});
 currentfolder = pwd;
-cd(fileparts(which(fullfile('HFB plot', 'subfunctions', 'plotting' , 'mytask.m'))));
+cd(fileparts(which('HFB plot/subfunctions/plotting/mytask.m')));
 matlab.io.saveVariablesToScript('mytask.m',{'task','p'});
 matlab.io.saveVariablesToScript('mytaskP.m',{'def'});
 edit_task_conf;

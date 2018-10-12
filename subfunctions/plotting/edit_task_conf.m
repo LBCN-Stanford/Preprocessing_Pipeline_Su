@@ -9,7 +9,7 @@ fid=fopen('newTaskCond.m');
 cac5 = textscan( fid, '%s', 'Delimiter','\n', 'CollectOutput',true );
 fclose( fid );
 
-cd(fileparts(which(fullfile('HFB plot' ,'subfunctions' ,'task_config.m'))));
+cd(fileparts(which('HFB plot/subfunctions/task_config.m')));
 fid=fopen('task_config.m');
 cac2 = textscan( fid, '%s', 'Delimiter','\n', 'CollectOutput',true );
 fclose( fid );
@@ -34,7 +34,7 @@ for jj = 1:length(cac4{1})
 end
 
 %% Rewrite task_config
-cd(fileparts(which(fullfile('HFB plot' ,'subfunctions' ,'task_config.m'))));
+cd(fileparts(which('HFB plot/subfunctions/task_config.m')));
 fid=fopen('task_config.m','w');
 
 for jj = 1 : n

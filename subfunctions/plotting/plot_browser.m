@@ -35,6 +35,7 @@ for i = page
         temp_mean(:,j ) = nanmean(signal(:,~elim),2);
         pp=round(length(temp_mean)*12/500);
         temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),pp,3,1);
+
         temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(1.2*nt);
         temp_std(:,j ) = smooth_sig(temp_std(:,j ),pp,3,1);
         try

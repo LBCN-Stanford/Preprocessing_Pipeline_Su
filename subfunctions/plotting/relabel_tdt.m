@@ -1,4 +1,4 @@
-function varargout = relabel(varargin)
+function varargout = relabel_tdt(varargin)
 % RELABEL MATLAB code for relabel.fig
 %      RELABEL, by itself, creates a new RELABEL or raises the existing
 %      singleton*.
@@ -22,14 +22,14 @@ function varargout = relabel(varargin)
 
 % Edit the above text to modify the response to help relabel
 
-% Last Modified by GUIDE v2.5 14-Aug-2018 17:24:14
+% Last Modified by GUIDE v2.5 11-Oct-2018 21:38:03
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
 gui_State = struct('gui_Name',       mfilename, ...
                    'gui_Singleton',  gui_Singleton, ...
-                   'gui_OpeningFcn', @relabel_OpeningFcn, ...
-                   'gui_OutputFcn',  @relabel_OutputFcn, ...
+                   'gui_OpeningFcn', @relabel_tdt_OpeningFcn, ...
+                   'gui_OutputFcn',  @relabel_tdt_OutputFcn, ...
                    'gui_LayoutFcn',  [] , ...
                    'gui_Callback',   []);
 if nargin && ischar(varargin{1})
@@ -45,7 +45,7 @@ end
 
 
 % --- Executes just before relabel is made visible.
-function relabel_OpeningFcn(hObject, eventdata, handles, varargin)
+function relabel_tdt_OpeningFcn(hObject, eventdata, handles, varargin)
 % This function has no output args, see OutputFcn.
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -53,20 +53,22 @@ function relabel_OpeningFcn(hObject, eventdata, handles, varargin)
 % varargin   command line arguments to relabel (see VARARGIN)
 handles.eeglabel = varargin{1};
 handles.mrilabel = varargin{2};
+handles.selection = [];
 handles.newlabel = cell(size(handles.eeglabel));
-set(handles.listbox1,'string',handles.mrilabel,'fontsize',12);
-set(handles.text3,'string',handles.eeglabel{1});
-set(handles.figure1,'name','Cannot correlate channel labels with image data')
+set(handles.listbox1,'string',handles.eeglabel,'fontsize',12,'max',length(handles.eeglabel),'min',0);
+set(handles.text3,'string',handles.mrilabel{1});
+set(handles.figure1,'name','Channel Relabel')
 po = get(handles.text3,'position');
 po2 = get(handles.edit1,'position');
-for i = 1:length(handles.eeglabel)
+for i = 1:length(handles.mrilabel)
      
-   uicontrol('unit','normalized','style','text','position',...
-       [po(1)+0.01 0.1+(i)*((po(2))/(1.2*length(handles.eeglabel))) po(3) po(4)],...
-       'string',handles.eeglabel(i),'fontname','optima','fontsize',12,...
-       'HorizontalAlignment','left');
-   handles.newedit(i) = uicontrol('unit','normalized','style','edit','position',...
-       [po2(1)+0.01 0.1+(i)*((po2(2))/(1.2*length(handles.eeglabel))) po2(3) po2(4)],'string','','fontsize',12);
+   uicontrol('unit','normalized','style','pushbutton','position',...
+       [po(1)+0.01 0.1+(i)*((po(2))/(1.2*length(handles.mrilabel))) po(3) po(4)],...
+       'string',handles.mrilabel(i),'fontname','optima','fontsize',12,...
+       'HorizontalAlignment','left','callback',{@pb_call,handles});
+   handles.newedit(i) = uicontrol('unit','normalized','style','text','position',...
+       [po2(1)+0.01 0.1+(i)*((po2(2))/(1.2*length(handles.mrilabel))) po2(3) po2(4)],'string','','fontsize',12,...
+       'tag',handles.mrilabel{i});
 end
 delete(handles.edit1);
 delete(handles.text3);
@@ -82,7 +84,7 @@ guidata(hObject, handles);
 
 
 % --- Outputs from this function are returned to the command line.
-function varargout = relabel_OutputFcn(hObject, eventdata, handles) 
+function varargout = relabel_tdt_OutputFcn(hObject, eventdata, handles) 
 % varargout  cell array for returning output args (see VARARGOUT);
 % hObject    handle to figure
 % eventdata  reserved - to be defined in a future version of MATLAB
@@ -97,9 +99,6 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-% for i =length(handles.eeglabel):-1:1
-%     handles.newlabels{i}=get(handles.newedit(i),'string');
-% end
 handles.newlabels=get(handles.listbox1,'string');
 handles.output = handles.newlabels;
 guidata(hObject, handles);
@@ -141,7 +140,9 @@ function listbox1_Callback(hObject, eventdata, handles)
 % hObject    handle to listbox1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
-contents = get(hObject,'String');
+handles.selection = get(hObject,'value');
+guidata(hObject, handles);
+
 % Hints: contents = cellstr(get(hObject,'String')) returns listbox1 contents as cell array
 %        contents{get(hObject,'Value')} returns selected item from listbox1
 
@@ -157,3 +158,25 @@ function listbox1_CreateFcn(hObject, eventdata, handles)
 if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
     set(hObject,'BackgroundColor','white');
 end
+
+function  pb_call(hObject, eventdata, handles)
+groupname = get(hObject,'string');
+list = get(handles.listbox1,'string');
+handles.selection = get(handles.listbox1,'value');
+rename = cell(length(handles.selection),1);
+for i = 1:length(handles.selection)
+    rename{i} = string(strcat(groupname, num2str(i)));
+end
+list(handles.selection) = rename;
+set(handles.listbox1,'string',list);
+txth = findobj('tag',groupname{1});
+txt = sprintf('Chan %s',num2str(handles.selection));
+set(txth,'string',txt,'fontname','optima');
+guidata(hObject, handles);
+
+
+% --- Executes on button press in pushbutton3.
+function pushbutton3_Callback(hObject, eventdata, handles)
+% hObject    handle to pushbutton3 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)

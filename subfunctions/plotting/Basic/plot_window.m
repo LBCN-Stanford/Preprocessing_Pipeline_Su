@@ -68,8 +68,27 @@ try
     setappdata(hObject,'signal_other',varargin{11});
     handles.bc_type = varargin{12};
 catch
-    view_results; % In case nothing is sent in
-    return
+    [filename,pathname] = uigetfile({'*.mat;*.edf','Raw data or saved data'},...
+                'MultiSelect', 'on');
+            fname = fullfile(pathname,filename);
+            fnamec = cellstr(fname);
+            
+            if isempty(fnamec{1}) || isempty(filename)
+                return;
+            else
+                [~,~,format]=fileparts(fnamec{1});
+                if strcmpi(format,'.edf')
+                    fname = string(fname)';
+                    LBCN_preprocessing_new(fname);
+                elseif strcmpi(format,'.mat')
+                    LBCN_plot_HFB(fname);
+                else
+                    disp('------- Wrong data format');
+                    return;
+                end
+            end   
+%     view_results; % In case nothing is sent in
+%     return
 end
 
 
@@ -241,11 +260,22 @@ try
                 handles.m(ii,3) = cellstr((join(regexp(string(handles.elecLabels{ii}),'[1-9]','Match'),'')));
             end
         end
-        
-        for ii=1:length(chanlabels(handles.D{1}))
-            mc = char(chanlabels(handles.D{1},ii));
-            modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' '),string('''')]));
+        random_check = randi(length(handles.m),1,2);
+        if ~isempty(str2num(handles.m{random_check(1),2})) &&  ~isempty(str2num(handles.m{random_check(2),2})) 
+            mrilabel = unique(handles.m(:,2));
+            eeglabelnew = relabel_tdt(chanlabels(handles.D{1}), mrilabel);
+            for ii=1:length(eeglabelnew)
+                mc = char(eeglabelnew{ii});
+                modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' '),string('''')]));
+            end
+        else
+            for ii=1:length(chanlabels(handles.D{1}))
+                mc = char(chanlabels(handles.D{1},ii));
+                modi(ii)=string(erase(mc,[string('EEG'),string('_'),string('-'),string('.'),string(' '),string('''')]));
+            end
         end
+           
+        
         if size(handles.m,2) ~=3
             side = cell(size(handles.m,1),1);
             handles.m = [side  handles.m];
@@ -316,7 +346,7 @@ try
         end
     end
 catch
-    disp('Can not match the channel names with imaging data.')
+    disp('Can not match channel labels with imaging data.')
     handles.elecoor = [];
     handles.elecMatrix = [];
     handles.V = [];
@@ -685,7 +715,6 @@ param = get(handles.slider2,'Value')*100;
             se = strel('line',param*2,90);
             for k=1:length(handles.plot_cond)
                 for j = 1:length(handles.signal_all{k})
-                    progress(j,length(handles.signal_all{k})*length(handles.plot_cond),80,0)
                     nanidx = handles.nanid{k}{j};
                     results=logical(imdilate(nanidx,se));
                     try
@@ -698,9 +727,9 @@ param = get(handles.slider2,'Value')*100;
             end
             %disp('-----------Done------------');
             %axes(app.axes1);
-            plot_browser(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
+            plot_browser_b(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
                 handles.window,handles.plot_cond(handles.sel_cond), handles.order(handles.page), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:),handles.axes1);
-            guidata(handles);
+            guidata(hObject,handles);
 % Hints: get(hObject,'Value') returns position of slider
 %        get(hObject,'Min') and get(hObject,'Max') to determine range of slider
 
@@ -900,7 +929,7 @@ function export_Callback(hObject, ~, handles)
                     
                     %axes(ax1);
                     plot_browser_b(handles.signal_all(handles.sel_cond), handles.sparam,handles.labels,handles.D,...
-                        handles.window,handles.plot_cond(app.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:),ax1);
+                        handles.window,handles.plot_cond(handles.sel_cond), handles.order(i), handles.yl,handles.bch,handles.t,1,handles.cc(handles.sel_cond,:),ax1);
                     set(ax1,'color',[1 1 1]);
                 end
             end

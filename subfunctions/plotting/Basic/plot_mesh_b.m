@@ -80,6 +80,10 @@ handles.head_center=[0 0 0];
 
 
 e = zeros(1,size(handles.group,1));
+if size(handles.elecoor,1) ~= handles.group(end)
+    disp('Electrode number mismatch, correcting..');
+    handles.group(end) = size(handles.elecoor,1);
+end
 for j=1:size(handles.group,1)
     
     type = char(handles.m(handles.group(j,1),1));
