@@ -12,7 +12,11 @@ elseif nargin ==1
 end
 info = [];
 head_file = cellstr(fname);
-dh = dir(head_file{1});
+try
+    dh = dir(head_file{1});
+catch
+    return;
+end
 %     if iscell(fname)
 %         head_file = fname;
 %     else
@@ -134,3 +138,4 @@ end
 
 % end
 plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
+%plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
