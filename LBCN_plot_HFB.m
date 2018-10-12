@@ -106,7 +106,11 @@ if nargin<2 || isempty(D)
             signal_all = LBCN_plot_HFB(varargin{:});
             return;
         elseif isfield(L,'data_all')
-            view_results(evtfile);
+            try
+                view_results(evtfile);
+            catch
+                view_results(fname);
+            end
             return;
         elseif length(size(getfield(L,char(fieldnames(L))))) == 3
             data = getfield(L,char(fieldnames(L)));
