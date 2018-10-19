@@ -37,6 +37,7 @@ if nargin<1 || isempty(fname)
         return;
     end
     evtfile = cellstr(fname);
+    dir_curr = pathname;
 end
 if nargin<2 || isempty(D)
     if iscell(fname)
@@ -50,6 +51,7 @@ if nargin<2 || isempty(D)
             signal_all = L.beh_fp;
             labels = L.labels;
             plot_cond = L.plot_cond;
+            dir_curr=fileparts(fname);
             try
                 all_nan = L.all_nan;
             catch
@@ -132,7 +134,7 @@ if ~exist('signal_all','var')
         for i = 1:length(evtfile)
             [filepath,name,~] = fileparts(evtfile{i});
             fixind = regexp(name,'DCchans')+8;
-            [name2] = find_file(filepath,'/eM*.mat',name(fixind:end));
+            [name2] = find_file(filepath,'eM*.mat',name(fixind:end));
             if ~isempty(name2)
                 
                 D{i} = spm_eeg_load(name2);
@@ -290,9 +292,10 @@ else
     window_bc = twbc;
 end
 %fbands = zeros(11,1);
-
+fname=cellstr(fname);
+dir_curr=fileparts(fname{1});
 if ~exist('sbjname','var') || isempty(sbjname) || ~exist('task','var') || isempty(task) 
-    sodir = find_file(path(D{1}),'sodata*.mat',[]);
+    sodir = find_file(dir_curr,'sodata*.mat',[]);
     [task,sbjname] = get_info(sodir);
     out = timer_getinfo(task,sbjname);
     task = out.task;
@@ -304,6 +307,7 @@ fbands = linspace(70,180,12);
 if ~exist('signal_all','var')
     fprintf('%s\n','------ Calculating HFB ------')
     %% re-arrange the data, take out excluded trials%%%%%%%%%%
+    
     sdata = cell(1,length(cellstr(evtfile)));
     sdata2 = cell(1,length(cellstr(evtfile)));
     sdata3 = cell(1,length(cellstr(evtfile)));
@@ -449,7 +453,9 @@ if ~exist('signal_all','var')
     beh_fp=all_plot;
     
        fprintf('------ Saving tfmaps ... \n');
-        save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
+        save(fullfile(dir_curr,strcat('Epoched_tfmap','.mat')),'all_tf');
+        tf_file = fullfile(dir_curr,strcat('Epoched_tfmap','.mat'));
+        information.tf = tf_file;
     signal_all=beh_fp;
     window = round((window(1) : dsamp : window(end))./dsamp);
     edge = round(30*fs/1000/dsamp);
@@ -457,13 +463,15 @@ if ~exist('signal_all','var')
     window = win;
     t = t(window);
     fprintf('------ Saving signal ... \n');
-    save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
+    save(fullfile(dir_curr,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
         'beh_fp','labels','plot_cond','type','bc_type','all_nan','window','t','information');
 else
         try
-            tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
-            load(tf_file);
+            tf_file = find_file(fullfile(dir_curr),'Epoched_tf*.mat',[]);
+            %load(tf_file);
+            information.tf = tf_file;
         catch
+            information.tf = [];
         end
 end
 
@@ -477,11 +485,11 @@ for j=1:length(labels)
 end
 sparam = 25;
 page = 1;
-try
-    information.tf = all_tf;
-catch
-    information.tf = [];
-end
+% try
+%     information.tf = tf_file;
+% catch
+%     information.tf = [];
+% end
 
 % try
 %     info.project_name = task;
@@ -493,8 +501,11 @@ end
 %Plot_script;
 
 %% Run this to open a GUI and inspect the plots and images (electrodes)
-
+try
+fpath = dir_curr;
+catch
 [fpath,~,~] = fileparts(evtfile{1});
+end
 if ~exist('total_plot2','var')
     all_plot2 = cell(1,length(evtfile));
 end
