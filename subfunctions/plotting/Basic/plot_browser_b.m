@@ -133,7 +133,8 @@ for i = page
     temp_std = nan(length(window),Nt);
     for j=1:Nt
         signal=signal_all{j}{i};
-        signal = ndnanfilter(signal,'hamming',round(sparam),[],[],[],1);
+        signal = ndnanfilter(signal,'hamming',round(length(window)/5),[],[],[],2);
+        signal = ndnanfilter(signal,'hamming',round(sparam/1.2),[],[],[],1);
         signal=signal(edge+1 : edge + length(window),:);
         if isempty(signal) || size(signal,2) == 1
             allcond(j)=0;
@@ -143,11 +144,11 @@ for i = page
         vs=nanvar(signal);
         elim=vs>5*nanmedian(vs);
         temp_mean(:,j ) = nanmean(signal(:,~elim),2);
-        pp=round(length(temp_mean)*12/500);
-        temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),pp,3,1);
+        %pp=round(length(temp_mean)*12/500);
+        %temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),pp,3,1);
 
         temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(1.2*nt);
-        temp_std(:,j ) = smooth_sig(temp_std(:,j ),pp,3,1);
+        %temp_std(:,j ) = smooth_sig(temp_std(:,j ),pp,3,1);
         try
             plot(ax,t,temp_mean(:,j),'color',cc(j,:),'linewidth',3);
             set(ax,'nextplot','add');

@@ -1,4 +1,4 @@
-function varargout = plot_window(varargin)
+ function varargout = plot_window(varargin)
 % PLOT_WINDOW MATLAB code for plot_window.fig
 %      PLOT_WINDOW, by itself, creates a new PLOT_WINDOW or raises the existing
 %      singleton*.
@@ -153,7 +153,8 @@ for k=1:length(handles.plot_cond)
             end
         fprintf('%d',k);
         end
-   sig_chan{handles.plot_cond(k)} = permutation_test(handles.signal_all{handles.plot_cond(k)},1:start-1,start:ending);   
+        
+   sig_chan{handles.plot_cond(k)} = permutation_test(handles.signal_all{handles.plot_cond(k)},start);   
 end
 fprintf('-----------\n');
 handles.sig_chan = sig_chan;

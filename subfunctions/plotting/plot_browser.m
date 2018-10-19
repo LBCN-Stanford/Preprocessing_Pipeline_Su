@@ -1,4 +1,4 @@
-function po = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t,showlegend, cc,ax)
+function po = plot_browser(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch,t,showlegend, cc,ax,nanwin)
 if nargin < 11
     showlegend = 1;
 end
@@ -6,6 +6,9 @@ Nt = length(plot_cond);
 if nargin < 12 || isempty(cc)
     cc = brewermap(Nt,'Set2');
     %cc = linspecer(Nt);
+end
+if nargin < 14
+    nanwin = 5;
 end
 cn = nchannels(D{1});
 chanp=1:cn;
@@ -23,17 +26,19 @@ for i = page
     temp_std = nan(length(window),Nt);
     for j=1:Nt
         signal=signal_all{j}{i};
-        signal = ndnanfilter(signal,'hamming',round(sparam),[],[],[],1);
-        signal=signal(edge+1 : edge + length(window),:);
+        signal = ndnanfilter(signal,'hamming',round(length(window)/nanwin),[],[],[],2);
+        signal = ndnanfilter(signal,'hamming',round(sparam/1.2),[],[],[],1);
+        
         if isempty(signal) || size(signal,2) == 1
             allcond(j)=0;
             continue;
         end
+        signal=signal(edge+1 : edge + length(window),:);
         nt=size(signal,2);
         vs=nanvar(signal);
         elim=vs>5*nanmedian(vs);
         temp_mean(:,j ) = nanmean(signal(:,~elim),2);
-        pp=round(length(temp_mean)*12/500);
+        pp=round(length(temp_mean)*5/500);
         temp_mean(:,j ) = smooth_sig(temp_mean(:,j ),pp,3,1);
 
         temp_std(:,j ) = nanstd((signal(:,~elim)'),1)/sqrt(1.2*nt);
