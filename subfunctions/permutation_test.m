@@ -1,62 +1,36 @@
-function [sig_chan, p_perchan, p_thresh, pchan_WSR] = permutation_test(signal,win_bl,win_bh,chanid,nperm,tail)
-if nargin<4 || isempty(chanid)
-    chanid = 1:length(signal);
+function [sig_channel, pval, sig_t] = permutation_test(signal,onset,nperm,tail)
+% Computes significant channels and timestamps per channel.
+% Outputs are significant channel id, pvalues, and a matrix that marks
+% significant timestamps for plotting. 
+%
+if nargin<3 || isempty(nperm)
+    nperm = 500;
 end
 
-if nargin<5 || isempty(nperm)
-    nperm = 2500;
-end
-
-if nargin<6 || isempty(tail)
+if nargin<4 || isempty(tail)
     tail = 0;
 end
-permutation = zeros(size(signal{1},2),nperm);
-p_perchan = zeros(length(chanid),1);
-pchan_WSR = zeros(length(chanid),1);
-for i = 1:length(chanid)
-    if size(signal{i},2) < size(signal{1},2)
-        missing = size(signal{1},2) - size(signal{i},2);
-        signal{i}(:,end+1:end+missing) = nan;%padding missing trials
-    end
-    % Counter of channels to be updated
-    %win_bl=200:550;
-        conddata = nanmean(signal{i}(win_bh,:),1);
-        baseline = nanmean(signal{i}(win_bl,:),1);
-    if tail
-        truediff = (nanmedian(conddata - baseline));
-    else
-        truediff = abs(nanmedian(conddata - baseline));
-    end
+sig_chan = false(1,length(signal));
+dn = size(signal{1},1);
+pval = ones(length(signal),dn);
+for j = 1:length(signal)
     try
-        pchan_WSR(i) = signrank(conddata-baseline);
+        dat=[];
+        dat(1,:,:) = signal{j};
+        pval(j,:) = clust_perm_sc(dat,[],nperm);
     catch
-        pchan_WSR(i) = 1;
-         p_perchan(i) = 1;
-         continue;
-    end
-    perm = zeros(size(signal{1},2),nperm);
-    permdiff = zeros(nperm,1);
-    for p = 1:nperm
-        if i == 1
-            % Need to set the permutation matrix
-            indperm = rand(numel(conddata),1);
-            permutation(:,p) = indperm;
-        end
-        perm(:,p) =  permutation(:,p);       
-        diff = conddata - baseline;
-        multp = ones(numel(conddata),1);
-        multp(perm(:,p)>0.5) = -1;
-        diffp = diff' .* multp;
-        if tail
-            permdiff(p) = (nanmedian(diffp));
-        else
-            permdiff(p) = abs(nanmedian(diffp));
-        end
-    end
-    permdiff = [permdiff;truediff];
-    p_perchan(i) = length(find(permdiff>=truediff))/(nperm + 1);
-end
 
-% Correct for multiple comparisons using FDR
-[p_thresh,pass] = LBCN_FDRcorrect(p_perchan);
-sig_chan = find(pass);
+    end
+    sig_ts = find(pval(j,:) <= 0.05);
+    if ~isempty(sig_ts)
+        fsig = find(sig_ts >= onset);
+        if any(fsig) && length(fsig) > (dn / 30)
+          sig_chan(j) = true;
+        end
+    end
+end
+pval = pval';
+sig_channel = find(sig_chan);
+sig_t = double(pval <= 0.05);
+sig_t(sig_t == 0) = nan;
+sig_t = sig_t-1; % This is for plotting
