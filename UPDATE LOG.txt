@@ -38,3 +38,10 @@
 		This has not been tested on many datasets, an update of matlab is still recommended. 
 		Now Supports TDT labeling.
 		
+10/18 Update:	Major update -- added permutation test (and plot). Pvalues can be exported to workspace using "Export". Thanks Ying and Pedro for your inspiration!
+		Image path, significant results, and some other information are saved after getting the user's input. 
+		Please also download crc_eeg_rdata_edf.m, crc_eeg_readHeaderEDF.m and replace the original funcitons in the LBCN old pipeline/FASST_tools to avoid saturation issue. Thanks Aaron!
+		Next update wille include a simple heat map to show the activations.
+		
+		
+		
