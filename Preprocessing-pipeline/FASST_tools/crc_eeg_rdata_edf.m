@@ -84,7 +84,7 @@ chan_names = header.channelname;
 
 
 %% Deal with the data
-datatype = 'int16';
+datatype = 'float32';
 D.Nsamples = header.nrsamples(1)*header.records;
 
 % Scaling issues: not sure how it works... 

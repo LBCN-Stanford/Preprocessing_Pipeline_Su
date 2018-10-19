@@ -262,7 +262,7 @@ else
         data_r = fread(fp,header.nrsamples(1)*header.channels,'int16');
         data_r = reshape(data_r,header.nrsamples(1),header.channels)';
         data_r = data_r(chtk,:);
-        fwrite(fo,data_r(:),'int16');
+        fwrite(fo,data_r(:),'float32');%%%%Change from int 16 to float 32%%%
     end
 end
 
