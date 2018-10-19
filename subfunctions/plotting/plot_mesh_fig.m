@@ -9,9 +9,9 @@ function handles = plot_mesh_fig(handles)
 %     s.tri= hi.faces;s.vert=hi.vertices;
 % end
 if strcmp(char(handles.m(1,1)),'d')
-        alpha = 0.7;
+        alpha = 0.15;
     else
-        alpha = 0.25;
+        alpha = 0.8;
 end
 % temp=tripatchDG(s,1);
 % if size(s.vert,1)>2000000
@@ -65,7 +65,7 @@ for j=1:size(handles.group,1)
     
     type = char(handles.m(handles.group(j,1),1));
     if strcmpi(type(2),'s') || strcmpi(type(2),'g')
-        handles.elecoor=handles.elecoor.*1.01;
+        %handles.elecoor=handles.elecoor.*0.99;
         [side,top,~]=electrode3d(handles.elecoor(handles.group(j,1):handles.group(j,2),1),...
             handles.elecoor(handles.group(j,1):handles.group(j,2),2),...
             handles.elecoor(handles.group(j,1):handles.group(j,2),3),...
