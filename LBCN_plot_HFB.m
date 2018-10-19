@@ -56,14 +56,18 @@ if nargin<2 || isempty(D)
                 all_nan = [];
             end
             try
-                sbjname = L.sbjname;
+                sbjname = L.information.sbj_name;
             catch
                 sbjname = [];
             end
             try
-                task = L.task;
+                task = L.information.project_name;
             catch
                 task = [];
+            end
+            try 
+                information = L.information;
+            catch
             end
             try
                 window = L.window;
@@ -265,8 +269,8 @@ if ~exist('signal_all','var')
     total_raw = cell(length(cellstr(evtfile)),1);
     total_raw2 = cell(length(cellstr(evtfile)),1);
     total_nan = cell(length(cellstr(evtfile)),1);
-    %total_tf = cell(length(cellstr(evtfile)),1);
-    %total_tf2 = cell(length(cellstr(evtfile)),1);
+    total_tf = cell(length(cellstr(evtfile)),1);
+    total_tf2 = cell(length(cellstr(evtfile)),1);
     t = time_start:(time_end-time_start)/(D{1}.nsamples-1):time_end;
     t = t(1:dsamp:end);
     %window = round(((twsmooth(1) - time_start*1000)) +1 : ceil(((twsmooth(2)/1000-time_start)*1000)/1));
@@ -294,7 +298,8 @@ if ~exist('sbjname','var') || isempty(sbjname) || ~exist('task','var') || isempt
     task = out.task;
     sbjname = out.sname;
 end 
-
+information.sbj_name = sbjname;
+information.project_name = task;
 fbands = linspace(70,180,12);
 if ~exist('signal_all','var')
     fprintf('%s\n','------ Calculating HFB ------')
@@ -302,8 +307,8 @@ if ~exist('signal_all','var')
     sdata = cell(1,length(cellstr(evtfile)));
     sdata2 = cell(1,length(cellstr(evtfile)));
     sdata3 = cell(1,length(cellstr(evtfile)));
-    %tf = cell(1,length(cellstr(evtfile)));
-    %tf2 = cell(1,length(cellstr(evtfile)));
+    tf = cell(1,length(cellstr(evtfile)));
+    tf2 = cell(1,length(cellstr(evtfile)));
     
     for N=1:length(cellstr(evtfile))
         dsp = strcat('File ',' ',num2str(N),' / ',' ',num2str(length(cellstr(evtfile))));
@@ -331,7 +336,7 @@ if ~exist('signal_all','var')
         %         type = 2;
         %         atf_check = 3;
         %% Signal 2 is the other un-chosen baseline correction method. (Just get ready for the plotting)
-        [sig, sig2,nanidx, ~] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window, dsamp);
+        [sig, sig2,nanidx, spec, spec2] = compute_HFB(data, fs, type, fbands, atf_check, bc_type,window_bc ,pre_defined, window, dsamp);
         cn = size(data,1);
         if length(ts) ~= size(sig,3)
             ts = trialonset(D{N});
@@ -341,8 +346,8 @@ if ~exist('signal_all','var')
         sdata{N} = sig(:,:,A);
         sdata2{N} = sig2(:,:,A);
         sdata3{N} = nanidx(:,:,A);
-         %tf{N} = spec(:,:,:,A);
-        %tf2{N} = spec2(:,:,:,A);
+         tf{N} = spec(:,:,:,A);
+        tf2{N} = spec2(:,:,:,A);
         %% In case it crashes 0_0
         try
             %             Signal = evalin('base', 'Signal');
@@ -360,8 +365,8 @@ if ~exist('signal_all','var')
             dt=squeeze(sdata{N}(i,:,:));
             dt2=squeeze(sdata2{N}(i,:,:));
             dt3=squeeze(sdata3{N}(i,:,:));
-            %dtf=squeeze(tf{N}(i,:,:,:));
-            %dtf2=squeeze(tf2{N}(i,:,:,:));
+            dtf=squeeze(tf{N}(i,:,:,:));
+            dtf2=squeeze(tf2{N}(i,:,:,:));
             try
                 ex=exclude{N}{i}(1,all(exclude{N}{i}));
             catch
@@ -375,8 +380,8 @@ if ~exist('signal_all','var')
             dt(:,ex)=[];
             dt2(:,ex)=[];
             dt3(:,ex)=[];
-            %dtf(:,:,ex)=[];
-            %dtf2(:,:,ex)=[];
+            dtf(:,:,ex)=[];
+            dtf2(:,:,ex)=[];
             curr_id=false(Nt,size(dt,2));
             for k = plot_cond
                 %ex=[];
@@ -403,8 +408,8 @@ if ~exist('signal_all','var')
                 total_raw{N}{m}{i}=dt(:,curr_id(k,:));
                 total_raw2{N}{m}{i}=dt2(:,curr_id(k,:));
                 total_nan{N}{m}{i}=dt3(:,curr_id(k,:));
-                %total_tf{N}{m}{i}=dtf(:,1:4:end,curr_id(k,:));%downsample the tf
-                %total_tf2{N}{m}{i}=dtf2(:,1:4:end,curr_id(k,:));
+                total_tf{N}{m}{i}=dtf(:,1:4:end,curr_id(k,:));%downsample the tf
+                total_tf2{N}{m}{i}=dtf2(:,1:4:end,curr_id(k,:));
                 m=m+1;
             end
         end
@@ -419,32 +424,32 @@ if ~exist('signal_all','var')
                 currcond2 = [];
                 currcond3 = [];
                 currtf = [];
-                %currtf2 = [];
+                currtf2 = [];
                 for jj=1:numel(total_raw)
                     currcond=[currcond total_raw{jj}{nn}{cc}];
                     currcond2=[currcond2 total_raw2{jj}{nn}{cc}];
                     currcond3=[currcond3 total_nan{jj}{nn}{cc}];
-                    %currtf = cat(3, currtf, total_tf{jj}{nn}{cc});
-                    %currtf = cat(3, currtf, total_tf{jj}{nn}{cc});
+                    currtf = cat(3, currtf, total_tf{jj}{nn}{cc});
+                    currtf = cat(3, currtf, total_tf{jj}{nn}{cc});
                 end
                 all_plot{nn}{cc}=currcond;
                 all_plot2{nn}{cc}=currcond2;
                 all_nan{nn}{cc}=currcond3;
-                %all_tf{nn}{cc}=currtf;
-                %all_tf2{nn}{cc}=currtf2;
+                all_tf{nn}{cc}=currtf;
+                all_tf2{nn}{cc}=currtf2;
             end
         end
     else
         all_plot=total_raw{1};
         all_plot2=total_raw2{1};
         all_nan=total_nan;
-        %all_tf=total_tf;
-        %all_tf2=total_tf2{1};
+        all_tf=total_tf;
+        all_tf2=total_tf2{1};
     end
     beh_fp=all_plot;
     
-    %    fprintf('------ Saving tfmaps ... \n');
-    %     save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
+       fprintf('------ Saving tfmaps ... \n');
+        save(fullfile(D{1}.path,strcat('Epoched_tfmap','.mat')),'all_tf');
     signal_all=beh_fp;
     window = round((window(1) : dsamp : window(end))./dsamp);
     edge = round(30*fs/1000/dsamp);
@@ -453,13 +458,13 @@ if ~exist('signal_all','var')
     t = t(window);
     fprintf('------ Saving signal ... \n');
     save(fullfile(D{1}.path,strcat('Epoched_HFB','.mat')),'evtfile','D','bch',...
-        'beh_fp','labels','plot_cond','type','bc_type','all_nan','sbjname','task','window','t');
+        'beh_fp','labels','plot_cond','type','bc_type','all_nan','window','t','information');
 else
-    %     try
-    %         tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
-    %         load(tf_file);
-    %     catch
-    %     end
+        try
+            tf_file = find_file(fullfile(D{1}.path),'/Epoched_tf*.mat',[]);
+            load(tf_file);
+        catch
+        end
 end
 
 % window = round((window(1) : dsamp : window(end))./dsamp);
@@ -473,16 +478,16 @@ end
 sparam = 25;
 page = 1;
 try
-    info.tf = all_tf;
+    information.tf = all_tf;
 catch
-    info.tf = [];
+    information.tf = [];
 end
 
-try
-    info.project_name = task;
-    info.sbj_name = sbjname;
-catch
-end
+% try
+%     info.project_name = task;
+%     info.sbj_name = sbjname;
+% catch
+% end
 %% Run this when no GUI is needed
 
 %Plot_script;
@@ -502,7 +507,7 @@ if nop
     return;
 end
 
-    plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, info);
+    plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, fpath, bch, t, all_plot2, bc_type,all_nan, information);
 %% This is for earlier matlab versions (earlier than 2018a)
 %    plot_window(signal_all, sparam,labels,D,window,plot_cond, page, path, bch, t, all_plot2, bc_type,all_nan, info);
 
