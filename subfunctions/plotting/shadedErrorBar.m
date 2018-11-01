@@ -58,10 +58,10 @@ transparent = 1;
 
 %col = [0.9290    0.6940    0.1250];
 
-%col = [64 180 187]/255;
+col = [64 180 187]/255;
 %col = [203 77 12]/255;
 linestyle = '-';
-lw = 2;
+lw = 3;
 
 for i =1:2:length(varargin)
     if strcmpi(varargin{i}, 'parent')
@@ -159,8 +159,8 @@ H.patch=patch(xP,yP,1,'facecolor',patchColor,...
 %H.edge(1)=line(ax,'XData',x,'YData',lE,'LineStyle','none');
 %H.edge(2)=line(ax,'XData',x,'YData',uE,'LineStyle','none');
 
-H.edge(1)=line(ax,'XData',x,'YData',lE,'LineStyle','-','color',edgeColor,'LineWidth',0.25);
-H.edge(2)=line(ax,'XData',x,'YData',uE,'LineStyle','-','color',edgeColor,'LineWidth',0.25);
+H.edge(1)=line(ax,'XData',x,'YData',lE,'LineStyle','-','color',edgeColor,'LineWidth',0.1);
+H.edge(2)=line(ax,'XData',x,'YData',uE,'LineStyle','-','color',edgeColor,'LineWidth',0.1);
 
 
 uistack(H.mainLine, 'top');
