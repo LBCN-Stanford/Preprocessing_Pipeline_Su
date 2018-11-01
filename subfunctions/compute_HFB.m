@@ -1,5 +1,5 @@
 function [signalbc, signalbc2,nanid, spec, spec2] = compute_HFB(data, fs, type, fbands, atf_check, ...
-    bc_type, bc_win , pre_defined_bad, window, downsamp)
+    bc_type, bc_win , pre_defined_bad, window, downsamp, spec_all)
 
 if nargin<1 || isempty(data)
     [filename,pathname] = uigetfile({'*.mat','Data format (*.mat)'});
@@ -24,7 +24,7 @@ if (nargin<2 || isempty(fs)) && ~exist('fs','var')
     end
 end
 if (nargin<3 || isempty(type)) 
-    type = 1;
+    type = 2;
 end
 if nargin<4 || isempty(fbands)
 %     fbands = [70 80; 80 90; 90 100; 100 110; 110 120; 120 130;...
@@ -52,8 +52,12 @@ end
 if nargin<10 || isempty(downsamp)
     downsamp = 2;
 end
-%spec_all = linspace(0,180,19);
-spec_all = fbands;
+if nargin<11 || isempty(spec_all)
+    %spec_all = linspace(0,180,19);
+    spec_all = linspace(0,200,21);
+end
+%
+%spec_all = fbands;
 spec_all(1) = 1;
 cn = size(data,1);
 dlength_org = size(data,2);
@@ -68,7 +72,7 @@ disp('.')
 if atf_check
     bad = false(cn, tn);
     for i = 1:tn
-        progress(i,tn,25,0)
+        progress(i,tn,10,0)
         dat = squeeze(data(:,:,i))';
         try
             inspectatf = evalin('base', 'inspectatf');
@@ -129,7 +133,7 @@ switch type
         fbands = [70 80; 80 90; 90 100; 100 110; 110 120; 120 130;...
         130 140; 140 150; 150 160; 160 170; 170 180];
         for i=1:size(fbands,1)
-            [b(i,:), a(i,:)]= fir1(20,[fbands(i,1) fbands(i,2)]/(fs/2));
+            [b(i,:), a(i,:)]= fir1(64,[fbands(i,1) fbands(i,2)]/(fs/2));
         end
         data = permute(data,[2,1,3]);%dn x cn x tn
         %remove = permute(nanid,[2,1,3]);
@@ -142,7 +146,8 @@ switch type
                     filtered_signal(:,:,m,n) = f_signal(1 : downsamp : end,:)';
             end
         end
-        env = hilbert(filtered_signal);
+        env = abs(hilbert(filtered_signal.^2));
+        
         env = env.*conj(env);
         narrown = permute(env,[1,4,2,3]); %cn x fn x dn xtn
     case 2
@@ -155,7 +160,7 @@ switch type
         fbands = spec_all;
         narrown = zeros(cn,size(fbands,1),ceil((dlength_org)/downsamp) ,tn);
         for k = 1:tn
-            progress(k,tn,50,0)
+            progress(k,tn,30,0)
             for j = 1:cn
                 for i = 1:length(wvmat)
                     tmp = conv(data(j, :,k), wvmat{i});
@@ -183,11 +188,11 @@ if ~isnumeric(bc_win)%use a specific condition as baseline;
         bls = ble-300/downsamp;
     end
     bc_sig = narrown(:,:,round(bls:ble),bc_win{1});
-    [signalbc, signalbc2, spec] = baseline_norm2(narrown, window, bc_sig, bc_type, bad, nanid, freqID);
+    [signalbc, signalbc2, spec, spec2] = baseline_norm2(narrown, window, bc_sig, bc_type, bad, nanid, freqID, 1);
 else
     bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
     bc_win(bc_win < window(1)) = [];
-    [signalbc, signalbc2, spec, ~] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid, freqID);
+    [signalbc, signalbc2, spec, spec2] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid, freqID, 1);
 end
 
 nanid=nanid(:,window,:);

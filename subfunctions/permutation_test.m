@@ -4,11 +4,14 @@ function [sig_channel, pval, sig_t] = permutation_test(signal,onset,nperm,tail)
 % significant timestamps for plotting. 
 %
 if nargin<3 || isempty(nperm)
-    nperm = 500;
+    nperm = 800;
 end
 
 if nargin<4 || isempty(tail)
     tail = 0;
+end
+if isempty(onset)
+    onset = round(length(signal{1})/5);
 end
 sig_chan = false(1,length(signal));
 dn = size(signal{1},1);
