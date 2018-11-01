@@ -54,10 +54,10 @@ if nargin<5 || isempty(pipeline)
     pipeline = 0;
 end
 if nargin < 6 || isempty(atf_check)
-    atf_check = 3;
+    atf_check = 2;
 end
 if nargin < 7 || isempty(dsamp)
-    dsamp = 1;
+    dsamp = 2;
 end
 if nargin < 8 || isempty(viewer)
     viewer = 1;
@@ -75,7 +75,9 @@ catch
     end
 end
 
-
+% if strcmpi(task,'category')
+%     dsamp = 2;
+% end
 fnamep = cell(size(filename,1),1);
 evtfile = cell(size(filename,1),1);
 exclude = cell(size(filename,1),1);
@@ -115,6 +117,7 @@ for i = 1:size(filename,1)
     
     %%%%%%%%%%%%%%find pathological%%%%%%%%%%%%%%%%%
     [bch{i},exclude{i},exclude_ts{i},conditionList{i},]=find_pChan(fnamep{i},3,twepoch);
+    exclude_ts{i} = exclude_ts{i}(:,1:dsamp:size(exclude_ts{i},2),:);
     %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
     %bch{i}=[];exclude{i}=[];exclude_ts{i}=[];conditionList{i}=[];
 end
@@ -205,7 +208,7 @@ if ~ pipeline
     % plot_cond=[1 4 5 9];%which conditions to plot
     save(fullfile(D.path,strcat('Epoched_data_',task,'.mat')),'evtfile','DAT','bch',...
         'exclude','conditionList','exclude_ts','plot_cond','twsmooth','twbc','task','sbjname');
-    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc,2,0,task,sbjname);
+    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc,1,0,task,sbjname);
 elseif viewer
     signal_all = format_signal([],df,plot_cond,exclude);
     nan_all = format_signal([],df,plot_cond,exclude);
