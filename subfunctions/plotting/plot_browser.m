@@ -27,7 +27,7 @@ for i = page
     for j=1:Nt
         signal=signal_all{j}{i};
         signal = ndnanfilter(signal,'hamming',round(length(window)/nanwin),[],[],[],2);
-        signal = ndnanfilter(signal,'hamming',round(sparam),[],[],[],1);
+        signal = ndnanfilter(signal,'hamming',round(sparam*1.2),[],[],[],1);
         
         if isempty(signal) || size(signal,2) == 1
             allcond(j)=0;

@@ -65,7 +65,7 @@ vs=nanvar(sig);
 elim=vs>5*nanmedian(vs);
 %fb = find(nansum(sig)==0);
 handles.fb = elim;
-null=nan(size(sig));alln = handles.alln{j}{handles.index};%sn = size(handles.alln{j}{handles.index}); sn2=size(null);if sn(2) ~= sn2(2);alln(:,sn2(2))=false(sn2(1),1);end
+null=nan(size(sig));alln = handles.alln{j}{handles.index};sn = size(handles.alln{j}{handles.index}); sn2=size(null);if sn(2) ~= sn2(2);alln(:,sn2(2))=false(sn2(2),1);end
 null(logical(alln))=1;
 null(:,handles.fb)=1;
 red=null.*sig;

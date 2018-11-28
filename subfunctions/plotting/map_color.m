@@ -1,12 +1,14 @@
 function rgb = map_color(channames)
 
 cn = length(channames);
-groupNo = length(unique(channames));
+[groupNo,~,groupid] = unique(channames);
+groupNo = length(groupNo);
 clr = brewermap(groupNo,'Set3')  ;
 cnn = 1;
 rgb = zeros(cn,3);
 rgb(1,:) = clr(1,:);
 for i = 2:cn
+%     try
     name1 = join(regexp(string(channames{i-1}),'[a-z]','Match','ignorecase'),'');
     name2 = join(regexp(string(channames{i}),'[a-z]','Match','ignorecase'),'');
     if strcmp(name1,name2)
@@ -15,4 +17,6 @@ for i = 2:cn
         cnn=cnn+1;
         rgb(i,:) = clr(cnn,:);
     end
+%     catch
+%         rgb(i,:) = clr(groupid(i),:);
 end

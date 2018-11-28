@@ -2,7 +2,7 @@ function handles = plot_mesh_fig(handles)
 
 
 alpha = handles.slider1.Value;
-alpha =1;
+alpha =0.6;
 
 handles.overlay = 1;
 hi.tri=handles.model(handles.overlay).faces;
@@ -19,8 +19,9 @@ if handles.showR.Value == 1
     set(lh,'facecolor',[0.87 0.87 0.87]);
     
 end
+hold on
 if handles.showL.Value == 1
-    handles.overlay = handles.overlay+1;
+    handles.overlay = length(handles.model);
     
     hi.tri=handles.model(handles.overlay).faces;
     hi.vert=handles.model(handles.overlay).vertices;
@@ -46,7 +47,7 @@ if handles.showMap.Value == 0
         
         type = char(handles.m(handles.group(j,1),1));
         if strcmpi(type(2),'s') || strcmpi(type(2),'g')
-            %handles.elecoor=handles.elecoor.*0.99;
+            handles.elecoor=handles.elecoor;
             [side,top,~]=electrode3d(handles.elecoor(handles.group(j,1):handles.group(j,2),1),...
                 handles.elecoor(handles.group(j,1):handles.group(j,2),2),...
                 handles.elecoor(handles.group(j,1):handles.group(j,2),3),...
