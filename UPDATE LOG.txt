@@ -42,6 +42,6 @@
 		Image path, significant results, and some other information are saved after getting the user's input. 
 		Please also download crc_eeg_rdata_edf.m, crc_eeg_readHeaderEDF.m and replace the original funcitons in the LBCN old pipeline/FASST_tools to avoid saturation issue. Thanks Aaron!
 		Next update wille include a simple heat map to show the activations.
-		
+11/28 Update:	More compatible with the new data structure (Pedro & Amy pipeline). 		
 		
 		
