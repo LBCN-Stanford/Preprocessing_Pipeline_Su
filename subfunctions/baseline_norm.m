@@ -37,37 +37,46 @@ original(remove) = nan;
 if perm == 1
     [xbase1, xbase2, stdev] = perm_baseline(original(:,:,bc_win,:), 100);
 end
-    for i=1:tn
-        
+for i=1:tn
+    if perm == 0
+        progress(i,tn,10,0)
         xx= spm_squeeze(original(:, :,window, i), 4);
-        if perm == 0
-            progress(i,tn,10,0)
-            xbase = xx(:, :, bc_win-window(1)+1);
-            xbase(badind(:,i), :,:) = nan;
-            stdev   =  nanstd(xbase, [], 3);
-            xbase1   =  nanmean(xbase , 3);
-            xbase2 = nanmean(log10(xbase),3);
-        end
-        xx= spm_squeeze(originalb(:, :,window, i), 4);
-        %rpc = nanmean(xbase(~badind,:,:),1);
-        %xbase(badind, :,:) = rpc;
-        xx(badind(:,i), :,:) = nan;
+        %         else
+        %             progress(i,tn,60,0)
+        %             xx = perm_sig(originalb(:,:,window,:), 10);
+        %        end
+        xbase = xx(:, :, bc_win-window(1)+1);
+        xbase(badind(:,i), :,:) = nan;
+        stdev   =  nanstd(xbase, [], 3);
+        xbase1   =  nanmean(xbase , 3);
+        xbase2 = nanmean(log10(xbase),3);
+    end
+    %if perm == 0
+    xx= spm_squeeze(originalb(:, :,window, i), 4);
+    xx(badind(:,i), :,:) = nan;
+    %rpc = nanmean(xbase(~badind,:,:),1);
+    %xbase(badind, :,:) = rpc;
+    if perm == 0
         SIG(:,:,:,i)= (xx - repmat(xbase1,[1 1 slength 1]))./repmat(stdev,[1 1 slength 1]);
         %SIG2(:,:,:,i)=10*log10((xx)./ repmat(xbase,[1 1 slength 1]));
         SIG2(:,:,:,i)=10*(log10(xx) - repmat(xbase2,[1 1 slength 1]));
+    else
+        SIG(:,:,:,i)= ((xx) - repmat(xbase1,[1 1 slength 1]))./repmat(stdev,[1 1 slength 1]);
+        SIG2(:,:,:,i)=(log10((xx) - repmat(xbase1,[1 1 slength 1]))./repmat(stdev,[1 1 slength 1]));
     end
-    switch bc_type
-        case 'z'
-            signalbc=squeeze(nanmean(SIG(:,freqID,:,:),2));
-            signalbc2=squeeze(nanmean(SIG2(:,freqID,:,:),2));
-            signalbc2=real(signalbc2);
-        case 'log'
-            signalbc=squeeze(nanmean(SIG2(:,freqID,:,:),2));
-            signalbc=real(signalbc);
-            signalbc2=squeeze(nanmean(SIG(:,freqID,:,:),2));
-            %freq = rh_zbaseline(freq, BLstart, BLend, numIt);
-            %freq has to be trials x CH x freqs x time
-    end
+end
+switch bc_type
+    case 'z'
+        signalbc=squeeze(nanmean(SIG(:,freqID,:,:),2));
+        signalbc2=squeeze(nanmean(SIG2(:,freqID,:,:),2));
+        signalbc2=real(signalbc2);
+    case 'log'
+        signalbc=squeeze(nanmean(SIG2(:,freqID,:,:),2));
+        signalbc=real(signalbc);
+        signalbc2=squeeze(nanmean(SIG(:,freqID,:,:),2));
+        %freq = rh_zbaseline(freq, BLstart, BLend, numIt);
+        %freq has to be trials x CH x freqs x time
+end
 spec = SIG;
 spec2 = SIG2;
 

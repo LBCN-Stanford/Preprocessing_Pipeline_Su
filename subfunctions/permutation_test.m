@@ -4,7 +4,7 @@ function [sig_channel, pval, sig_t] = permutation_test(signal,onset,nperm,tail)
 % significant timestamps for plotting. 
 %
 if nargin<3 || isempty(nperm)
-    nperm = 800;
+    nperm = 50;
 end
 
 if nargin<4 || isempty(tail)

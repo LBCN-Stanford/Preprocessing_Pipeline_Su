@@ -17,6 +17,8 @@ try
 catch
     return;
 end
+
+
 %     if iscell(fname)
 %         head_file = fname;
 %     else
@@ -35,9 +37,26 @@ for i = 1:length(head_file)
         LBCN_plot_HFB(head_file{i});
         return;
     elseif dh.bytes > 100000000 %if it is the concatenated data
-        
+        disp('Loading...');
         v = load(head_file{i});
-        dat = v.data_all;
+        svn = find_file(pathname,'subjVar*',[]);
+        if isempty(svn)
+            disp('Cannot find subjVar file, skipping ... ');
+        else
+            sv = load(svn);
+            fdn = string(fieldnames(sv));
+            v.subjVar = getfield(sv,fdn);
+        end
+        fdn = string(fieldnames(v));
+        dat = getfield(v,fdn(1));
+        dat.sbj_name = v.subjVar.sbj_name;
+%         try
+%         if length(dat.labels) == length(v.subjVar.elect_names)
+%             disp('Re-assignning channel labels based on subjVar info')
+%             dat.labels = v.subjVar.elect_names;
+%         end
+%         catch
+%         end
         s = dat.wave;
         signal{i}=permute(s,[2 3 1]);
         cn = size(signal{1},1);
@@ -48,15 +67,20 @@ for i = 1:length(head_file)
         %    labels = unique(v.data_all.trialinfo{1}.conds_math_memory);
         %    conditionList{i} = v.data_all.trialinfo{1}.conds_math_memory;
         %catch
-            labels = unique(dat.trialinfo{1}.condNames);
-            conditionList{i} = dat.trialinfo{1}.condNames;
-        %end
+        if isfield(dat,'trialinfo_all')
+            labels = unique(dat.trialinfo_all{1}.condNames);
+            conditionList{i} = dat.trialinfo_all{1}.condNames;
+        else
+            dat.trialinfo_all = dat.trialinfo;
+            labels = unique(dat.trialinfo_all{1}.condNames);
+            conditionList{i} = dat.trialinfo_all{1}.condNames;
+        end
         plot_cond = 1:length(labels);
         nan_all{i} = false(size(signal{1}));
         for j = 1:cn
             for k = 1:tn
                 try
-                nan_all{i}(j,dat.trialinfo{j}.bad_inds{k},k) = true;
+                nan_all{i}(j,dat.trialinfo_all{j}.bad_inds{k},k) = true;
                 catch
                     continue;
                 end
@@ -119,7 +143,7 @@ if isempty(signal{1})
 else
    signal_all = format_signal(signal,D,plot_cond,exclude,labels,conditionList);
    nan_all = format_signal(nan_all,D,plot_cond,exclude,labels,conditionList);
-   t = v.data_all.time;
+   t = dat.time;
    w1 = 1;
    w2 = dn;
    yl = [-0.4 1];
@@ -137,5 +161,5 @@ end
 %     bch = cell(length(D),1);
 
 % end
-plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
+plot_window_App(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);
 %plot_window(signal_all, sparam,labels,D,window,plot_cond, page, yl, bch, t, [], bc_type, nan_all, info);

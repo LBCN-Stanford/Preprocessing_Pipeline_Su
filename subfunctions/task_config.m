@@ -181,10 +181,88 @@ p.twResc{2} = '700';
 p.twResc{3} = '1000';
 p.twsmooth = [-1450 650];
 p.plot_cond = [1 2 3 4 5 6 7 8];
+case  'emotionf_newbl'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-300 1000];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = cell(1, 3);
+p.twbc{1} = 'ITI';
+p.twbc{2} = '700';
+p.twbc{3} = '900';
+p.smoothwin = 50;
+p.twResc = cell(1, 3);
+p.twResc{1} = 'ITI';
+p.twResc{2} = '700';
+p.twResc{3} = '900';
+p.twsmooth = [-250 950];
+p.plot_cond = [1 2 3 4 5];
+
+case  'forpaper'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-450 850];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = [-200 0];
+p.smoothwin = 50;
+p.twResc = [-300 0];
+p.twsmooth = [-400 800];
+p.plot_cond = [1 2 3 4 5 6];
+
+case  'forpaper2'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-450 850];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = [-200 0];
+p.smoothwin = 50;
+p.twResc = [-200 0];
+p.twsmooth = [-400 800];
+p.plot_cond = [1 2 3];
+
+case  'ictalcogencode'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-400 800];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = [-200 0];
+p.smoothwin = 50;
+p.twResc = [-200 0];
+p.twsmooth = [-350 750];
+p.plot_cond = [1 2 3];
+
+case  'ictalcogencode'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-400 800];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = [-200 0];
+p.smoothwin = 50;
+p.twResc = [-200 0];
+p.twsmooth = [-350 750];
+p.plot_cond = [1 2 3];
+
+case  'ictalcogbaseline'
+p = struct;
+p.fieldepoch = 'start';
+p.twepoch = [-300 1000];
+p.bc = 1;
+p.bcfield = 'start';
+p.twbc = [-300 0];
+p.smoothwin = 50;
+p.twResc = [-300 0];
+p.twsmooth = [-250 950];
+p.plot_cond = [1 2 3];
+
 
 end
 
-
+%p.bc = 0;
 confn = fieldnames(p);
 for i = 1:length(confn)
 val = getfield(p,confn{i});
