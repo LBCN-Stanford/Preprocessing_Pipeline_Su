@@ -140,10 +140,10 @@ for i = 1: size(filename,1)
     fname1 = fullfile(fd{1}.path,fd{1}.fname);
     
     d = LBCN_montage(fname1);
-    %fname1b = fullfile(d{1}.path,d{1}.fname);
-    %d2 = montage_commonAvg_local(fname1b,bch{i});
+    fname1b = fullfile(d{1}.path,d{1}.fname);
+    d2 = montage_commonAvg_local(fname1b,bch{i});
     
-    fname2 = fullfile(d{1}.path,d{1}.fname);
+    fname2 = fullfile(d2{1}.path,d2{1}.fname);
     
     % Epoch data using event file
     D = LBCN_epoch_bc(fname2,evtfile{i},[],fieldepoch,twepoch,bc,bcfield,twbc);
@@ -208,7 +208,7 @@ if ~ pipeline
     % plot_cond=[1 4 5 9];%which conditions to plot
     save(fullfile(D.path,strcat('Epoched_data_',task,'.mat')),'evtfile','DAT','bch',...
         'exclude','conditionList','exclude_ts','plot_cond','twsmooth','twbc','task','sbjname');
-    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc,1,0,task,sbjname);
+    LBCN_plot_HFB(evtfile,DAT,bch,exclude,conditionList,plot_cond,save_plot,method,exclude_ts,atf_check,twsmooth,twbc,[],0,task,sbjname);
 elseif viewer
     signal_all = format_signal([],df,plot_cond,exclude);
     nan_all = format_signal([],df,plot_cond,exclude);
