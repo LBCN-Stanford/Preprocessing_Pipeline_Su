@@ -52,6 +52,9 @@ for i = page
         end
         
     end
+    if yl(2) < max(temp_mean(:))
+        yl(2) = 1.1 * max(temp_mean(:));
+    end
     if showlegend
      le = legend(ax,labels(plot_cond(allcond)),'Location','NorthEastoutside','box','off',...
          'autoupdate','off','color',[0.94 0.94 0.94]);
