@@ -108,10 +108,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 %     handles.newlabels{i}=get(handles.newedit(i),'string');
 % end
 for i = 1:length(handles.newedit)
-    try
-        handles.newlabel(i)=get(handles.newedit(i),'string');
-    catch
-        handles.newlabel(i)=get(handles.oldedit(i),'string');
+    %try
+    if ~isempty(handles.newedit(i))
+        handles.newlabel{i}=get(handles.newedit(i),'string');
+    %catch
+    else
+        handles.newlabel{i}=get(handles.oldedit(i),'string');
     end
 end
 %handles.newlabels=get(handles.listbox1,'string');

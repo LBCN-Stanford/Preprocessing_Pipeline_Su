@@ -50,9 +50,9 @@ try
                 infohandle.Text = sprintf('Copying files from the server  \n');
                 pause(0.2);
                 elecfolder = fullfile(serverpath,'elec_recon');
-                mkdir(fullfile(sbjpath,'elec_recon'));
-                [~,~] = copyfile(elecfolder,fullfile(sbjpath,'elec_recon'));
-                elecpath = fullfile(sbjpath,'elec_recon');
+                [upper,~] = fileparts(path(sd));mkdir(fullfile(upper,'elec_recon'));
+                [~,~] = copyfile(elecfolder,fullfile(upper,'elec_recon'));
+                elecpath = fullfile(upper,'elec_recon');
                 [~,~] = copyfile(fullfile(serverpath,'surf','lh.pial'),elecpath);
                 [~,~] = copyfile(fullfile(serverpath,'surf','rh.pial'),elecpath);
                 infohandle.Text = sprintf('Finished. \n');
