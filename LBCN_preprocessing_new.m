@@ -141,9 +141,9 @@ for i = 1: size(filename,1)
     
     d = LBCN_montage(fname1);
     fname1b = fullfile(d{1}.path,d{1}.fname);
-    d2 = montage_commonAvg_local(fname1b,bch{i});
+    %d2 = montage_commonAvg_local(fname1b,bch{i});
     
-    fname2 = fullfile(d2{1}.path,d2{1}.fname);
+    fname2 = fullfile(d{1}.path,d{1}.fname);
     
     % Epoch data using event file
     D = LBCN_epoch_bc(fname2,evtfile{i},[],fieldepoch,twepoch,bc,bcfield,twbc);
