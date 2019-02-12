@@ -1,4 +1,4 @@
-function [pathological_chan_id,exclude,exclude_ts,beh_cond]=find_pChan(filename,thr,twepoch)
+function [pathological_chan_id,exclude,exclude_ts,beh_cond,eeg_bi,chan,pcn]=find_pChan(filename,thr,twepoch)
 %   Find possible pathological channels with HFO and spikes.
 %   Pathological (irritative) channels are defined as channels with event 
 %   occuerrnce rate > [thr] times of the average HFO+spike rate per
@@ -100,6 +100,7 @@ end
 s_p(1,u)=s;
 %Channels with event occurence rate > 2*median rate are shown. Can change as needed.
 pc=chan(s_p>thr*mean(s_p));
+pcn = find(s_p>thr*mean(s_p));
 monochan=cell(length(pc),2);
 for i = 1:length(pc)
     try
@@ -122,13 +123,18 @@ for i=1:length(pathological_chan)
     fc = find(strcmp(pathological_chan{i},chanNames));
     pathological_chan_id(i)=fc(1);
 end
-for i=1:length(D.trials.events)
-    beh_ts(i)=D.trials.events(i).time*fs;
-    beh_cond{i}=D.trials.events(i).type;
+try
+    for i=1:length(D.trials.events)
+        beh_ts(i)=D.trials.events(i).time*fs;
+        beh_cond{i}=D.trials.events(i).type;
+    end
+    fprintf('%s\n','---- Finding overlapping trials ----')
+    [exclude,exclude_ts] = exclude_trial(event.timestamp(:,1),pChan,round(beh_ts),chanNames,twepoch,atf_nnr);
+catch
+    exclude = [];
+    exclude_ts = [];
+    beh_cond = [];
 end
-fprintf('%s\n','---- Finding overlapping trials ----')
-[exclude,exclude_ts] = exclude_trial(event.timestamp(:,1),pChan,round(beh_ts),chanNames,twepoch,atf_nnr);
-
 
 
 
