@@ -9,7 +9,7 @@ function LBCN_preprocessing_new(filename,sodata,badchan,task,pipeline,atf_check,
 %               task    :   which task to perform. If no input, will try
 %               matching the folder name with pre-defined task names.
 %               pipeline:   0 -- compute HFB externally. Generally faster.
-%                           1 -- use SPM internal blocks (~standard pipeline with denoise).
+%                           1 -- use SPM internal blocks (*old pipeline with denoise).
 %               atf_check:  0 -- no additional epoch - by - epoch data
 %               quality check;
 %                           1 -- only spike/artifact indicies will be
@@ -50,6 +50,11 @@ if nargin<4 || isempty(task)
     sbjname = out.sname;
 end
 
+if strcmpi(task,'ccep')
+    out = timer_getinfo_main(task,[]);
+    sbjname = out.sname;
+end
+
 if nargin<5 || isempty(pipeline)
     pipeline = 0;
 end
@@ -86,44 +91,6 @@ conditionList = cell(size(filename,1),1);
 removeid = [];
 DAT = cell(size(filename,1),1);
 nd = zeros(size(filename,1),1);
-
-for i = 1:size(filename,1)
-    % Convert data
-    %[D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],0,[20 40 41 64:67 102:190]);
-    [D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:),[], 1,badchan);
-    if dsamp > 1 && round(D.fsample)/dsamp >= 500
-        S.D = D;
-        S.fsample_new = D.fsample/dsamp;
-        D = spm_eeg_downsample(S);
-        S.D = Ddiod;
-        Ddiod = spm_eeg_downsample(S);
-        S.D = Ddiod;
-    end
-    fname = fullfile(D.path,D.fname);
-    
-    % Get events from SODATA
-    %     if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
-    %             || strcmpi(task,'category') || strcmpi(task,'EmotionF') || strcmpi(task,'EmotionA') ...
-    %             || strcmpi(task,'RACE_CAT')
-    %         [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
-    %     else
-    %         task = 'other';
-    %         %evtfile{i} = sodata(i,:);
-    %     end
-    [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
-    % Save events in SPM data file
-    D = get_events_SPMformat(fname,evtfile{i});
-    fnamep{i} = fullfile(D.path,D.fname);
-    
-    %%%%%%%%%%%%%%find pathological%%%%%%%%%%%%%%%%%
-    [bch{i},exclude{i},exclude_ts{i},conditionList{i},]=find_pChan(fnamep{i},3,twepoch);
-    exclude_ts{i} = exclude_ts{i}(:,1:dsamp:size(exclude_ts{i},2),:);
-    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-    %bch{i}=[];exclude{i}=[];exclude_ts{i}=[];conditionList{i}=[];
-end
-%conditionList=[];
-fname = char(fnamep);
-%fd = notch_meeg(fname,50,4);
 try
     if strcmp(sbjname(1),'S')
         plnotch = 60;
@@ -133,6 +100,69 @@ try
 catch
     plnotch = 60;
 end
+for i = 1:size(filename,1)
+    % Convert data
+    %[D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:), [],0,[20 40 41 64:67 102:190]);
+    [D,Ddiod] = LBCN_convert_NKnew_rename(filename(i,:),[], 1,badchan);
+    if ~strcmpi(task,'ccep')
+        if dsamp > 1 && round(D.fsample)/dsamp >= 500
+            S.D = D;
+            S.fsample_new = D.fsample/dsamp;
+            D = spm_eeg_downsample(S);
+            S.D = Ddiod;
+            Ddiod = spm_eeg_downsample(S);
+            S.D = Ddiod;
+        end
+        fname = fullfile(D.path,D.fname);
+        
+        % Get events from SODATA
+        %     if strcmpi(task, 'MMR') || strcmpi(task,'VTCLoc') || strcmpi(task,'Animal') ...
+        %             || strcmpi(task,'category') || strcmpi(task,'EmotionF') || strcmpi(task,'EmotionA') ...
+        %             || strcmpi(task,'RACE_CAT')
+        %         [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
+        %     else
+        %         task = 'other';
+        %         %evtfile{i} = sodata(i,:);
+        %     end
+        
+        
+        [evtfile{i}] = LBCN_read_events_diod_sodata(Ddiod,sodata(i,:), task);
+        % Save events in SPM data file
+        D = get_events_SPMformat(fname,evtfile{i});
+        fnamep{i} = fullfile(D.path,D.fname);
+        [bch{i},exclude{i},exclude_ts{i},conditionList{i},]=find_pChan(fnamep{i},3,twepoch);
+        exclude_ts{i} = exclude_ts{i}(:,1:dsamp:size(exclude_ts{i},2),:);
+    else
+        
+        fname = fullfile(D.path,D.fname);
+        fd = LBCN_filter_badchans(fname,[], [],1,0.5, plnotch);
+        [~,~,~,~,eeg_bi,chanNames,pcn]=find_pChan(fullfile(fd{1}.path,fd{1}.fname),3);
+        if size(Ddiod(:,:,:),1) == 1 %China cohort
+            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],pcn,4.5,Ddiod(:,:,:),[],1,D.path);% (dataMat,chanLabel,stimchan,pathchan,thr,dcchan, plotchan,show_ost,currpath)
+        else
+            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],[],[],[],[],1,D.path);
+        end
+        save(fullfile(D.path,['zCCEP_',D.fname]),'zccep','cond','onset','group');
+        convert_meeg(zccep,cond,onset, group,D);
+    end
+    
+    %%%%%%%%%%%%%%find pathological%%%%%%%%%%%%%%%%%
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    %bch{i}=[];exclude{i}=[];exclude_ts{i}=[];conditionList{i}=[];
+end
+%conditionList=[];
+fname = char(fnamep);
+%fd = notch_meeg(fname,50,4);
+% try
+%     if strcmp(sbjname(1),'S')
+%         plnotch = 60;
+%     else
+%         plnotch = 50;
+%     end
+% catch
+%     plnotch = 60;
+% end
 
 for i = 1: size(filename,1)
     fd = LBCN_filter_badchans(fname(i,:),[], bch{i},1,0.5, plnotch);%Change to 60 if not looking at China datasets!!!

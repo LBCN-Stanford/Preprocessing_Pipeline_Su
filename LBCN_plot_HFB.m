@@ -219,7 +219,7 @@ catch
     D{1}.nsamples = D{1}.Nsamples;
 end
 if (nargin<13 || isempty(dsamp)) ||  ~exist('dsamp','var')
-    dsamp = 1;
+    dsamp = 2;
 end
 if (nargin<14)
     nop = 0;
