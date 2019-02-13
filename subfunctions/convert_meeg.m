@@ -47,7 +47,7 @@ for i = 1:length(indc)
     end
 end
 inbounds = (trl(:,1)>=1 & trl(:, 2)<=D.nsamples);
-timeOns = twepoch(1)/1000;
+timeOns = aa.start;%twepoch(1)/1000;
 ntrial = size(trl, 1);
 nsampl = unique(round(diff(trl, [], 2)))+1;
 ev = D.events;
@@ -61,7 +61,8 @@ Dnew = type(Dnew, 'single');
 Dnew = conditions(Dnew, ':', conditionlabels);
 Dnew = trialonset(Dnew, ':', trl(:, 1)./D.fsample+D.trialonset);
 Dnew = badtrials(Dnew,[],1);
-D = meeg(D);
+Dnew = condlist(Dnew,conditionlabels);
+D = meeg(Dnew);
 save(D);
 
 evtspm = [];
@@ -89,14 +90,6 @@ end
 %save events in SPM friendly format
 [~,fname] = fileparts(D.fname);
 save([path(D),'onset_',fname,'.mat'],'names','durations','onsets')
-%sort by event time
-% d1 = [evtspm(:).time];
-% [~,ids] = sort(d1,'ascend');
-% evtspm = evtspm(ids);
-% D = struct(D);
-% D.trials.label = 'Undefined';
-% D.trials.events = evtspm;
-% D.trials.onset = 1/D.Fsample;
 
 %Create and save MEEG object
 
