@@ -40,13 +40,13 @@ if nargin<2 || isempty(chanLabel)
 end
 if nargin<3 || isempty(stimchan)
     varall = var(dataMat);
-    inith = 60;
+    inith = 50;
     stimchan = find(varall > inith*median(varall));
     while (isempty(stimchan) && inith >20) %adaptive threshold
         inith = inith - 5;
         stimchan = find(varall > inith*median(varall));
     end
-    if any(diff(stimchan) ~=1 )% == 1
+    if find(diff(stimchan) ~=1 ) == 1
         stimchan(diff(stimchan)~=1) = [];
     else
         stimchan(find(diff(stimchan,2) ~= 0) + 2) = [];

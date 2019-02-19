@@ -22,7 +22,7 @@ function varargout = checkOnset(varargin)
 
 % Edit the above text to modify the response to help checkOnset
 
-% Last Modified by GUIDE v2.5 04-Feb-2019 10:06:13
+% Last Modified by GUIDE v2.5 12-Feb-2019 18:15:41
 
 % Begin initialization code - DO NOT EDIT
 gui_Singleton = 1;
@@ -56,8 +56,11 @@ handles.removed = [];
 handles.data = filtfilt(b,a,varargin{1});
 handles.onset = varargin{2};
 handles.group = varargin{3};
+
+handles.group((handles.group(:,2)-handles.group(:,1)<0),:)=[];
 handles.chanLabel = varargin{4};
 handles.chan = varargin{5};
+handles.plotchan = 1;
 null = nan(size(handles.data,1),1);
 null(handles.onset(~isnan(handles.onset))) = 1;
 handles.axes1;
@@ -110,7 +113,12 @@ function pushbutton1_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton1 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 %set(handles.figure1,'WindowButtonDownFcn',[]);
+change_cursor_f('hand');
+try
     [~,xd,~]=select3('selectionMode','closest','pt',15,'Axes',handles.axes1);
+catch
+    return;
+end
     %try
     n=1;
  for k = 1:length(xd)
@@ -123,10 +131,16 @@ function pushbutton1_Callback(hObject, eventdata, handles)
  end
   %xd =  xd(~isempty(xd));
   try
-      %handles.remove = find(handles.onset == x);
-      difference = handles.onset - x;
-      closest = abs(difference) == min(abs(difference));
-      handles.onset(closest) =nan;
+      
+      handles.remove = find(handles.onset == x);
+      if isempty(handles.remove)
+        difference = handles.onset - x;
+        difference(isnan(difference))=max(difference);
+        closest = abs(difference) == min(abs(difference));
+        handles.onset(closest) =nan;
+      else
+          handles.onset(handles.remove) = nan;
+      end
   catch
       return;
   end
@@ -138,7 +152,8 @@ handles.axes1;
 delete(PH);
 handles.onsetplot = stem(null,'color',[0.4 0.4 0.4],'marker','.','markersize',8);
 hold on
-handles.dataplot = plot(1:length(null),handles.data(:,1),'color',[0.85 0.33 0.1],'linewidth',1);
+plotchan = get(handles.popupmenu1,'value');
+handles.dataplot = plot(1:length(null),handles.data(:,plotchan),'color',[0.85 0.33 0.1],'linewidth',1);
 %set(handles.popupmenu1,'string',handles.chan);
 %stimchanlabel = ['All' handles.chan];
 %set(handles.popupmenu2,'string',stimchanlabel);
@@ -146,6 +161,7 @@ hold off
 set(gca,'ticklength',[0.001 0.001],'fontsize',16);
 xlim(handles.xlimit);
 guidata(hObject, handles);
+change_cursor_f('hand');
 uiwait;
 
 % --- Executes on button press in pushbutton2.
@@ -154,13 +170,16 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 %set(handles.figure1,'WindowButtonDownFcn',[]);
+change_cursor_f('cross');
     [pl,xd,yd]=select3('selectionMode','rect','pt',3,'Axes',handles.axes1);
     dataseg=yd{1}; 
     dif2 = diff(dataseg,2); 
     adif2 = abs(dif2);
-    ind = find(adif2 > 4*std(abs(dif2)));% Initial detection of signal jumps
+    th = get(handles.edit1,'string');
+    thr = str2num(th);
+    ind = find(adif2 > thr*std(abs(dif2)));% Initial detection of signal jumps
     ind = ind+3;
-    onset = find(diff(ind) > 300);
+    onset = find(diff(ind) > 200);
     onset = [1;onset];
     onsetind = ind(onset+1)+xd{1}(1);
     
@@ -171,7 +190,8 @@ function pushbutton2_Callback(hObject, eventdata, handles)
     end
     handles.onset(indredo)=[];
     handles.onset=sort([handles.onset;onsetind]);
-    last = [find(diff(onsetind) > 3*median(diff(onsetind)));length(onsetind)]; % Separate pulses in different groups. Only useful for China cohort
+    handles.onset(isnan(handles.onset))=[];
+    last = [find(diff(handles.onset) > 2.5*nanmedian(diff(handles.onset)));length(handles.onset)]; % Separate pulses in different groups. Only useful for China cohort
     first = [1;last+1];
     first(end) = [];
     group = [first last];
@@ -182,12 +202,20 @@ function pushbutton2_Callback(hObject, eventdata, handles)
  
     
     null = nan(size(handles.data,1),1);
-    null(handles.onset(1:end-1)) = 1;
-    handles.axes1;
-    cla;
+    null(handles.onset(~isnan(handles.onset))) = 1;
+    PH = handles.onsetplot;
+    handles.axes1; 
+%hold on
+    delete(PH);
+%handles.onsetplot = stem(null,'color',[0.4 0.4 0.4],'marker','.','markersize',8);
+hold on
+plotchan = get(handles.popupmenu1,'value');
+    %handles.axes1;
+    
+    %cla;
     handles.onsetplot = stem(null,'color',[0.4 0.4 0.4],'marker','.','markersize',8);
-    hold on
-    handles.dataplot = plot(1:length(null),handles.data(:,1),'color',[0.85 0.33 0.1],'linewidth',1);
+    %hold on
+    handles.dataplot = plot(1:length(null),handles.data(:,plotchan),'color',[0.85 0.33 0.1],'linewidth',1);
     
     set(handles.popupmenu1,'string',handles.chan);
 %stimchanlabel = ['All' handles.chan];
@@ -230,6 +258,7 @@ function pushbutton2_Callback(hObject, eventdata, handles)
 % hold off
 % set(gca,'ticklength',[0.001 0.001],'fontsize',16);
 % xlim(handles.xlimit);
+change_cursor_f('cross');
 guidata(hObject, handles);
 
 % --- Executes on selection change in popupmenu1.
@@ -238,6 +267,7 @@ function popupmenu1_Callback(hObject, eventdata, handles)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
 plotchan = get(hObject,'value');
+handles.plotchan=plotchan;
 % handles    structure with handles and user data (see GUIDATA)
 handles.axes1;
 handles.dataplot.YData = handles.data(:,plotchan);
@@ -272,6 +302,13 @@ if currgroup>1 && size(handles.group,1)>3
     xlim([handles.onset(currentind(1))-2000 handles.onset(currentind(2))+2000]);
 elseif currgroup>1 && size(handles.group,1)<=3
     currentind = handles.group(1,:);
+    checknan = isnan(handles.onset(handles.group));
+    if find(checknan) == 1
+        currentind(1) = currentind(1) + 1;
+    else
+        currentind(2) = currentind(2) - 1;
+    end
+    handles.group = currentind;
     handles.axes1;
     handles.xlimit = [handles.onset(currentind(1))-2000 handles.onset(currentind(2))+2000];
     xlim([handles.onset(currentind(1))-2000 handles.onset(currentind(2))+2000]);
@@ -318,3 +355,26 @@ function pushbutton5_Callback(hObject, eventdata, handles)
 % hObject    handle to pushbutton5 (see GCBO)
 % eventdata  reserved - to be defined in a future version of MATLAB
 % handles    structure with handles and user data (see GUIDATA)
+
+
+
+function edit1_Callback(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    structure with handles and user data (see GUIDATA)
+
+% Hints: get(hObject,'String') returns contents of edit1 as text
+%        str2double(get(hObject,'String')) returns contents of edit1 as a double
+
+
+% --- Executes during object creation, after setting all properties.
+function edit1_CreateFcn(hObject, eventdata, handles)
+% hObject    handle to edit1 (see GCBO)
+% eventdata  reserved - to be defined in a future version of MATLAB
+% handles    empty - handles not created until after all CreateFcns called
+
+% Hint: edit controls usually have a white background on Windows.
+%       See ISPC and COMPUTER.
+if ispc && isequal(get(hObject,'BackgroundColor'), get(0,'defaultUicontrolBackgroundColor'))
+    set(hObject,'BackgroundColor','white');
+end

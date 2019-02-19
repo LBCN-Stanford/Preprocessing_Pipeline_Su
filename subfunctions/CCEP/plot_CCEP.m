@@ -39,7 +39,7 @@ end
 yl(1)=min(minvalue);
 yl(2)=max(maxvalue);
 if yl(2)<5
-    yl(2)=5;
+    yl(2)=6;
 end
     
 figure;
@@ -67,7 +67,8 @@ pos = [0.1 ini wid hei];
 
 P=tight_subplot(length(plotchan),size(group,1),[.02 .02],[.02 .02],[.08 .05]);
         set(gcf,'Unit','normalized','Position',pos,'color',[1 1 1]);
-n=1;
+cond = cellstr(cond);
+        n=1;
 for i =plotchan
 
     %figure;

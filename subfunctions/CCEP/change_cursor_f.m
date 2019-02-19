@@ -1,4 +1,4 @@
-function change_cursor(varargin)
+function change_cursor_f(type)
 % set(gcf,'pointer','arrow');
 % C=get(gcf,'CurrentPoint');
 % %P=getpixelposition(handles.axes_dist);
@@ -8,14 +8,14 @@ function change_cursor(varargin)
 %     set(gcf,'pointer','arrow');
 % end
 
-% 
-% C=get(gcf,'pointer');
-% %P=getpixelposition(handles.axes_dist);
-% if strcmpi(C,'arrow')
-%     set(gcf,'pointer',type);
-% else
-%     set(gcf,'pointer','arrow');
-% end
+
+C=get(gcf,'pointer');
+%P=getpixelposition(handles.axes_dist);
+if strcmpi(C,'arrow')
+    set(gcf,'pointer',type);
+else
+    set(gcf,'pointer','arrow');
 end
+
 
 %
