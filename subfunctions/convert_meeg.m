@@ -62,6 +62,11 @@ Dnew = conditions(Dnew, ':', conditionlabels);
 Dnew = trialonset(Dnew, ':', trl(:, 1)./D.fsample+D.trialonset);
 Dnew = badtrials(Dnew,[],1);
 Dnew = condlist(Dnew,conditionlabels);
+for i = 1:size(DD,1)
+    for j = 1:size(DD,3)
+        Dnew(i,:,j)=DD(i,:,j);
+    end
+end
 D = meeg(Dnew);
 save(D);
 

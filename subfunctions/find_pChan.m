@@ -31,7 +31,13 @@ catch
     eeg=D.data(:,:,:)';
 end
 
-
+pathological_chan_id = [];
+exclude = [];
+exclude_ts = [];
+beh_cond = [];
+eeg_bi = [];
+chan = [];
+pcn = [];
 
 fs=D.Fsample;
 z=1;
@@ -99,8 +105,37 @@ for j=1:length(u)
 end
 s_p(1,u)=s;
 %Channels with event occurence rate > 2*median rate are shown. Can change as needed.
+
 pc=chan(s_p>thr*mean(s_p));
 pcn = find(s_p>thr*mean(s_p));
+try
+    nonneural = false(1,length(pc));
+    for i = 1:length(pc)
+        nonneural(i) = contains(lower(pc{i}),'ekg');
+    end
+    pc(nonneural)=[];
+    pcn(nonneural)=[];
+catch
+end
+
+while (isempty(pc) && thr >1)
+    thr = thr - 0.5;
+    pc=chan(s_p>thr*mean(s_p));
+    pcn = find(s_p>thr*mean(s_p));
+    try
+        nonneural = false(1,length(pc));
+        for i = 1:length(pc)
+            nonneural(i) = contains(lower(pc{i}),'ekg');
+        end
+        pc(nonneural)=[];
+        pcn(nonneural)=[];
+    catch
+    end
+    
+    
+end
+    
+
 monochan=cell(length(pc),2);
 for i = 1:length(pc)
     try
