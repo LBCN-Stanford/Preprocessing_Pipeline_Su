@@ -1,5 +1,4 @@
-function [pathological_chan_id,exclude,exclude_ts,beh_cond,eeg_bi,chan,pcn]=...
-    find_paChan(eeg,chanNames,fs,thr,twepoch)
+function [bad_chan_id,exclude,exclude_ts]=find_badChan(eeg,chanNames,fs,thr,twepoch)
 %   Find possible pathological channels with HFO and spikes.
 %   Pathological (irritative) channels are defined as channels with event 
 %   occuerrnce rate > [thr] times of the average HFO+spike rate per
@@ -36,7 +35,7 @@ end
 %     eeg=D.data(:,:,:)';
 % end
 
-pathological_chan_id = [];
+bad_chan_id = [];
 exclude = [];
 exclude_ts = [];
 beh_cond = [];
@@ -46,24 +45,35 @@ pcn = [];
 
 %fs=D.Fsample;
 z=1;
-
+varall = var(detrend(eeg,'constant'));
+thrinit = 8;
+bad1 = varall < 0.1*median(varall);
+bad2 = varall > thrinit*median(varall);
+b2 = fir1(64,[8 70]/(fs/2));
+a = 1;
+varall2 = var(filtfilt(b2,a,eeg));
+bad3 = varall2 > thrinit*median(varall2);
+while (isempty(bad2) && thrinit >5)
+    thrinit = thrinit - 1;
+    bad2 = varall > thrinit*median(varall);
+end
 %% Create bipolar for HFO and spike detection
 fprintf('%s\n','---- Creating bipolar montage ----')
 for d=1:size(eeg,2)-1
     
-    name1 = join(regexp(string(D.channels(d).label),'[a-z]','Match','ignorecase'),'');
-    name2 = join(regexp(string(D.channels(d+1).label),'[a-z]','Match','ignorecase'),'');
-    chanNames{d}=D.channels(d).label;
+    name1 = join(regexp(string(chanNames{d}),'[a-z]','Match','ignorecase'),'');
+    name2 = join(regexp(string(chanNames{d+1}),'[a-z]','Match','ignorecase'),'');
+    %chanNames{d}=D.channels(d).label;
     
     if strcmp(name1,name2)
         eeg_bi(:,z)=eeg(:,d)-eeg(:,d+1);
-        chan{1,z}=sprintf('%s-%s',chanNames{d},D.channels(d+1).label);
+        chan{1,z}=sprintf('%s-%s',chanNames{d},chanNames{d+1});
         z=z+1;
     else
         continue
     end
 end
-chanNames{d+1}=D.channels(d+1).label;
+%chanNames{d+1}=D.channels(d+1).label;
 %% Detecting events
 
 fprintf('%s\n','---- Detecting pathological events ----');
@@ -135,9 +145,7 @@ while (isempty(pc) && thr >1)
         pc(nonneural)=[];
         pcn(nonneural)=[];
     catch
-    end
-    
-    
+    end 
 end
     
 
@@ -158,11 +166,20 @@ end
 
 fprintf('---- Done ----')
 %%%%%%%%%show problematic chan%%%%%%%%%%%%%%
-pathological_chan=unique(monochan(:))
+pathological_chan=unique(monochan(:));
+corrupted_chan = chanNames(logical(bad1+bad2+bad3));
+corrupted_chan_id = find(logical(bad1+bad2+bad3));
 for i=1:length(pathological_chan)
     fc = find(strcmp(pathological_chan{i},chanNames));
-    pathological_chan_id(i)=fc(1);
+    bad_chan_id(i)=fc(1);
 end
+keep = find((varall(bad_chan_id)./median(varall))>=2);
+bad_chan_id = [bad_chan_id(keep) corrupted_chan_id];
+pathological_chan = pathological_chan(keep);
+
+disp('Bad channels:');
+disp([pathological_chan;corrupted_chan'])
+
 try
     for i=1:length(D.trials.events)
         beh_ts(i)=D.trials.events(i).time*fs;

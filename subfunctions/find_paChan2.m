@@ -1,5 +1,5 @@
 function [pathological_chan_id,exclude,exclude_ts,beh_cond,eeg_bi,chan,pcn]=...
-    find_paChan(eeg,chanNames,fs,thr,twepoch)
+    find_paChan2(eeg,chanNames,fs,thr,twepoch)
 %   Find possible pathological channels with HFO and spikes.
 %   Pathological (irritative) channels are defined as channels with event 
 %   occuerrnce rate > [thr] times of the average HFO+spike rate per
