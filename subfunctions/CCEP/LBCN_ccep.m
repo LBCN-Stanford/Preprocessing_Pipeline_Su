@@ -42,6 +42,10 @@ if nargin<3 || isempty(stimchan)
     varall = var(dataMat);
     inith = 60;
     stimchan = find(varall > inith*median(varall));
+    if length(stimchan)>10
+        inith = 200;
+        stimchan = find(varall > inith*median(varall));
+    end
     while (isempty(stimchan) && inith >20) %adaptive threshold
         inith = inith - 5;
         stimchan = find(varall > inith*median(varall));

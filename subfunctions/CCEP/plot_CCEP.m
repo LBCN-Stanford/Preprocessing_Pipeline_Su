@@ -67,7 +67,10 @@ pos = [0.1 ini wid hei];
 
 P=tight_subplot(length(plotchan),size(group,1),[.02 .02],[.02 .02],[.08 .05]);
         set(gcf,'Unit','normalized','Position',pos,'color',[1 1 1]);
+        try
 cond = cellstr(cond);
+        catch
+        end
         n=1;
 for i =plotchan
 
