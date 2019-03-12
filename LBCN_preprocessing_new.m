@@ -137,13 +137,20 @@ for i = 1:size(filename,1)
         fname = fullfile(D.path,D.fname);
         fd = LBCN_filter_badchans(fname,[], [],1,0.5, plnotch);
         [~,~,~,~,eeg_bi,chanNames,pcn]=find_pChan(fullfile(fd{1}.path,fd{1}.fname),3);
-        if size(Ddiod(:,:,:),1) == 1 %China cohort
-            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],pcn,4.5,Ddiod(:,:,:),[],1,D.path);% (dataMat,chanLabel,stimchan,pathchan,thr,dcchan, plotchan,show_ost,currpath)
+        if size(D(:,:,:),1) >= 10 %China cohort
+            [~,dcchan] = max(var(Ddiod(:,:,:)'));
+            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],pcn,4.5,Ddiod(dcchan,:,:),[],1,fullfile(D.path,D.fname));% (dataMat,chanLabel,stimchan,pathchan,thr,dcchan, plotchan,show_ost,currpath)
         else
-            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],[],[],[],[],1,D.path);
+            [zccep,cond,onset, group] = LBCN_ccep(eeg_bi/1000,chanNames,[],[],3.5,[],[],1,fullfile(D.path,D.fname));
         end
         save(fullfile(D.path,['zCCEP_',D.fname]),'zccep','cond','onset','group');
+        disp(' ');
+        disp('Saving MEEG format...');
         convert_meeg(zccep,cond,onset, group,D);
+        if i == size(filename,1)
+            disp('Done.');
+            return;
+        end
     end
     
     %%%%%%%%%%%%%%find pathological%%%%%%%%%%%%%%%%%
