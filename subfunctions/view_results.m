@@ -10,6 +10,8 @@ elseif nargin ==1
     fc = cellstr(fname);
     [pathname,~]=fileparts(fc{1});nop = 0;
 end
+
+
 info = [];
 head_file = cellstr(fname);
 try
@@ -46,10 +48,37 @@ for i = 1:length(head_file)
             sv = load(svn);
             fdn = string(fieldnames(sv));
             v.subjVar = getfield(sv,fdn);
+            if isfield(v.subjVar,'labels_EDF') && isempty(v.subjVar.labels_EDF)
+                v.subjVar.labels_EDF = v.subjVar.elinfo.FS_label;
+                v.data_all.labels = v.subjVar.elinfo.FS_label;
+            end
+            if ~isfield(v.subjVar,'mgrid')
+                %genpath(filepath)
+                [mgridfilename] = find_file(pathname,[],'.mgrid');
+                [mgridcoor, mgridlabel, mgridcolor]=mgrid2matlab(mgridfilename);
+                v.subjVar.mgrid.label = mgridlabel;
+                v.subjVar.mgrid.color = mgridcolor;
+                v.subjVar.mgrid.coor = mgridcoor;
+                subjVar = v.subjVar;
+                save(svn,'subjVar');
+            end
         end
         fdn = string(fieldnames(v));
-        dat = getfield(v,fdn(1));
-        dat.sbj_name = v.subjVar.sbj_name;
+        for j = 1:length(fieldnames(v))
+            if isstruct(getfield(v,fdn(j))) && length(fieldnames(getfield(v,fdn(j))))>=5
+                dat = getfield(v,fdn(j));
+                break;
+            else
+                continue;
+            end
+        end
+        
+        %dat = getfield(v,fdn(1));
+        try 
+            dat.sbj_name = dat.sbj_name;
+        catch
+            dat.sbj_name = v.subjVar.sbj_name;
+        end
 %         try
 %         if length(dat.labels) == length(v.subjVar.elect_names)
 %             disp('Re-assignning channel labels based on subjVar info')
