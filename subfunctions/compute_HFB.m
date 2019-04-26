@@ -46,7 +46,7 @@ if nargin<8 || isempty(pre_defined_bad)
 end
 
 if (nargin<9 || isempty(window)) && ~exist('window','var')
-    window = 101:1100;
+    window = 101:round(101*fs/1000:1100*fs/1000);
 end
 
 if nargin<10 || isempty(downsamp)
@@ -188,11 +188,11 @@ if ~isnumeric(bc_win)%use a specific condition as baseline;
         bls = ble-300/downsamp;
     end
     bc_sig = narrown(:,:,round(bls:ble),bc_win{1});
-    [signalbc, signalbc2, spec, spec2] = baseline_norm2(narrown, window, bc_sig, bc_type, bad, nanid, freqID, 1);
+    [signalbc, signalbc2, spec, spec2] = baseline_norm2(narrown, window, bc_sig, bc_type, bad, nanid, freqID, 0);
 else
     bc_win = round((bc_win(1) : downsamp : bc_win(end))./downsamp);
     bc_win(bc_win < window(1)) = [];
-    [signalbc, signalbc2, spec, spec2] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid, freqID, 1);
+    [signalbc, signalbc2, spec, spec2] = baseline_norm(narrown, window, bc_win, bc_type, bad, nanid, freqID, 0);
 end
 
 nanid=nanid(:,window,:);
